@@ -15,7 +15,7 @@ export const Item = ({ item, i }: { item: any, i: number }) => {
     {!item.isFalseData && <><LoadImage url={item?.img}>
       <img src={item?.img} className="rounded-t-md w-full cursor-pointer" alt="" style={{ borderBottom: "0.6px solid #dfe4ea", height: mobile ? "auto" : 300 }}
         onClick={() => {
-          !item.isFalseData && navigate(`/details/${item?.id || i}`)
+          !item.isFalseData && navigate(`/detail/${item?.id || i}`)
         }} />
     </LoadImage>
       <div className="p-4">

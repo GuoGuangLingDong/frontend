@@ -3,7 +3,6 @@ const CracoLessPlugin = require('craco-less')
 const path = require("path");
 const { whenProd } = require('@craco/craco')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 module.exports = {

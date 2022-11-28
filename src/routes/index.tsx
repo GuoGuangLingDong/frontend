@@ -10,7 +10,7 @@ export const routes = [
   { path: "/login", component: <Login /> },
   { path: "/register", component: <Register /> },
   { path: "/profile", component: <Profile /> },
-  { path: "/details/:id", component: <Detail /> },
+  { path: "/detail/:id", component: <Detail /> },
   { path: "/home", component: <Trending /> },
 ]
 
