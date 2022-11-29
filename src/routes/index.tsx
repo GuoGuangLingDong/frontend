@@ -5,6 +5,7 @@ import { Detail } from "../pages/trending/Detail"
 import { Trending } from "../pages/trending"
 import { Login } from "../pages/auth/Login";
 import { Register } from "../pages/auth/Register";
+import { Test } from "../pages/test/Test"
 
 export const routes = [
   { path: "/login", component: <Login /> },
@@ -12,6 +13,7 @@ export const routes = [
   { path: "/profile", component: <Profile /> },
   { path: "/detail/:id", component: <Detail /> },
   { path: "/home", component: <Trending /> },
+  { path: "/test", component: <Test /> }
 ]
 
 const Redirect = ({ to }: { to: string }) => {
