@@ -5,13 +5,14 @@ import { Detail } from "../pages/trending/Detail"
 import { Trending } from "../pages/trending"
 import { Login } from "../pages/auth/Login";
 import { Register } from "../pages/auth/Register";
+import { Home } from "../pages/poap";
 
 export const routes = [
   { path: "/login", component: <Login /> },
   { path: "/register", component: <Register /> },
   { path: "/profile", component: <Profile /> },
   { path: "/detail/:id", component: <Detail /> },
-  { path: "/home", component: <Trending /> },
+  { path: "/home", component: <Home /> },
 ]
 
 const Redirect = ({ to }: { to: string }) => {
