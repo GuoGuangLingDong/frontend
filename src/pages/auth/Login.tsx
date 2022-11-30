@@ -15,8 +15,8 @@ export type TAuthParams = {
 
 export const useParams = () => {
     const [values, setValues] = useState<TAuthParams>({});
-    const setParams = useCallback((arg) => {
-        setValues((pre: any) => ({ ...pre, ...arg }))
+    const setParams = useCallback((arg: TAuthParams) => {
+        setValues((pre: TAuthParams) => ({ ...pre, ...arg }))
     }, [])
     return [values, setParams] as const
 }
