@@ -1,20 +1,24 @@
-import { ReactNode, useEffect, useState } from "react"
+import { DetailedHTMLProps, ReactNode, useEffect, useState } from "react"
 
-export const LoadImage = ({ url, children }: { url: string, children: ReactNode }) => {
+export const LoadImage = (props: DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) => {
   const [isLoad, setIsLoad] = useState(false);
   useEffect(() => {
-    if (!url) return
+    if (!props.src) return
     const img = new Image();
     img.onload = () => {
       setIsLoad(true);
     }
-    img.src = url;
-  }, [url])
+    img.src = props.src;
+  }, [props.src])
 
   return (
     isLoad
-      ? <>{children}</>
-      : <div className="animate-pulse bg-gray-400 rounded" style={{ height: 300 }}>
+      ? <img alt="img" {...props} style={props.style || {}} />
+      : <div className={`animate-pulse bg-gray-400 ${props.className || ""}`} style={props.style || {}}>
       </div>
   )
+}
+
+export const IconImage = (props: DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) => {
+  return (<LoadImage {...props} className={`w-8 h-8 rounded-full ${props.className || ""}`} />)
 }

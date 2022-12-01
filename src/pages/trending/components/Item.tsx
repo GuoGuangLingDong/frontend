@@ -12,12 +12,7 @@ export const Item = ({ item, i }: { item: any, i: number }) => {
       width: mobile ? "100%" : 300,
       margin: mobile ? "10px 0" : `0px ${i % 3 === 2 ? "0px" : "30px"} 30px 0px`,
     }}>
-    {!item.isFalseData && <><LoadImage url={item?.img}>
-      <img src={item?.img} className="rounded-t-md w-full cursor-pointer" alt="" style={{ borderBottom: "0.6px solid #dfe4ea", height: mobile ? "auto" : 300 }}
-        onClick={() => {
-          !item.isFalseData && navigate(`/detail/${item?.id || i}`)
-        }} />
-    </LoadImage>
+    {!item.isFalseData && <><LoadImage src={item?.img} />
       <div className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center cursor-pointer">

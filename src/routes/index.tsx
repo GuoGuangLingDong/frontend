@@ -6,12 +6,17 @@ import { Trending } from "../pages/trending"
 import { Login } from "../pages/auth/Login";
 import { Register } from "../pages/auth/Register";
 import { Home } from "../pages/poap";
+import { PoapDetail } from "../pages/poap/Details";
+import { ClaimPOAP } from "../pages/poap/Claim";
+import { DIDScore } from "../pages/mine/DIDScore";
 
 export const routes = [
   { path: "/login", component: <Login /> },
   { path: "/register", component: <Register /> },
   { path: "/profile", component: <Profile /> },
-  { path: "/detail/:id", component: <Detail /> },
+  { path: "/did-score", component: <DIDScore /> },
+  { path: "/detail/:id", component: <PoapDetail /> },
+  { path: "/claim/:id", component: <ClaimPOAP /> },
   { path: "/home", component: <Home /> },
 ]
 

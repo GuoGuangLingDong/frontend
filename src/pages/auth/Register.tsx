@@ -30,9 +30,6 @@ export const Register = () => {
             <InputLabel text="邀请码" value={params.invite_code} onChange={(val) => {
                 setParams({ invite_code: val })
             }} />
-            {/* <TextLabel className="h-12" text="铸造POAP" right={<div>11.21 22:22</div>}>
-                <span>-222</span>
-            </TextLabel> */}
             <RememberPassword />
             <Button className="mt-10" onClick={() => {
                 // 此处调用注册接口函数
