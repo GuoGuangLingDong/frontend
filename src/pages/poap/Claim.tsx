@@ -1,14 +1,10 @@
 import { useCallback, useEffect } from "react";
 import { Button } from "../../components/Button";
-import { PersonBackground } from "../auth/components/PersonBackground";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { BodyBox } from "../../components/BodyBox";
-import { secondColor, textColor } from "../../theme";
 import { useState } from "react";
-import { isMobile } from "../../helpers/utilities";
-import { LoadImage } from "../../components/Image";
 import { Header } from "../../components/Header";
-import { DetailItem, Share, Star } from "./components/Item";
+import { DetailItem } from "./components/Item";
 import { CardBackground, IconTextRightCard } from "../../components/Card";
 import { PoapInfoLabels } from "./Details";
 import { BackgroundLabel } from "../../components/Label";
@@ -35,9 +31,8 @@ export const ClaimButton = ({ item, text }: { item: IPoap, text?: string }) => {
 }
 
 export const ClaimPOAP = () => {
-    const navigate = useNavigate();
     const param = useParams();
-    const [details, setDetails] = useState<IPoap>({
+    const [details] = useState<IPoap>({
         "poap_id": '1321321321321',
         "miner": '0x321312321',
         "poap_name": "国际青年徽章",
@@ -47,11 +42,11 @@ export const ClaimPOAP = () => {
         "poap_intro": "poap_intro",
         "favour_number": 456
     },);
-    const mobile = isMobile();
 
     useEffect(() => {
         const id = (param as any)?.id;
         if (!id) return
+        // setDetails({})
     }, [param])
 
     return (

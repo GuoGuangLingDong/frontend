@@ -2,11 +2,13 @@ import { Header, hearderBoxCss, hearderIconCss } from "../../components/Header";
 import { PersonBackground } from "../auth/components/PersonBackground";
 import search from "../../assets/image/search.svg";
 import { secondColor } from "../../theme";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BodyBox } from "../../components/BodyBox";
 import { ListItem } from "./components/Item";
 import { isMobile } from "../../helpers/utilities";
 import person from "../../assets/image/person.png"
+import api from "../../api/index";
+import { useAuth } from "../../components/UserAuth";
 
 export interface IPoap {
   "poap_id": string,
@@ -22,6 +24,7 @@ export interface IPoap {
 export const List = () => {
   const ref = useRef<HTMLDivElement>(null);
   const mobile = isMobile();
+  const { userInfo } = useAuth();
   const [data, setData] = useState<IPoap[]>([
     {
       "poap_id": '1321321321321',
@@ -55,6 +58,19 @@ export const List = () => {
     },
   ]);
 
+  const getList = useCallback(async (arg: any) => {
+    const data = await api.getPoapList(arg);
+    setData(data);
+  }, [setData])
+
+  useEffect(() => {
+    getList({
+      from: userInfo?.username,
+      count: 10,
+    });
+  // eslint-disable-next-line
+  }, [])
+
   return (data?.length > 0 ?
     <BodyBox>
       <div className="flex mt-6 flex-wrap" ref={ref}>
@@ -75,6 +91,17 @@ export const List = () => {
 };
 
 export const Home = () => {
+  const { setUserInfo } = useAuth();
+
+  const getList = useCallback(async () => {
+    const data = await api.getUserInfo();
+    setUserInfo(data);
+  }, [setUserInfo])
+
+  useEffect(() => {
+    getList();
+    //eslint-disable-next-line
+  }, [])
 
   return (
     <>
@@ -82,7 +109,18 @@ export const Home = () => {
         <img className={hearderIconCss} src={search} alt="logo" />
       </div>} />
       <main className="mx-auto mb-8 sm:mb-16 pt-16">
-        <PersonBackground image={person}></PersonBackground>
+        <PersonBackground image={person}>
+          {/* <div className="relative h-full">
+            <div className="absolute flex justify-center items-center bg-white rounded-full" style={{
+              bottom: "-8.8%",
+              width: `${w}vw`,
+              height: `${w}vw`,
+              left: `calc(50% - ${w / 2}vw)`
+            }}>
+              <img src={logo} className="w-20 h-16" alt="" />
+            </div>
+          </div> */}
+        </PersonBackground>
         <List />
       </main>
     </>

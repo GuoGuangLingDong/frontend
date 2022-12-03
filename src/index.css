@@ -46,3 +46,21 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
 	-moz-appearance: textfield;
 }
+
+.small-loading {
+  border-radius: 50%;
+  --mask: radial-gradient(closest-side, transparent 70%, black 76%);
+  -webkit-mask-image: var(--mask);
+  mask-image: var(--mask);
+  animation: spin 1s linear infinite reverse;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

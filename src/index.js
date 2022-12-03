@@ -6,6 +6,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { HashRouter } from "react-router-dom";
 import { AuthProvider } from './components/UserAuth';
+import { MessageProvider } from './components/Message';
 
 // import WOW from 'wow.js';
 // new WOW().init();//WOW要大写
@@ -16,9 +17,11 @@ const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
 
 root.render(<HashRouter>
-  <AuthProvider>
-    <App />
-  </AuthProvider>
+  <MessageProvider>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </MessageProvider>
 </HashRouter>);
 
 // If you want to start measuring performance in your app, pass a function

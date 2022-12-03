@@ -1,20 +1,19 @@
 import { BodyBox } from "../../components/BodyBox";
-import { bgColor, secondColor, textColor } from "../../theme";
-import { useState } from "react";
-import { IconImage, LoadImage } from "../../components/Image";
-import { Header } from "../../components/Header";
+import { bgColor, secondColor } from "../../theme";
+import { useCallback, useEffect } from "react";
+import { LoadImage } from "../../components/Image";
 import { CardBackground, IconTextRightCard } from "../../components/Card";
-import { BackgroundLabel, TextLabel } from "../../components/Label";
 import { PersonBackground } from "../auth/components/PersonBackground";
 import person from "../../assets/image/person.png"
-import logo from "../../assets/image/logo.png"
 import share from "../../assets/image/share.svg"
 import edit from "../../assets/image/edit.svg"
 import back from "../../assets/image/back.svg";
 import { IPoap } from "../poap";
-import { DetailItem, ListItem, Share, Star } from "../poap/components/Item";
+import { Share, Star } from "../poap/components/Item";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
+import { useAuth } from "../../components/UserAuth";
+// import api from "../../api";
 
 const SocialItem = ({ logo, text, handle }: { logo: string, text: string, handle?: () => void }) => {
   return (
@@ -34,38 +33,60 @@ const SocialItem = ({ logo, text, handle }: { logo: string, text: string, handle
 export const Mine = () => {
   const w = 24;
   const navigate = useNavigate();
-  const [data, setData] = useState<IPoap[]>([
-    {
-      "poap_id": '1321321321321',
-      "miner": '0x321312321',
-      "poap_name": "国际青年徽章",
-      "poap_number": 123,
-      "receive_condition": "receive_condition",
-      "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images",
-      "poap_intro": "poap_intro",
-      "favour_number": 456
-    },
-    {
-      "poap_id": '1321321321321',
-      "miner": '0x321312321',
-      "poap_name": "国际青年徽章",
-      "poap_number": 123,
-      "receive_condition": "receive_condition",
-      "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images",
-      "poap_intro": "poap_intro",
-      "favour_number": 456
-    },
-    {
-      "poap_id": '1321321321321',
-      "miner": '0x321312321',
-      "poap_name": "国际青年徽章",
-      "poap_number": 123,
-      "receive_condition": "receive_condition",
-      "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images",
-      "poap_intro": "poap_intro",
-      "favour_number": 456
-    },
-  ]);
+  const { userInfo, setUserInfo } = useAuth();
+
+  const getList = useCallback(async () => {
+    // const data = await api.getUserInfo();
+    setUserInfo({
+      "username": "username",
+      "uid": "uid",
+      "user_desc": "user_desc",
+      "follow_count": 12312,
+      "nft_count": 22222,
+      "dy_link": "string",
+      "ins_link": "string",
+      "weibo_link": "string",
+      "poap_list": [
+        {
+          "poap_id": '1321321321321',
+          "miner": '0x321312321',
+          "poap_name": "国际青年徽章",
+          "poap_number": 123,
+          "receive_condition": "receive_condition",
+          "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images",
+          "poap_intro": "poap_intro",
+          "favour_number": 456
+        },
+        {
+          "poap_id": '1321321321321',
+          "miner": '0x321312321',
+          "poap_name": "国际青年徽章",
+          "poap_number": 123,
+          "receive_condition": "receive_condition",
+          "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images",
+          "poap_intro": "poap_intro",
+          "favour_number": 456
+        },
+        {
+          "poap_id": '1321321321321',
+          "miner": '0x321312321',
+          "poap_name": "国际青年徽章",
+          "poap_number": 123,
+          "receive_condition": "receive_condition",
+          "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images",
+          "poap_intro": "poap_intro",
+          "favour_number": 456
+        },
+      ]
+    });
+  }, [setUserInfo])
+
+  // @ts-ignore
+  useEffect(() => {    
+    getList();
+
+    // eslint-disable-next-line
+  }, [])
 
   return (<>
     <PersonBackground image={person}>
@@ -76,7 +97,7 @@ export const Mine = () => {
           height: `${w}vw`,
           left: `calc(50% - ${w / 2}vw)`
         }}>
-          <img className="w-24 h-24 rounded-full" src={"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images"} />
+          <img className="w-24 h-24 rounded-full" src={"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images"} alt=""/>
         </div>
 
         <div className="absolute flex justify-center items-center bg-white rounded-full" style={{
@@ -85,7 +106,7 @@ export const Mine = () => {
           height: `14vw`,
           left: `6.5%`
         }}>
-          <img src={edit} className="w-6 h-6" />
+          <img src={edit} className="w-6 h-6"  alt=""/>
         </div>
 
         <div className="absolute flex justify-center items-center bg-white rounded-full" style={{
@@ -94,26 +115,26 @@ export const Mine = () => {
           height: `14vw`,
           right: `6.5%`
         }}>
-          <img src={share} className="w-6 h-6" />
+          <img src={share} className="w-6 h-6"  alt=""/>
         </div>
       </div>
     </PersonBackground>
     <div className="mt-4 text-center">
-      <div className="font-bold text-2xl">Abraham</div>
+      <div className="font-bold text-2xl">{userInfo?.username}</div>
       <div style={{
         color: "#989CB3"
-      }}>@did.ren/5566.DID</div>
-      <div className="font-bold text-sm">国际创新青年协会常务理事</div>
+      }}>@{userInfo?.uid}</div>
+      <div className="font-bold text-sm">{userInfo?.user_desc}</div>
     </div>
     <BodyBox>
       <div className="flex justify-between items-center my-8">
         <div className="flex-1 bg-white h-12 rounded-full mr-2 flex items-center justify-between px-6">
           <div>Links</div>
-          <div>168888</div>
+          <div>{userInfo?.follow_count}</div>
         </div>
         <div className="flex-1 bg-white h-12 rounded-full ml-2 flex items-center justify-between px-6">
           <div>NFT</div>
-          <div>242</div>
+          <div>{userInfo?.nft_count}</div>
         </div>
       </div>
       <SocialItem text={"Abraham在北京"} logo="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images" handle={() => { }} />
@@ -121,8 +142,8 @@ export const Mine = () => {
       <SocialItem text={"Abraham在北京"} logo="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images" handle={() => { }} />
       <div>
         <div className="flex mt-6 flex-wrap">
-          {data?.map((item, i) => {
-            return (<CardBackground className="p-0 m-0">
+          {userInfo?.poap_list?.map((item: IPoap, i: number) => {
+            return (<CardBackground className="p-0 m-0" key={i}>
               <LoadImage
                 src={item?.cover_pic}
                 className="rounded-t-3xl cursor-pointer h-96 w-full"

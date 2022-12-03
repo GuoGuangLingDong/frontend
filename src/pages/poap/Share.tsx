@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { PersonBackground } from "../auth/components/PersonBackground";
 import { List } from ".";
 
 export const Home = () => {

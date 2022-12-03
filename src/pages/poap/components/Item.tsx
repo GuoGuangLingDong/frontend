@@ -1,11 +1,10 @@
 import { bgColor, secondColor, textColor } from "../../../theme";
 import { useNavigate } from "react-router-dom";
-import { isMobile } from "../../../helpers/utilities";
-import { IconImage, LoadImage } from "../../../components/Image";
+import { LoadImage } from "../../../components/Image";
 import share from "../../../assets/image/share.svg";
 import { Button } from "../../../components/Button";
 import { CardBackground } from "../../../components/Card";
-import { DetailedHTMLProps, HTMLAttributes, ReactNode, useCallback } from "react";
+import { DetailedHTMLProps, HTMLAttributes } from "react";
 import { ClaimButton } from "../Claim";
 import { IPoap } from "..";
 

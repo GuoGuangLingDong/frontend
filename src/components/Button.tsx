@@ -1,6 +1,7 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
+import { SmallLoading } from "./Loading";
 
-export const Button = ({ children, deep, ...props }: { children: ReactNode, deep?: boolean } & ButtonHTMLAttributes<HTMLButtonElement>) => {
+export const Button = ({ children, deep, loading, ...props }: { children: ReactNode, loading?: boolean, deep?: boolean } & ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <button
       {...props}
@@ -10,7 +11,9 @@ export const Button = ({ children, deep, ...props }: { children: ReactNode, deep
         ...(props.style || {})
       }}
     >
-      {children}
+      <div className="flex items-center justify-center">
+        {loading && <><SmallLoading />&nbsp;</>}{children}
+      </div>
     </button>
   );
 }

@@ -1,13 +1,10 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { BodyBox } from "../../components/BodyBox";
-import { secondColor, textColor } from "../../theme";
+import { secondColor } from "../../theme";
 import { useEffect, useState } from "react";
-import { isMobile } from "../../helpers/utilities";
-import { LoadImage } from "../../components/Image";
 import { Header } from "../../components/Header";
-import { DetailItem, Share, Star } from "./components/Item";
+import { DetailItem } from "./components/Item";
 import { IPoap } from ".";
-import { ClaimButton } from "./Claim";
 import { CardBackground, IconTextRightCard } from "../../components/Card";
 import { Button } from "../../components/Button";
 
@@ -49,9 +46,8 @@ export const PoapInfoLabels = () => {
 }
 
 export const PoapDetail = () => {
-  const navigate = useNavigate();
   const param = useParams();
-  const [details, setDetails] = useState<IPoap>({
+  const [details] = useState<IPoap>({
     "poap_id": '1321321321321',
     "miner": '0x321312321',
     "poap_name": "国际青年徽章",
@@ -61,7 +57,6 @@ export const PoapDetail = () => {
     "poap_intro": "poap_intro",
     "favour_number": 456
   },);
-  const mobile = isMobile();
 
   useEffect(() => {
     const id = (param as any)?.id;
