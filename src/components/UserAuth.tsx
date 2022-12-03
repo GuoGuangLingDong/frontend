@@ -1,6 +1,7 @@
+import { message } from "antd";
 import { createContext, useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TAuthParams } from "../pages/auth/Login";
+import { TAuthParams } from "../pages/auth/Register";
 
 export const AuthContext = createContext(
   {} as {
@@ -33,10 +34,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     console.log(arg)
     navigate("/home");
   }, [navigate]);
+
   const register = useCallback((arg: TAuthParams) => {
     console.log(arg)
-    navigate("/login");
-  }, [navigate]);
+    // navigate("/login");
+    message.success("注册成功！")
+  }, []);
 
   return (
     <AuthContext.Provider value={{ userInfo, setUserInfo, isLogin, login, register }}>

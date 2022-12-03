@@ -1,4 +1,3 @@
-import { Header } from './components/Header';
 import { Footer } from "./components/Footer";
 import { AppRouter } from './routes';
 import { useLocation } from 'react-router-dom';
@@ -11,7 +10,6 @@ const App = () => {
 
   return (
     <div className="relativ overflow-hidden w-full sm:min-w-base min-h-screen" id="app-head" style={{ background: bgColor }}>
-      {isShowHeaderAndFooter && <Header />}
       <AppRouter />
       {isShowHeaderAndFooter && <Footer />}
     </div>

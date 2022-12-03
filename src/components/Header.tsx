@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
-import { memo, useCallback } from "react";
-import { secondColor } from "../theme";
+import { CSSProperties, memo, ReactNode } from "react";
+import logo from "../assets/image/logo.png";
+import menu from "../assets/image/menu.svg";
+import back from "../assets/image/back.svg";
+import { bgColor, secondColor } from "../theme";
+import { IDIVProps } from "../pages/poap/components/Item";
 
 export const nav = [
   { label: "Home", path: "/home" },
@@ -25,37 +29,43 @@ export const useQueryParams = () => {
   return params
 }
 
-export const Header = memo(() => {
+const HearderTitle: any = {
+  "did": "DID积分",
+  "detail": "POAP详情",
+  "details1": "定制个人主页",
+  "details2": "编辑内容",
+  "details3": "我的链接",
+  "details4": "星座联盟紫金徽章",
+  "detail4s": "铸造POAP"
+}
+
+export const hearderBoxCss = "cursor-pointer w-8 h-8 bg-white rounded-full flex justify-center items-center"
+export const hearderIconCss = "select-none cursor-pointer w-4 md:z-50 z-0"
+
+export const Header = memo(({ title, right, css }: { title?: string | ReactNode, right?: ReactNode, css?: CSSProperties }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const backTop = () => {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }
 
-  const goPath = useCallback((path: string) => {
-    navigate(`${path}`);
-    backTop();
-  }, [navigate])
-
   return (
-    <div className="flex px-4 lg:px-16 items-center  justify-between text-l fixed w-full h-16 md:h-16 bg-gray-50 md:bg-opacity-90 text-black text-opacity-70 shadow-sm z-50">
-      <img className="cursor-pointer mr-20 w-32 lg:w-10 md:z-50 z-0 hidden lg:block" src={"https://0.soompi.io/wp-content/uploads/2018/04/20170556/IU-140x140.jpg"} onClick={() => {
-        goPath("/home")
-      }} alt="logo" />
-      <img className="select-none cursor-pointer mr-20 w-10 md:z-50 z-0 block lg:hidden" src={"https://0.soompi.io/wp-content/uploads/2018/04/20170556/IU-140x140.jpg"} onClick={() => {
-        goPath("/home")
-      }} alt="logo" />
-
-      <div className="flex items-center cursor-pointer " onClick={() => {
-        navigate(`/profile`)
+    <div className="flex px-4 lg:px-16 items-center justify-between text-lg fixed w-full h-16 md:h-16 bg-gray-50 md:bg-opacity-90 text-black text-opacity-70 shadow-sm z-50" style={{ background: pathname === "/home" ? bgColor : "white", ...(css || {}) }}>
+      {pathname === "/home" ? <div className={hearderBoxCss} onClick={() => {
       }}>
-        <img
-          className="rounded-full mr-1 -mt-1 w-32 lg:w-8 md:z-50 z-0 hidden lg:block"
-          src={"https://0.soompi.io/wp-content/uploads/2018/04/20170556/IU-140x140.jpg"}
-          alt="logo" />
-        Serati Me
-      </div>
+        <img className={hearderIconCss} src={menu} alt="menu" />
+      </div> : <div className={hearderBoxCss} style={{ backgroundColor: bgColor }} onClick={() => {
+        navigate(-1);
+        backTop();
+      }}>
+        <img className={`${hearderIconCss} w-6`} src={back} alt="back" />
+      </div>}
+      {pathname === "/home"
+        ? <img className="select-none cursor-pointer w-14 md:z-50 z-0" src={logo} alt="logo" />
+        : <div>{title || HearderTitle[pathname?.split("/")?.[1]]}</div>}
+      {right || <div className="w-8"></div>}
     </div>
   );
 });
