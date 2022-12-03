@@ -27,7 +27,8 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "deploy": "bash deploy.sh"
+    "deploy": "bash deploy.sh",
+    "push": "git add . && git commit -m 'update' && git push"
   },
   "eslintConfig": {
     "extends": [

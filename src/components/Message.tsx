@@ -32,7 +32,7 @@ export const MessageProvider = ({ children }: { children: React.ReactNode }) => 
     const backgroundColor = useMemo(() => {
         return {
             info: "gray",
-            warn: "yellow",
+            warn: "orange",
             error: "red",
             success: "green",
         }[type]
@@ -40,14 +40,13 @@ export const MessageProvider = ({ children }: { children: React.ReactNode }) => 
 
     return (
         <MessageContext.Provider value={{ message }}>
-            {text && <div className="w-screen h-screen absolute" style={{ zIndex: 1000 }}>
-                <div className="absolute bottom-20 w-full">
-                    <div className="w-full flex justify-center">
-                        <div className="bg-gray-400 rounded-md px-4 py-3 text-white transform ease-in-out duration-500"
-                            style={{
-                                backgroundColor
-                            }}>{text}</div>
-                    </div>
+            {text && <div className="absolute bottom-20 w-full">
+                <div className="w-full flex justify-center">
+                    <div className="bg-gray-400 rounded-md px-4 py-3 text-white transform ease-in-out duration-500"
+                        style={{
+                            backgroundColor,
+                            zIndex: 1000
+                        }}>{text}</div>
                 </div>
             </div>}
             {children}
