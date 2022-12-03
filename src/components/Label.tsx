@@ -1,7 +1,6 @@
 import { DetailedHTMLProps, HTMLAttributes, ReactNode } from "react";
 import { isMobile } from "../helpers/utilities";
 import { bgColor } from "../theme";
-import { IconImage } from "./Image";
 import { Input } from "./Input";
 
 export const BackgroundLabel = ({
