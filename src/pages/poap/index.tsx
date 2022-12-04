@@ -68,7 +68,7 @@ export const List = () => {
       from: userInfo?.username,
       count: 10,
     });
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [])
 
   return (data?.length > 0 ?

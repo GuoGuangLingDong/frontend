@@ -8,12 +8,18 @@ import { PoapDetail } from "../pages/poap/Details";
 import { ClaimPOAP } from "../pages/poap/Claim";
 import { DIDScore } from "../pages/mine/DIDScore";
 import { Mine } from "../pages/mine";
+import { Follow } from "../pages/mine/Follow";
+import { Share } from "../pages/mine/Share";
+import { CastPOAP } from "../pages/poap/Cast";
 
 export const routes = [
   { path: "/login", component: <Login /> },
   { path: "/register", component: <Register /> },
   { path: "/test", component: <Test /> },
   { path: "/mine", component: <Mine /> },
+  { path: "/share", component: <Share /> },
+  { path: "/cast", component: <CastPOAP /> },
+  { path: "/follow", component: <Follow /> },
   { path: "/did-score", component: <DIDScore /> },
   { path: "/detail/:id", component: <PoapDetail /> },
   { path: "/claim/:id", component: <ClaimPOAP /> },

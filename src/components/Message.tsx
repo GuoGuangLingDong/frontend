@@ -40,12 +40,12 @@ export const MessageProvider = ({ children }: { children: React.ReactNode }) => 
 
     return (
         <MessageContext.Provider value={{ message }}>
-            {text && <div className="absolute bottom-20 w-full">
-                <div className="w-full flex justify-center">
+            {text && <div className="fixed w-full z-50 bottom-32">
+                <div className="absolute w-full flex justify-center px-6">
                     <div className="bg-gray-400 rounded-md px-4 py-3 text-white transform ease-in-out duration-500"
                         style={{
                             backgroundColor,
-                            zIndex: 1000
+                            zIndex: 1000,
                         }}>{text}</div>
                 </div>
             </div>}

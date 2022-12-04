@@ -10,6 +10,14 @@ const api = {
     getUserInfo: {
         method: 'get',
         url: '/user/profile'
+    },
+    getFollow: {
+        method: 'get',
+        url: '/user/follow_all'
+    },
+    cancelFollow: {
+        method: 'get',
+        url: '/user/unfollow'
     }
 };
 export default api;
