@@ -1,11 +1,11 @@
 const api = {
     login: {
         method: 'post',
-        url: '/user/log_in'
+        url: '/user/log_in',
     },
     register: {
         method: 'post',
-        url: '/user/sign_up',
+        url: '/user/sign-up',
     },
     getVerifyCode: {
         method: 'post',
