@@ -26,6 +26,7 @@ export const AuthContext = createContext(
     isLogin: boolean,
     login: (arg: TAuthParams) => void,
     register: (arg: TAuthParams) => void,
+    resetPassword: (arg: TAuthParams) => void,
     loading: boolean,
     openLoading: () => void,
     closeLoading: () => void
@@ -63,6 +64,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     navigate("/home");
   }, [navigate, closeLoading, message, openLoading]);
 
+  const resetPassword = useCallback(async (arg: TAuthParams) => {
+    openLoading();
+    // 重置函数
+
+
+    closeLoading();
+    message("密码修改成功！", "success");
+    navigate("/login");
+  }, [navigate, closeLoading, message, openLoading]);
+
   const register = useCallback(async (arg: TAuthParams) => {
     openLoading();
     await registerFUn(arg);
@@ -73,7 +84,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [navigate, closeLoading, message, openLoading]);
 
   return (
-    <AuthContext.Provider value={{ userInfo, setUserInfo, isLogin, login, register, loading, openLoading, closeLoading }}>
+    <AuthContext.Provider value={{ userInfo, setUserInfo, isLogin, login, register, loading, openLoading, closeLoading, resetPassword }}>
       {children}
     </AuthContext.Provider>
   )

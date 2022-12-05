@@ -11,10 +11,12 @@ import { Mine } from "../pages/mine";
 import { Follow } from "../pages/mine/Follow";
 import { Share } from "../pages/mine/Share";
 import { CastPOAP } from "../pages/poap/Cast";
+import { ResetPassword } from "../pages/auth/ResetPassword";
 
 export const routes = [
   { path: "/login", component: <Login /> },
   { path: "/register", component: <Register /> },
+  { path: "/reset-password", component: <ResetPassword /> },
   { path: "/test", component: <Test /> },
   { path: "/mine", component: <Mine /> },
   { path: "/share", component: <Share /> },

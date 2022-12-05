@@ -73,12 +73,13 @@ export const useRememberPassword = () => {
 export const useCheckInput = () => {
     const [, save] = useRememberPassword();
     const { message } = useMessage();
-    return useCallback((params: TAuthParams, idReister?: boolean) => {
+    return useCallback((params: TAuthParams, type?: "resetPassword" | "login" | "register") => {
+        console.log(type)
         if (!params.phone_number) {
             message("请输入手机号", "warn")
             return
         }
-        if (!params.verify_code && idReister) {
+        if (!params.verify_code) {
             message("请输入验证码", "warn")
             return
         }
@@ -185,7 +186,7 @@ export const Register = () => {
             <RememberPassword />
             <Button className="mt-10" disabled={loading} loading={loading} onClick={() => {
                 // 此处调用注册接口函数
-                const isChecked = checkValues(params, true);
+                const isChecked = checkValues(params, "register");
                 if (isChecked) {
                     register(params);
                 }

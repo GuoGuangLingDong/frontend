@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Button } from "../../components/Button"
 import { InputLabel } from "../../components/Label"
 import { useAuth } from "../../components/UserAuth"
@@ -8,6 +9,7 @@ import { ImageVerifyCode, TImageCode, useCheckInput, useParams, VerifyCode } fro
 
 export const Login = () => {
     const [params, setParams] = useParams();
+    const navigate = useNavigate();
     const { login, loading } = useAuth();
     const checkValues = useCheckInput();
     const [imageData, setImageData] = useState<TImageCode>();
@@ -32,11 +34,13 @@ export const Login = () => {
             }} />
             <div className="flex justify-between items-center text-sm">
                 <RememberPassword />
-                {/* <div>忘记密码</div> */}
+                <div onClick={()=>{
+                    navigate("/reset-password")
+                }}>忘记密码</div>
             </div>
             <Button className="mt-10" disabled={loading} loading={loading} onClick={() => {
                 // 此处调用登录接口函数
-                if (checkValues(params, false)) {
+                if (checkValues(params, "login")) {
                     login(params);
                 }
             }}>
