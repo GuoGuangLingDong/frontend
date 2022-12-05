@@ -31,10 +31,10 @@ export const MessageProvider = ({ children }: { children: React.ReactNode }) => 
 
     const backgroundColor = useMemo(() => {
         return {
-            info: "gray",
-            warn: "orange",
-            error: "red",
-            success: "green",
+            info: "#EEEFF4",
+            warn: "#F41263",
+            error: "#2E334E",
+            success: "#0DD570",
         }[type]
     }, [type])
 
