@@ -6,22 +6,26 @@ import { useState } from "react";
 import { Header } from "../../components/Header";
 import { DetailItem } from "./components/Item";
 import { CardBackground, IconTextRightCard } from "../../components/Card";
-import { PoapInfoLabels } from "./Details";
+import { PoapBaseInfo } from "./Details";
 import { BackgroundLabel } from "../../components/Label";
 import share from "../../assets/image/share.svg";
 import { IPoap } from ".";
-
-export const useClaim = () => {
-    return useCallback((item: IPoap) => {
-        console.log(item)
-    }, [])
-}
+import { useSwitch } from "../../components/Loading";
+import api from "../../api/index";
+import { useMessage } from "../../components/Message";
 
 export const ClaimButton = ({ item, text }: { item: IPoap, text?: string }) => {
-    const claim = useClaim();
+    const [loading, openLoading, closeLoading] = useSwitch();
+    const { message } = useMessage();
+    const claim = useCallback(async (item: IPoap) => {
+        openLoading();
+        await api.claim({ poap_id: item.poap_id });
+        closeLoading();
+        message("领取成功！", "success")
+    }, [message, openLoading, closeLoading])
 
     return (
-        <Button className="mt-6" onClick={() => {
+        <Button className="mt-6" loading={loading} disabled={loading} onClick={() => {
             // 此处调用立即领取接口函数
             claim(item)
         }}>
@@ -83,7 +87,7 @@ export const ClaimPOAP = () => {
                             </div>
                         </button>
                     </div>
-                    <PoapInfoLabels />
+                    <PoapBaseInfo />
                 </CardBackground>
             </BodyBox>
         </>

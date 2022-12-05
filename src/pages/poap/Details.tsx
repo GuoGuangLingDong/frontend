@@ -30,7 +30,7 @@ const Label = ({ text, value }: { text: string, value: string }) => {
   )
 }
 
-export const PoapInfoLabels = () => {
+export const PoapBaseInfo = () => {
   return (
     <>
       <Label text="发行平台" value="优版权" />
@@ -91,7 +91,7 @@ export const PoapDetail = () => {
               <div className="text-xs">yong.did</div>
             </div>
           </IconTextRightCard>
-          <PoapInfoLabels />
+          <PoapBaseInfo />
         </CardBackground>
       </BodyBox>
     </>

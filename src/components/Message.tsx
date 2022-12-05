@@ -22,8 +22,8 @@ export const MessageProvider = ({ children }: { children: React.ReactNode }) => 
     useEffect(() => {
         if (!text) return
         const timer = setTimeout(() => {
-            setText("")
-        }, 2000)
+            // setText("")
+        }, 3000)
         return () => {
             clearTimeout(timer)
         }

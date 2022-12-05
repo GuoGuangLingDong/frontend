@@ -9,8 +9,8 @@ import share from "../../assets/image/share.svg"
 import edit from "../../assets/image/edit.svg"
 import back from "../../assets/image/back.svg";
 import { IPoap } from "../poap";
-import { Share, Star } from "../poap/components/Item";
-import { useNavigate } from "react-router-dom";
+import { Holder, Star } from "../poap/components/Item";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { useAuth } from "../../components/UserAuth";
 // import api from "../../api";
@@ -30,8 +30,71 @@ const SocialItem = ({ logo, text, handle }: { logo: string, text: string, handle
   )
 }
 
-export const Mine = () => {
+export const MineBaseInfo = () => {
   const w = 24;
+  const { userInfo } = useAuth();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  return <>
+    <PersonBackground image={person} className={pathname === "/share" ? "rounded-t-3xl" : "rounded-none"}>
+      <div className="relative h-full">
+        <div className="absolute flex justify-center items-center rounded-full" style={{
+          bottom: pathname === "/share" ? "17%" : "-5%",
+          width: `${w}%`,
+          left: `calc(50% - ${w / 2}%)`
+        }}>
+          <img className="w-24 rounded-full" src={"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images"} alt="" />
+        </div>
+
+        {pathname !== "/share" && <><div className="absolute flex justify-center items-center bg-white rounded-full" style={{
+          bottom: "-14%",
+          width: `14vw`,
+          height: `14vw`,
+          left: `6.5%`
+        }}>
+          <img src={edit} className="w-6 h-6" alt="" />
+        </div>
+
+          <div className="absolute flex justify-center items-center bg-white rounded-full"
+            style={{
+              bottom: "-14%",
+              width: `14vw`,
+              height: `14vw`,
+              right: `6.5%`
+            }}
+            onClick={() => {
+              navigate("/share")
+            }}
+          >
+            <img src={share} className="w-6 h-6" alt="" />
+          </div>
+        </>}
+      </div>
+    </PersonBackground>
+    <div className="mt-4 text-center">
+      <div className="font-bold text-2xl">{userInfo?.username}</div>
+      <div style={{
+        color: "#989CB3"
+      }}>@{userInfo?.uid}</div>
+      <div className="font-bold text-sm">{userInfo?.user_desc}</div>
+    </div>
+
+    <BodyBox>
+      <div className="flex justify-between items-center my-8">
+        <div className="flex-1 bg-white h-12 rounded-full mr-2 flex items-center justify-between px-6">
+          <div>Links</div>
+          <div>{userInfo?.follow_count}</div>
+        </div>
+        <div className="flex-1 bg-white h-12 rounded-full ml-2 flex items-center justify-between px-6">
+          <div>NFT</div>
+          <div>{userInfo?.nft_count}</div>
+        </div>
+      </div>
+    </BodyBox></>
+}
+
+export const Mine = () => {
   const navigate = useNavigate();
   const { userInfo, setUserInfo } = useAuth();
 
@@ -82,61 +145,15 @@ export const Mine = () => {
   }, [setUserInfo])
 
   // @ts-ignore
-  useEffect(() => {    
+  useEffect(() => {
     getList();
 
     // eslint-disable-next-line
   }, [])
 
   return (<>
-    <PersonBackground image={person}>
-      <div className="relative h-full">
-        <div className="absolute flex justify-center items-center rounded-full" style={{
-          bottom: "-5%",
-          width: `${w}vw`,
-          height: `${w}vw`,
-          left: `calc(50% - ${w / 2}vw)`
-        }}>
-          <img className="w-24 h-24 rounded-full" src={"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images"} alt=""/>
-        </div>
-
-        <div className="absolute flex justify-center items-center bg-white rounded-full" style={{
-          bottom: "-14%",
-          width: `14vw`,
-          height: `14vw`,
-          left: `6.5%`
-        }}>
-          <img src={edit} className="w-6 h-6"  alt=""/>
-        </div>
-
-        <div className="absolute flex justify-center items-center bg-white rounded-full" style={{
-          bottom: "-14%",
-          width: `14vw`,
-          height: `14vw`,
-          right: `6.5%`
-        }}>
-          <img src={share} className="w-6 h-6"  alt=""/>
-        </div>
-      </div>
-    </PersonBackground>
-    <div className="mt-4 text-center">
-      <div className="font-bold text-2xl">{userInfo?.username}</div>
-      <div style={{
-        color: "#989CB3"
-      }}>@{userInfo?.uid}</div>
-      <div className="font-bold text-sm">{userInfo?.user_desc}</div>
-    </div>
+    <MineBaseInfo />
     <BodyBox>
-      <div className="flex justify-between items-center my-8">
-        <div className="flex-1 bg-white h-12 rounded-full mr-2 flex items-center justify-between px-6">
-          <div>Links</div>
-          <div>{userInfo?.follow_count}</div>
-        </div>
-        <div className="flex-1 bg-white h-12 rounded-full ml-2 flex items-center justify-between px-6">
-          <div>NFT</div>
-          <div>{userInfo?.nft_count}</div>
-        </div>
-      </div>
       <SocialItem text={"Abraham在北京"} logo="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images" handle={() => { }} />
       <SocialItem text={"Abraham在北京"} logo="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images" handle={() => { }} />
       <SocialItem text={"Abraham在北京"} logo="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images" handle={() => { }} />
@@ -157,7 +174,7 @@ export const Mine = () => {
                 </div>
                 <div className="text-sm flex items-center justify-between mt-2" style={{ color: secondColor }}>
                   <div className="flex items-center">
-                    <Share item={item} className="mr-4" />
+                    <Holder item={item} className="mr-4" />
                     <Star item={item} />
                   </div>
                   <Button

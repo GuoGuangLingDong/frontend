@@ -1,8 +1,9 @@
 import { ReactNode } from "react"
+import { IDIVProps } from "../../poap/components/Item"
 
-export const PersonBackground = ({ children, image }: { children?: ReactNode, image: string }) => {
+export const PersonBackground = ({ children, image, ...props }: { children?: ReactNode, image: string } & IDIVProps) => {
     return (
-        <div style={{
+        <div { ...props } style={{
             height: 200,
             backgroundImage: `url(${image})`,
             backgroundRepeat: "no-repeat",

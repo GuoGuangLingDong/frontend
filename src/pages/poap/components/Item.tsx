@@ -1,7 +1,8 @@
 import { bgColor, secondColor, textColor } from "../../../theme";
 import { useNavigate } from "react-router-dom";
 import { LoadImage } from "../../../components/Image";
-import share from "../../../assets/image/share.svg";
+import holder from "../../../assets/image/holder.svg";
+import star from "../../../assets/image/star.svg";
 import { Button } from "../../../components/Button";
 import { CardBackground } from "../../../components/Card";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
@@ -13,21 +14,17 @@ export type IDIVProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLIn
 export const Star = ({ item, ...props }: { item: IPoap } & IDIVProps) => {
   return (
     <div {...props} className={`flex item-center justify-center cursor-pointer flex-1 ${props.className || ""}`}>
-      <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9550" width="16" height="16">
-        <path d="M171.712 571.648l0.352 0.32 287.904 252.8a64 64 0 0 0 82.912 1.344l296.832-244.544a215.584 215.584 0 1 0-301.824-300.576L512 316.672l-25.888-35.616a215.584 215.584 0 1 0-314.4 290.624zM32 407.584a279.584 279.584 0 0 1 480-194.944 279.584 279.584 0 0 1 480 194.944 278.144 278.144 0 0 1-113.024 224.512l-295.36 243.392a128 128 0 0 1-165.888-2.592L129.984 620.16A278.976 278.976 0 0 1 32 407.584z" fill="#858891">
-        </path>
-      </svg>&nbsp;
-      <div>{item.poap_number || 0}</div>
+      <img src={star} className="w-3" alt="share" />
+      &nbsp;
+      <div>{item.favour_number || 0}</div>
     </div>
   )
 }
 
-export const Share = ({ item, ...props }: { item: IPoap } & IDIVProps) => {
+export const Holder = ({ item, ...props }: { item: IPoap } & IDIVProps) => {
   return (
-    <div {...props} className={`flex item-center justify-center cursor-pointer flex-1 ${props.className || ""}`} onClick={() => {
-      window.open(`https://twitter.com/intent/tweet?text=XXXXXXXXXXXXX`, "_blank")
-    }}>
-      <img src={share} className="w-3" alt="share" />
+    <div {...props} className={`flex item-center justify-center cursor-pointer flex-1 ${props.className || ""}`}>
+      <img src={holder} className="w-4" alt="share" />
       &nbsp;
       <div>{item.poap_number || 0}</div>
     </div>
@@ -50,7 +47,7 @@ export const DetailItem = ({ item }: { item: IPoap }) => {
         {item.poap_name}
       </div>
       <div className="text-xs flex items-center mt-2" style={{ color: secondColor }}>
-        <Share item={item} style={{ justifyContent: "start" }} />
+        <Holder item={item} style={{ justifyContent: "start" }} />
         <Star item={item} />
         <div style={{ flex: 4, textAlign: "right" }} >
           限量发行
@@ -89,7 +86,9 @@ export const ListItem = ({ item, ...props }: { item: IPoap } & IDIVProps) => {
       </div>
     </div>
     <div className="flex items-center justify-between px-2 my-2 text-xs">
-      <div className="text-xs transform scale-90 origin-left">
+      <div className="text-xs transform scale-90 origin-left" onClick={() => {
+        navigate(`/detail/${item?.poap_id}`)
+      }}>
         {item.poap_name}
       </div>
       <Button
@@ -102,7 +101,7 @@ export const ListItem = ({ item, ...props }: { item: IPoap } & IDIVProps) => {
       </Button>
     </div>
     <div className="text-xs flex items-center border-t h-10" style={{ color: secondColor }}>
-      <Share item={item} />
+      <Holder item={item} />
       <div style={{ width: 1, height: "100%", backgroundColor: bgColor }}></div>
       <Star item={item} />
     </div>

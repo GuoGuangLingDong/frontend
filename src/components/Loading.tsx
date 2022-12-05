@@ -10,8 +10,8 @@ export const SmallLoading = (props: { size?: number, color?: string }) => {
     }}></div>)
 }
 
-export const useSwitch = () => {
-    const [isOpen, setRequesting] = React.useState(false)
+export const useSwitch = (isSwitch?: boolean) => {
+    const [isOpen, setRequesting] = React.useState(!!isSwitch)
     const open = () => {
         setRequesting(true)
     };

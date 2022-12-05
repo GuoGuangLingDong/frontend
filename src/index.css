@@ -41,10 +41,11 @@ input {
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-	-webkit-appearance: none;
+  -webkit-appearance: none;
 }
+
 input[type='number'] {
-	-moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 .small-loading {
@@ -63,4 +64,23 @@ input[type='number'] {
   to {
     transform: rotate(360deg);
   }
+}
+
+.select-left {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-right: solid 20px transparent;
+  /* border-left: solid 10px transparent; */
+  border-bottom: solid 20px white;
+}
+
+.select-right {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: solid 20px transparent;
+  border-bottom: solid 20px white;
 }

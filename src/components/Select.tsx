@@ -1,7 +1,21 @@
-import { Dispatch, Fragment, SetStateAction } from 'react'
+import { CSSProperties, Dispatch, Fragment, ReactNode, SetStateAction } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ArrowImg } from './Header'
 import { secondColor, thirdColor } from '../theme'
+
+export const DropDown = ({ children, isOpen, css, right }: { children: ReactNode, isOpen: boolean, css?: CSSProperties, right?: boolean }) => {
+
+    return (
+        isOpen ? <div className="fixed top-20 w-32 bg-white shadow-2xl rounded-md cursor-default" style={css}
+            onClick={(e) => {
+                e.stopPropagation();
+            }}
+        >
+            <div className={`-top-4 ${right ? "right-0 select-right" : "left-0 select-left"} shadow-2xl`}></div>
+            {children}
+        </div> : null
+    )
+}
 
 export const Select = ({ list, setSelectCoin, selectCoin }: { list: any[], setSelectCoin: Dispatch<SetStateAction<number>>, selectCoin: number }) => {
     return (

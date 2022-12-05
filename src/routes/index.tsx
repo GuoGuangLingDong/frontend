@@ -20,6 +20,7 @@ export const routes = [
   { path: "/share", component: <Share /> },
   { path: "/cast", component: <CastPOAP /> },
   { path: "/follow", component: <Follow /> },
+  { path: "/share", component: <Share /> },
   { path: "/did-score", component: <DIDScore /> },
   { path: "/detail/:id", component: <PoapDetail /> },
   { path: "/claim/:id", component: <ClaimPOAP /> },

@@ -5,7 +5,6 @@ import { BodyBox } from "../../components/BodyBox";
 import { useState } from "react";
 import { Header } from "../../components/Header";
 import { CardBackground } from "../../components/Card";
-import { IPoap } from ".";
 import { useSwitch } from "../../components/Loading";
 import api from "../../api";
 import { useMessage } from "../../components/Message";
@@ -16,25 +15,6 @@ export type TCastPoapParams = {
     receive_cond?: string,
     cover_img?: string,
     poap_intro?: string
-}
-
-export const useClaim = () => {
-    return useCallback((item: IPoap) => {
-        console.log(item)
-    }, [])
-}
-
-export const ClaimButton = ({ item, text }: { item: IPoap, text?: string }) => {
-    const claim = useClaim();
-
-    return (
-        <Button className="mt-6" onClick={() => {
-            // 此处调用立即领取接口函数
-            claim(item)
-        }}>
-            {text || "立即领取"}
-        </Button>
-    )
 }
 
 // 铸造POAP

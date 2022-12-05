@@ -5,11 +5,16 @@ import logo from "../assets/image/logo.png";
 import menu from "../assets/image/menu.svg";
 import back from "../assets/image/back.svg";
 import { bgColor, secondColor } from "../theme";
-import { IDIVProps } from "../pages/poap/components/Item";
+import { useSwitch } from "./Loading";
+import { DropDown } from "./Select";
 
-export const nav = [
-  { label: "Home", path: "/home" },
-  { label: "login", path: "/login" },
+export const navs = [
+  { label: "发现POAP", path: "/home" },
+  { label: "铸造POAP", path: "/cast" },
+  { label: "导入NFT", path: "/login" },
+  { label: "我的链接", path: "/follow" },
+  { label: "DID积分", path: "/did-score" },
+  { label: "定制主页", path: "/mine" }
 ]
 
 export const ArrowImg = ({ color, cursor, handle, css }: { color?: string, cursor?: string, handle?: () => void, css?: string }) => {
@@ -39,12 +44,35 @@ const HearderTitle: any = {
   "detail4s": "铸造POAP"
 }
 
+const Memu = ({ isOpen, close }: { isOpen: boolean, close: () => void }) => {
+  const navigate = useNavigate();
+  return (
+    <DropDown isOpen={isOpen} css={{
+      left: 30,
+      top: 65,
+      right: "none"
+    }}>
+      <div className="text-center" style={{ fontWeight: 600 }}>
+        {navs?.map((item: any, index: number) => {
+          return <div key={index} className="py-2" onClick={() => {
+            navigate(item.path);
+            close();
+          }} style={{
+            borderTop: index !== 0 ? "1px solid #EEEFF4" : "none"
+          }}>{item.label}</div>
+        })}
+      </div>
+    </DropDown>
+  )
+}
+
 export const hearderBoxCss = "cursor-pointer w-8 h-8 bg-white rounded-full flex justify-center items-center"
 export const hearderIconCss = "select-none cursor-pointer w-4 md:z-50 z-0"
 
 export const Header = memo(({ title, right, css }: { title?: string | ReactNode, right?: ReactNode, css?: CSSProperties }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [isOpenMenu, openMenu, closeMenu] = useSwitch();
 
   const backTop = () => {
     document.documentElement.scrollTop = 0;
@@ -54,8 +82,10 @@ export const Header = memo(({ title, right, css }: { title?: string | ReactNode,
   return (
     <div className="flex px-4 lg:px-16 items-center justify-between text-lg fixed w-full h-16 md:h-16 bg-gray-50 md:bg-opacity-90 text-black text-opacity-70 shadow-sm z-50" style={{ background: pathname === "/home" ? bgColor : "white", ...(css || {}) }}>
       {pathname === "/home" ? <div className={hearderBoxCss} onClick={() => {
+        isOpenMenu ? closeMenu() : openMenu();
       }}>
         <img className={hearderIconCss} src={menu} alt="menu" />
+        <Memu isOpen={isOpenMenu} close={closeMenu} />
       </div> : <div className={hearderBoxCss} style={{ backgroundColor: bgColor }} onClick={() => {
         navigate(-1);
         backTop();
