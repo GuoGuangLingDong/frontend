@@ -27,23 +27,6 @@ export const ArrowImg = ({ color, cursor, handle, css }: { color?: string, curso
   )
 }
 
-export const useQueryParams = () => {
-  const { search } = useLocation();
-  const parmasString = search.substring(1);
-  const params = new URLSearchParams(parmasString);
-  return params
-}
-
-const HearderTitle: any = {
-  "did": "DID积分",
-  "detail": "POAP详情",
-  "details1": "定制个人主页",
-  "details2": "编辑内容",
-  "details3": "我的链接",
-  "details4": "星座联盟紫金徽章",
-  "detail4s": "铸造POAP"
-}
-
 const Memu = ({ isOpen, close }: { isOpen: boolean, close: () => void }) => {
   const navigate = useNavigate();
   return (
@@ -94,7 +77,7 @@ export const Header = memo(({ title, right, css }: { title?: string | ReactNode,
       </div>}
       {pathname === "/home"
         ? <img className="select-none cursor-pointer w-14 md:z-50 z-0" src={logo} alt="logo" />
-        : <div>{title || HearderTitle[pathname?.split("/")?.[1]]}</div>}
+        : <div>{title}</div>}
       {right || <div className="w-8"></div>}
     </div>
   );

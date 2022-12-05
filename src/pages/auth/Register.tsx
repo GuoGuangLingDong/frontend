@@ -6,13 +6,16 @@ import { useAuth } from "../../components/UserAuth"
 import { AuthBox } from "./components/AuthBox"
 import { RememberPassword } from "./components/RememberPassword"
 import api from "../../api/index";
+import { useAutoRequest, useRequest } from "../../hooks/useRequest"
 
 export type TAuthParams = {
     phone_number?: string,
     image_code?: string,
     password?: string,
+    password2?: string,
     verify_code?: string,
-    invite_code?: string
+    invite_code?: string,
+    username?: string,
 }
 
 export type TImageCode = {
@@ -23,8 +26,10 @@ export type TImageCode = {
 export const useParams = () => {
     const [values, setValues] = useState<TAuthParams>({
         phone_number: "",
+        username: "",
         image_code: "",
         password: "",
+        password2: "",
         verify_code: "",
         invite_code: ""
     });
@@ -88,8 +93,20 @@ export const useCheckInput = () => {
 
 export const VerifyCode = ({ phone, imageData, from, image_code }: { imageData?: TImageCode, phone?: string, from: "register" | "login", image_code?: string }) => {
     const [time, setTimt] = useState(0);
+    const [, getCode] = useRequest(api.getVerifyCode, true);
+    const { message } = useMessage();
 
     const getVerifyCode = async () => {
+        if (!phone) {
+            message("请输入手机号", "warn")
+            return
+        }
+
+        if (!image_code) {
+            message("请输入校验码", "warn")
+            return
+        }
+
         // 传给获取手机验证码的接口的参数
         const params = {
             phone,
@@ -99,8 +116,7 @@ export const VerifyCode = ({ phone, imageData, from, image_code }: { imageData?:
         }
 
         // 获取手机验证码逻辑
-        await api.getVerifyCode(params);
-        // 获取成功后调用
+        await getCode(params);
         setTimt(60);
     };
 
@@ -126,19 +142,15 @@ export const VerifyCode = ({ phone, imageData, from, image_code }: { imageData?:
 }
 
 export const ImageVerifyCode = ({ imageData, setImageData }: { imageData?: TImageCode, setImageData: React.Dispatch<React.SetStateAction<TImageCode | undefined>> }) => {
-    const getImageVerifyCode = async () => {
-        // 获取图形验证码逻辑
-        const data = await api.getImageCode();
-        //获取图片验证码成功后调用
-        setImageData(data);
-    };
+    const [data, getImageVerifyCode] = useAutoRequest(api.getImageCode);
 
     useEffect(() => {
-        getImageVerifyCode();
-    // eslint-disable-next-line
-    }, [])
+        if (!data) return
+        setImageData(data)
+        // eslint-disable-next-line
+    }, [data])
 
-    return (<img src={imageData?.base64} alt="" style={{ width: 60, height: 30 }} onClick={getImageVerifyCode} />)
+    return (<img src={imageData?.base64} alt="" style={{ width: 60, height: 30 }} onClick={() => { getImageVerifyCode() }} />)
 }
 
 export const Register = () => {
@@ -149,6 +161,9 @@ export const Register = () => {
 
     return (<div>
         <AuthBox>
+            <InputLabel text="用户名" maxLength={11} value={params.username} onChange={(val) => {
+                setParams({ username: val })
+            }} />
             <InputLabel text="手机号(+86)" maxLength={11} value={params.phone_number} onChange={(val) => {
                 setParams({ phone_number: val })
             }} />
@@ -161,13 +176,17 @@ export const Register = () => {
             <InputLabel text="密码" type="password" value={params.password} onChange={(val) => {
                 setParams({ password: val })
             }} />
+            <InputLabel text="确认密码" type="password" value={params.password2} onChange={(val) => {
+                setParams({ password: val })
+            }} />
             <InputLabel text="邀请码" value={params.invite_code} onChange={(val) => {
                 setParams({ invite_code: val })
             }} />
             <RememberPassword />
             <Button className="mt-10" disabled={loading} loading={loading} onClick={() => {
                 // 此处调用注册接口函数
-                if (checkValues(params, true)) {
+                const isChecked = checkValues(params, true);
+                if (isChecked) {
                     register(params);
                 }
             }}>

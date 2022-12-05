@@ -34,7 +34,6 @@ const httpTool = ({
     function (err) {
       let config = err.config; // 如果config不存在或未设置重试选项，请拒绝
       // console.log(config, 'config');
-
       if (!config || !config.retry) return Promise.reject(err); // 设置变量跟踪重试次数
       config.__retryCount = config.__retryCount || 0; // 检查是否已经达到最大重试总次数
       if (config.__retryCount >= config.retry) {

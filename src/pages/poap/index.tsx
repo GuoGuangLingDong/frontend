@@ -8,6 +8,7 @@ import { isMobile } from "../../helpers/utilities";
 import api from "../../api/index";
 import { Banner } from "./components/Banner";
 import { SmallLoading, useSwitch } from "../../components/Loading";
+import { LoadPage } from "../../components/LoadPage";
 
 interface IPoapSearchParams {
   from: number,
@@ -49,98 +50,15 @@ export const List = ({ data }: { data: IPoap[] }) => {
 };
 
 export const Home = () => {
-  const [from, setPageNo] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [isOpenSearch, openSearch, closeSearch] = useSwitch();
-
-  const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const dom = ref?.current;
-    if (!dom) return
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(item => {
-        setIsVisible(item.isIntersecting);
-        setPageNo(1);
-      })
-    }, {
-      root: null,
-      threshold: 0.3,
-    })
-
-    io.observe(dom)
-  }, [ref])
-
-  console.log(from)
-
-  const [data, setData] = useState<IPoap[]>([
-    {
-      "poap_id": '1321321321321',
-      "miner": '0x321312321',
-      "poap_name": "国际青年徽章",
-      "poap_number": 123,
-      "receive_condition": "receive_condition",
-      "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images",
-      "poap_intro": "poap_intro",
-      "favour_number": 456
-    },
-    {
-      "poap_id": '1321321321321',
-      "miner": '0x321312321',
-      "poap_name": "国际青年徽章",
-      "poap_number": 123,
-      "receive_condition": "receive_condition",
-      "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images",
-      "poap_intro": "poap_intro",
-      "favour_number": 456
-    },
-    {
-      "poap_id": '1321321321321',
-      "miner": '0x321312321',
-      "poap_name": "国际青年徽章",
-      "poap_number": 123,
-      "receive_condition": "receive_condition",
-      "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images",
-      "poap_intro": "poap_intro",
-      "favour_number": 456
-    },
-    {
-      "poap_id": '1321321321321',
-      "miner": '0x321312321',
-      "poap_name": "国际青年徽章",
-      "poap_number": 123,
-      "receive_condition": "receive_condition",
-      "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images",
-      "poap_intro": "poap_intro",
-      "favour_number": 456
-    },
-    {
-      "poap_id": '1321321321321',
-      "miner": '0x321312321',
-      "poap_name": "国际青年徽章",
-      "poap_number": 123,
-      "receive_condition": "receive_condition",
-      "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images",
-      "poap_intro": "poap_intro",
-      "favour_number": 456
-    },
-  ]);
-
-  const getList = useCallback(async (arg: IPoapSearchParams) => {
-    const data = await api.getPoapList(arg);
-    setIsVisible(false);
-    setData(data);
-  }, [setData, setIsVisible])
-
-  useEffect(() => {
-    getList({
-      count: 10,
-      from: 1
+  const [data, setData] = useState<IPoap[]>([]);
+  const getList = useCallback(async (pageNo: number) => {
+    await api.getPoapList({
+      from: pageNo,
+      count: 10
     });
-
-    //eslint-disable-next-line
-  }, [])
+  }, [searchValue])
 
   return (
     <>
@@ -163,10 +81,9 @@ export const Home = () => {
         </div>} />}
       <main className="mx-auto mb-8 sm:mb-16 pt-16">
         <Banner />
-        <List data={data} />
-        <div ref={ref} className="flex justify-center mt-10">
-          {isVisible && <SmallLoading color={textColor} size={30} />}
-        </div>
+        <LoadPage setData={setData} getList={getList}>
+          <List data={data} />
+        </LoadPage>
       </main>
     </>
   );

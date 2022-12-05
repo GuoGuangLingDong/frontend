@@ -3,7 +3,7 @@ import { useMessage } from '../components/Message';
 import httpTool from '../service/httpTool';
 
 const httpAxios = httpTool({
-  timeout: 3,
+  timeout: 100,
   failMesage: (msg: string) => {
     console.log(msg)
     // message.warn(msg);

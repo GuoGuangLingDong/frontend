@@ -5,6 +5,7 @@ import { useSwitch } from "./Loading";
 import { useMessage } from "./Message";
 import api from "../api/index";
 import { IPoap } from "../pages/poap";
+import { useRequest } from "../hooks/useRequest";
 
 export interface IUserInfo {
   "username": string
@@ -38,6 +39,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, openLoading, closeLoading] = useSwitch();
   const navigate = useNavigate();
   const { message } = useMessage();
+  const [, loginFun] = useRequest(api.login, { manual: true });
+  const [, registerFUn] = useRequest(api.register, { manual: true });
   // const { pathname } = useLocation();
   const isLogin = false;
 
@@ -52,7 +55,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = useCallback(async (arg: TAuthParams) => {
     openLoading();
-    await api.login(arg);
+    await loginFun({
+
+    });
     closeLoading();
     message("登录成功！", "success");
     navigate("/home");
@@ -60,7 +65,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const register = useCallback(async (arg: TAuthParams) => {
     openLoading();
-    await api.register(arg);
+    await registerFUn(arg);
     closeLoading();
     message("注册成功！", "success");
     // window.open("http://did.crichain.cn:8080/")
