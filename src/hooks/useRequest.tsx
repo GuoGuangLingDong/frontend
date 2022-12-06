@@ -8,7 +8,7 @@ export const useRequest = (service: any, options?: any) => {
   const requset = async (arg?: any) => {
     // 发接口请求
     let res = await service(arg ? arg : options?.arg);
-    if (res.data?.code == 0) {
+    if (res.data?.code === 0) {
       // 请求成功
       setData(res.data?.data);
       return res.data?.data
@@ -36,6 +36,8 @@ export const useAutoRequest = (service: any, options?: any) => {
       // 默认
       requset(options?.arg);
     }
+
+    // eslint-disable-next-line
   }, [options]);
 
   return [

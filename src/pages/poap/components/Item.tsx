@@ -1,4 +1,4 @@
-import { bgColor, secondColor, textColor } from "../../../theme";
+import { bgColor, secondColor } from "../../../theme";
 import { useNavigate } from "react-router-dom";
 import { LoadImage } from "../../../components/Image";
 import holder from "../../../assets/image/holder.svg";
@@ -6,60 +6,29 @@ import star from "../../../assets/image/star.svg";
 import { Button } from "../../../components/Button";
 import { CardBackground } from "../../../components/Card";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
-import { ClaimButton } from "../Claim";
 import { IPoap } from "..";
 
 export type IDIVProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLInputElement>
 
-export const Star = ({ item, ...props }: { item: IPoap } & IDIVProps) => {
+export const Star = ({ amount, ...props }: { amount: number } & IDIVProps) => {
   return (
     <div {...props} className={`flex item-center justify-center cursor-pointer flex-1 ${props.className || ""}`}>
       <img src={star} className="w-3" alt="share" />
       &nbsp;
-      <div>{item.favour_number || 0}</div>
+      <div>{amount || 0}</div>
     </div>
   )
 }
 
-export const Holder = ({ item, ...props }: { item: IPoap } & IDIVProps) => {
+export const Holder = ({ amount, ...props }: { amount: number } & IDIVProps) => {
   return (
     <div {...props} className={`flex item-center justify-center cursor-pointer flex-1 ${props.className || ""}`}>
       <img src={holder} className="w-4" alt="share" />
       &nbsp;
-      <div>{item.poap_number || 0}</div>
+      <div>{amount || 0}</div>
     </div>
   )
 }
-
-export const DetailItem = ({ item }: { item: IPoap }) => {
-  const navigate = useNavigate();
-
-  return (<CardBackground className="p-0 m-0">
-    <LoadImage
-      src={item?.cover_pic}
-      className="rounded-t-3xl cursor-pointer h-96 w-full"
-      style={{ padding: 2 }}
-      onClick={() => {
-        navigate(`/detail/${item?.poap_id}`)
-      }} />
-    <div className="p-4">
-      <div className="text-sm">
-        {item.poap_name}
-      </div>
-      <div className="text-xs flex items-center mt-2" style={{ color: secondColor }}>
-        <Holder item={item} style={{ justifyContent: "start" }} />
-        <Star item={item} />
-        <div style={{ flex: 4, textAlign: "right" }} >
-          限量发行
-          <span style={{ color: textColor }}>{item.poap_number || 0}</span>
-          张
-        </div>
-      </div>
-      <ClaimButton item={item} />
-    </div>
-  </CardBackground>
-  )
-};
 
 export const ListItem = ({ item, ...props }: { item: IPoap } & IDIVProps) => {
   const navigate = useNavigate();
@@ -101,9 +70,9 @@ export const ListItem = ({ item, ...props }: { item: IPoap } & IDIVProps) => {
       </Button>
     </div>
     <div className="text-xs flex items-center border-t h-10" style={{ color: secondColor }}>
-      <Holder item={item} />
+      <Holder amount={item.poap_number} />
       <div style={{ width: 1, height: "100%", backgroundColor: bgColor }}></div>
-      <Star item={item} />
+      <Star amount={item.favour_number} />
     </div>
   </CardBackground>
   )

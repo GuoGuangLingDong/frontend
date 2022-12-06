@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     closeLoading();
     message("登录成功！", "success");
     navigate("/home");
-  }, [navigate, closeLoading, message, openLoading]);
+  }, [navigate, closeLoading, message, openLoading, loginFun]);
 
   const resetPassword = useCallback(async (arg: TAuthParams) => {
     openLoading();
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     message("注册成功！", "success");
     // window.open("http://did.crichain.cn:8080/")
     navigate("/login");
-  }, [navigate, closeLoading, message, openLoading]);
+  }, [navigate, closeLoading, message, openLoading, registerFUn]);
 
   return (
     <AuthContext.Provider value={{ userInfo, setUserInfo, isLogin, login, register, loading, openLoading, closeLoading, resetPassword }}>

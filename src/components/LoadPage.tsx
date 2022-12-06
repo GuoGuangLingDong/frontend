@@ -1,7 +1,5 @@
-import { DetailedHTMLProps, HTMLAttributes, ReactNode, useCallback, useEffect, useRef, useState } from "react";
-import { isMobile } from "../helpers/utilities";
-import { bgColor, textColor } from "../theme";
-import { Input } from "./Input";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { textColor } from "../theme";
 import { SmallLoading } from "./Loading";
 
 const mockdata = [
@@ -63,7 +61,7 @@ export const LoadPage = ({
     children
 }: {
     getList: (pageNo: number) => Promise<void>,
-    setData: React.Dispatch<React.SetStateAction<any[]>>
+    setData?: React.Dispatch<React.SetStateAction<any>>
     children: ReactNode
 }) => {
     const ref = useRef<HTMLDivElement>(null);
@@ -75,8 +73,8 @@ export const LoadPage = ({
         await getList?.(pageNo);
         console.log("请求成功", pageNo);
         setIsVisible(false);
-        setData((pre: any[]) => ([...pre, ...mockdata]));
-    }, [setIsVisible, pageNo, getList])
+        setData?.((pre: any[]) => ([...pre, ...mockdata]));
+    }, [setIsVisible, pageNo, getList, setData])
 
     useEffect(() => {
         getListFun();

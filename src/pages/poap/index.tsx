@@ -1,19 +1,15 @@
 import { Header, hearderBoxCss, hearderIconCss } from "../../components/Header";
 import search from "../../assets/image/search.svg";
-import { secondColor, textColor } from "../../theme";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { secondColor } from "../../theme";
+import { useCallback, useRef, useState } from "react";
 import { BodyBox } from "../../components/BodyBox";
 import { ListItem } from "./components/Item";
 import { isMobile } from "../../helpers/utilities";
 import api from "../../api/index";
 import { Banner } from "./components/Banner";
-import { SmallLoading, useSwitch } from "../../components/Loading";
+import { useSwitch } from "../../components/Loading";
 import { LoadPage } from "../../components/LoadPage";
-
-interface IPoapSearchParams {
-  from: number,
-  count: number
-}
+import { useRequest } from "../../hooks/useRequest";
 
 export interface IPoap {
   "poap_id": string,
@@ -53,12 +49,13 @@ export const Home = () => {
   const [searchValue, setSearchValue] = useState("");
   const [isOpenSearch, openSearch, closeSearch] = useSwitch();
   const [data, setData] = useState<IPoap[]>([]);
+  const [, getPoapList] = useRequest(api.getPoapList);
   const getList = useCallback(async (pageNo: number) => {
-    await api.getPoapList({
+    await getPoapList({
       from: pageNo,
       count: 10
     });
-  }, [searchValue])
+  }, [getPoapList])
 
   return (
     <>

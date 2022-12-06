@@ -13,6 +13,7 @@ import { Holder, Star } from "../poap/components/Item";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { useAuth } from "../../components/UserAuth";
+import { Header } from "../../components/Header";
 // import api from "../../api";
 
 const SocialItem = ({ logo, text, handle }: { logo: string, text: string, handle?: () => void }) => {
@@ -152,6 +153,7 @@ export const Mine = () => {
   }, [])
 
   return (<>
+    <Header css={{ boxShadow: "none", background: "transparent" }}/>
     <MineBaseInfo />
     <BodyBox>
       <SocialItem text={"Abraham在北京"} logo="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images" handle={() => { }} />
@@ -174,8 +176,8 @@ export const Mine = () => {
                 </div>
                 <div className="text-sm flex items-center justify-between mt-2" style={{ color: secondColor }}>
                   <div className="flex items-center">
-                    <Holder item={item} className="mr-4" />
-                    <Star item={item} />
+                    <Holder amount={item.poap_number} className="mr-4" />
+                    <Star amount={item.favour_number} />
                   </div>
                   <Button
                     className="w-16 py-1 text-xs transform scale-75 origin-right"

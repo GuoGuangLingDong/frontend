@@ -1,18 +1,14 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import { BodyBox } from "../../components/BodyBox"
 import { Button } from "../../components/Button"
 import { CardBackground } from "../../components/Card"
 import { Header } from "../../components/Header"
 import { InputLabel } from "../../components/Label"
 import { useAuth } from "../../components/UserAuth"
-import { AuthBox } from "./components/AuthBox"
-import { RememberPassword } from "./components/RememberPassword"
 import { ImageVerifyCode, TImageCode, useCheckInput, useParams, VerifyCode } from "./Register"
 
 export const ResetPassword = () => {
     const [params, setParams] = useParams();
-    const navigate = useNavigate();
     const { resetPassword, loading } = useAuth();
     const checkValues = useCheckInput();
     const [imageData, setImageData] = useState<TImageCode>();

@@ -11,7 +11,6 @@ import { DropDown } from "./Select";
 export const navs = [
   { label: "发现POAP", path: "/home" },
   { label: "铸造POAP", path: "/cast" },
-  { label: "导入NFT", path: "/login" },
   { label: "我的链接", path: "/follow" },
   { label: "DID积分", path: "/did-score" },
   { label: "定制主页", path: "/mine" }
@@ -64,7 +63,7 @@ export const Header = memo(({ title, right, css }: { title?: string | ReactNode,
 
   return (
     <div className="flex px-4 lg:px-16 items-center justify-between text-lg fixed w-full h-16 md:h-16 bg-gray-50 md:bg-opacity-90 text-black text-opacity-70 shadow-sm z-50" style={{ background: pathname === "/home" ? bgColor : "white", ...(css || {}) }}>
-      {pathname === "/home" ? <div className={hearderBoxCss} onClick={() => {
+      {["/home", "/mine"]?.includes(pathname) ? <div className={hearderBoxCss} onClick={() => {
         isOpenMenu ? closeMenu() : openMenu();
       }}>
         <img className={hearderIconCss} src={menu} alt="menu" />
