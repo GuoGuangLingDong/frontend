@@ -94,7 +94,7 @@ export const useCheckInput = () => {
 
 export const VerifyCode = ({ phone, imageData, from, image_code }: { imageData?: TImageCode, phone?: string, from: "register" | "login", image_code?: string }) => {
     const [time, setTimt] = useState(0);
-    const [, getCode] = useRequest(api.getVerifyCode, true);
+    const [, getCode] = useRequest(api.getVerifyCode);
     const { message } = useMessage();
 
     const getVerifyCode = async () => {

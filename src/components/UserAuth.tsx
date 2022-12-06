@@ -40,8 +40,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, openLoading, closeLoading] = useSwitch();
   const navigate = useNavigate();
   const { message } = useMessage();
-  const [, loginFun] = useRequest(api.login, { manual: true });
-  const [, registerFUn] = useRequest(api.register, { manual: true });
+  const [, loginFun] = useRequest(api.login);
+  const [, registerFUn] = useRequest(api.register);
   // const { pathname } = useLocation();
   const isLogin = false;
 

@@ -1,10 +1,11 @@
 import { BodyBox } from "../../components/BodyBox";
-import { secondColor } from "../../theme";
+import { secondColor, textColor } from "../../theme";
 import { useCallback, useEffect, useState } from "react";
 import { IconImage } from "../../components/Image";
 import { Header } from "../../components/Header";
 import { CardBackground } from "../../components/Card";
 import { TextLabel } from "../../components/Label";
+import huizhang from "../../assets/image/huizhang.png";
 import api from "../../api/index";
 
 interface IDIDScoreItem {
@@ -67,16 +68,18 @@ export const DIDScore = () => {
   }, [])
 
   return (<>
-    <Header title={<span className="text-white">DID积分</span>} css={{ background: "transparent", boxShadow: "none" }} right={<div className="text-xs text-white">规则</div>} ></Header>
+    <Header title={<span className="text-white">DID积分</span>} css={{ background: "transparent", boxShadow: "none" }}></Header>
     <BodyBox css={{
       background: "linear-gradient(360deg, transparent 60%, #EEEFF4, #F6BF75, #D77185, #8766AC, #4150B1)",
       paddingTop: 100,
     }}>
       <CardBackground className="m-0 p-4">
-        <div className="text-center -mt-8 mb-10">
-          <IconImage className="m-auto h-16 w-16" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images" />
-          <div>我的积分</div>
-          <div>{data.score}</div>
+        <div className="text-center -mt-12 mb-10">
+          <div className="m-auto w-24 h-24 rounded-full flex justify-center items-center mb-4" style={{ background: "#EEEFF4", border: "3px solid white" }}>
+            <IconImage className="h-12 w-12 rounded-none" src={huizhang} />
+          </div>
+          <div style={{ color: textColor }}>我的积分</div>
+          <div className="font-bold text-2xl">{data.score}</div>
         </div>
         {data?.operations?.map((item: IDIDScoreItem, i: number) => {
           return (<TextLabel className="h-12" text={item.opt} right={<div>{item.opt_time}</div>}>

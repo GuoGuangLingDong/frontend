@@ -8,6 +8,7 @@ import { Tabs } from "../../components/Tab";
 import { IDIVProps } from "../poap/components/Item";
 import { Button } from "../../components/Button";
 import { useMessage } from "../../components/Message";
+import follow from "../../assets/image/follow.svg";
 
 interface IFollowItem {
   username: string
@@ -24,11 +25,19 @@ interface IFollow {
 export const FollowLink = ({ item, ...props }: { item: IFollowItem } & IDIVProps) => {
   return (
     <div {...props} className={`flex item-center justify-center cursor-pointer flex-1 ${props.className || ""}`}>
-      <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9550" width="16" height="16">
-        <path d="M171.712 571.648l0.352 0.32 287.904 252.8a64 64 0 0 0 82.912 1.344l296.832-244.544a215.584 215.584 0 1 0-301.824-300.576L512 316.672l-25.888-35.616a215.584 215.584 0 1 0-314.4 290.624zM32 407.584a279.584 279.584 0 0 1 480-194.944 279.584 279.584 0 0 1 480 194.944 278.144 278.144 0 0 1-113.024 224.512l-295.36 243.392a128 128 0 0 1-165.888-2.592L129.984 620.16A278.976 278.976 0 0 1 32 407.584z" fill="#858891">
-        </path>
-      </svg>&nbsp;
+      <img src={follow} className="w-4" alt="follow" />
+      &nbsp;
       <div>{item.follow_count || 0}</div>
+    </div>
+  )
+}
+
+export const NFTAmountLink = ({ item, ...props }: { item: IFollowItem } & IDIVProps) => {
+  return (
+    <div {...props} className={`flex item-center justify-center cursor-pointer flex-1 ${props.className || ""}`}>
+      <img src={follow} className="w-4" alt="follow" />
+      &nbsp;
+      <div>{item.poap_count || 0}</div>
     </div>
   )
 }
@@ -43,9 +52,7 @@ const FollowItem = ({ item }: { item: IFollowItem }) => {
   }, [message])
 
   return (<div className="border rounded-3xl mb-2">
-    <IconTextRightCard className="p-2 mb-0" style={{ backgroundColor: "transparent" }} icon={item.username} right={<div
-      className="py-2 text-xs"
-    >连接: {item.follow_count}人</div>}>
+    <IconTextRightCard className="p-2 mb-0" style={{ backgroundColor: "transparent" }} icon={item.username}>
       <div className="ml-2">
         <div className="font-bold">{item.username}</div>
         <div className="text-xs">{item.uid}</div>
@@ -54,7 +61,7 @@ const FollowItem = ({ item }: { item: IFollowItem }) => {
     <div className="text-sm flex items-center justify-between border-t pl-12 pr-2 h-12" style={{ color: secondColor }}>
       <div className="flex items-center">
         <FollowLink item={item} className="mr-4" />
-        <FollowLink item={item} />
+        <NFTAmountLink item={item} />
       </div>
       <Button
         className="w-20 py-2 text-xs transform scale-75 origin-right"
