@@ -12,6 +12,7 @@ import { DropDown } from "../../components/Select";
 import back from "../../assets/image/back.svg";
 import { bgColor } from "../../theme";
 import { useRequest } from "../../hooks/useRequest";
+import { Upload } from "../../components/Upload";
 
 export type TCastPoapParams = {
     poap_name?: string,
@@ -56,9 +57,6 @@ export const CastPOAP = () => {
     const { message } = useMessage();
     const [, createPoap] = useRequest(api.mint);
 
-    // 图片预览数据，接口接收的是url链接，所以在此之前还需要将图片数据上传到服务器，然后将返回的图片url赋值给 cover_img
-    const [img, setImg] = useState<any>(null)
-
     const [values, setValues] = useState<TCastPoapParams>({
         poap_name: "",
         poap_sum: "",
@@ -68,6 +66,7 @@ export const CastPOAP = () => {
         mint_plat: 1,
         collect_list: ""
     });
+
     const setParams = useCallback((arg: TCastPoapParams) => {
         setValues((pre: TCastPoapParams) => ({ ...pre, ...arg }))
     }, [])
@@ -96,43 +95,6 @@ export const CastPOAP = () => {
         message("铸造成功！", "success");
         //eslint-disable-next-line
     }, [param, createPoap])
-
-    const handleImage = (e: any) => {
-        const file = e?.target?.files?.[0];
-        if (!file?.size) return
-        if (file?.size > 10 * 1024 * 1024) {
-            message("图片尺寸太大！", "warn")
-            return
-        }
-
-        const reads = new FileReader();
-        reads.readAsDataURL(file as any);
-        reads.onload = function (event) {
-            let image = new Image();
-            if (!event?.target?.result) return
-            image.src = event?.target?.result as any;
-            image.onload = function (e: any) {
-                const w = e?.path?.[0]?.width;
-                const h = e?.path?.[0]?.height;
-                if (w > 0 && h > 0 && w === h) {
-                    setImg(event?.target?.result);
-                    uploadImage(file);
-                } else {
-                    message("图片高宽比应为1:1", "warn")
-                }
-            }
-        };
-    }
-
-    const uploadImage = useCallback((file) => {
-        console.log(file);
-
-        //上传图片的逻辑
-        // const data = 上传函数。。。。
-
-        //拿到图片url后，赋值给cover_img
-        // setParams({ cover_img: data })
-    }, []);
 
     return (
         <>
@@ -189,14 +151,9 @@ export const CastPOAP = () => {
 
                 <div className="ml-4 mb-1 font-bold">Poap封面图片</div>
                 <div className="flex items-center font-bold mb-6" style={{ color: "#99A7B5" }}>
-                    <CardBackground className="flex justify-center items-center mr-4 mt-0 p-0" style={{ minHeight: 180, minWidth: 180, maxHeight: 180, maxWidth: 180 }}>
-                        <input type="file" className="h-0 w-0" name="image" id="image" onChange={handleImage} accept="image/png,image/jpg,image/gif" />
-                        <label htmlFor="image">
-                            <div>
-                                {img ? <img src={img} className="rounded-3xl" style={{ width: 180, height: 180 }} alt="" /> : "点击上传"}
-                            </div>
-                        </label>
-                    </CardBackground>
+                    <Upload width={180} height={180} onChange={(url) => {
+                        setParams({ cover_img: url })
+                    }} />
                     <div>
                         请上传1:1正方形图片，图片大小10MB以内，支持格式JPG、PNG、GIF。
                     </div>

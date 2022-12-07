@@ -10,12 +10,14 @@ import { Follow } from "../pages/mine/Follow";
 import { Share } from "../pages/mine/Share";
 import { CastPOAP } from "../pages/poap/Cast";
 import { ResetPassword } from "../pages/auth/ResetPassword";
+import { Edit } from "../pages/mine/Edit";
 
 export const routes = [
   { path: "/login", component: <Login /> },
   { path: "/register", component: <Register /> },
   { path: "/reset-password", component: <ResetPassword /> },
   { path: "/mine", component: <Mine /> },
+  { path: "/edit", component: <Edit /> },
   { path: "/share", component: <Share /> },
   { path: "/cast/:id", component: <CastPOAP /> },
   { path: "/follow", component: <Follow /> },

@@ -53,7 +53,11 @@ export const MineBaseInfo = () => {
           width: `14vw`,
           height: `14vw`,
           left: `6.5%`
-        }}>
+        }}
+          onClick={() => {
+            navigate(`/edit`)
+          }}
+        >
           <img src={edit} className="w-6 h-6" alt="" />
         </div>
 
@@ -153,7 +157,7 @@ export const Mine = () => {
   }, [])
 
   return (<>
-    <Header css={{ boxShadow: "none", background: "transparent" }}/>
+    <Header css={{ boxShadow: "none", background: "transparent" }} />
     <MineBaseInfo />
     <BodyBox>
       <SocialItem text={"Abraham在北京"} logo="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images" handle={() => { }} />
