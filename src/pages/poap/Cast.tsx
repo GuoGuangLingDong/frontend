@@ -11,11 +11,13 @@ import { useMessage } from "../../components/Message";
 import { DropDown } from "../../components/Select";
 import back from "../../assets/image/back.svg";
 import { bgColor } from "../../theme";
+import { useRequest } from "../../hooks/useRequest";
 
 export type TCastPoapParams = {
     poap_name?: string,
     poap_sum?: string,
     receive_cond?: number,
+    mint_plat?: number,
     cover_img?: string,
     poap_intro?: string
     collect_list?: string
@@ -26,7 +28,7 @@ const conditions = ["所有人可领取", "指定人可领取"]
 const Select = ({ isOpen, close, handle }: { isOpen: boolean, close: () => void, handle: (index: number) => void }) => {
 
     return (
-        <DropDown isOpen={isOpen} right css={{
+        <DropDown isOpen={isOpen} direction="right" css={{
             right: 10,
             top: -10,
             position: "absolute",
@@ -52,6 +54,9 @@ export const CastPOAP = () => {
     const [loading, openLoading, closeLoading] = useSwitch();
     const [isOpenSelect, openSelect, closeSelect] = useSwitch();
     const { message } = useMessage();
+    const [, createPoap] = useRequest(api.mint);
+
+    // 图片预览数据，接口接收的是url链接，所以在此之前还需要将图片数据上传到服务器，然后将返回的图片url赋值给 cover_img
     const [img, setImg] = useState<any>(null)
 
     const [values, setValues] = useState<TCastPoapParams>({
@@ -60,6 +65,7 @@ export const CastPOAP = () => {
         receive_cond: 1,
         cover_img: "",
         poap_intro: "",
+        mint_plat: 1,
         collect_list: ""
     });
     const setParams = useCallback((arg: TCastPoapParams) => {
@@ -67,25 +73,29 @@ export const CastPOAP = () => {
     }, [])
 
     const cast = useCallback(async () => {
-        if (!values.poap_name) {
-            message("请输入POAP名称", "warn")
+        if (!values.poap_name || values.poap_name?.length < 4 || values?.poap_name?.length > 30) {
+            message("请输入4～30位的POAP名称", "warn")
             return
         }
-        if (!values.poap_sum) {
-            message("请输入铸造数量", "warn")
+        if (!values.poap_sum || Number(values.poap_sum) < 0 || Number(values.poap_sum) > 10000) {
+            message("请输入10000以内的数量", "warn")
             return
         }
         if (!values.cover_img) {
             message("请上传封面图片", "warn")
             return
         }
+        if (values.receive_cond === 2 && !values.collect_list) {
+            message("请输入领取的名单", "warn")
+            return
+        }
 
         openLoading();
-        await api.mint(param);
+        await createPoap(param);
         closeLoading();
         message("铸造成功！", "success");
         //eslint-disable-next-line
-    }, [param])
+    }, [param, createPoap])
 
     const handleImage = (e: any) => {
         const file = e?.target?.files?.[0];
@@ -106,6 +116,7 @@ export const CastPOAP = () => {
                 const h = e?.path?.[0]?.height;
                 if (w > 0 && h > 0 && w === h) {
                     setImg(event?.target?.result);
+                    uploadImage(file);
                 } else {
                     message("图片高宽比应为1:1", "warn")
                 }
@@ -113,18 +124,31 @@ export const CastPOAP = () => {
         };
     }
 
+    const uploadImage = useCallback((file) => {
+        console.log(file);
+
+        //上传图片的逻辑
+        // const data = 上传函数。。。。
+
+        //拿到图片url后，赋值给cover_img
+        // setParams({ cover_img: data })
+    }, []);
+
     return (
         <>
             <Header title={"铸造POAP"} />
             <BodyBox css={{ marginBottom: 50, paddingTop: 80 }}>
                 <div className="ml-4 mb-1 font-bold">Poap名称</div>
-                <input type="text" placeholder="请输入名称" value={values.poap_name} className="bg-white outline-none rounded-3xl w-full px-4 py-2 mb-6" onChange={(val) => {
-                    setParams({ poap_name: val.target.name })
+                <input type="text" placeholder="请输入4～30位的POAP名称" value={values.poap_name} maxLength={30} className="bg-white outline-none rounded-3xl w-full px-4 py-2 mb-6" onChange={(val) => {
+                    setParams({ poap_name: val.target.value })
                 }} />
 
                 <div className="ml-4 mb-1 font-bold" >铸造数量</div>
-                <input type="text" placeholder="请输入数量" className="bg-white outline-none rounded-3xl w-full px-4 py-2 mb-6" value={values.poap_sum} onChange={(val) => {
-                    setParams({ poap_name: val.target.name })
+                <input type="number" placeholder="请输入10000以内的数量" className="bg-white outline-none rounded-3xl w-full px-4 py-2 mb-6" value={values.poap_sum} onChange={(val) => {
+                    const value = val.target.value;
+                    if (value && Number(value) <= 10000) {
+                        setParams({ poap_sum: val.target.value })
+                    }
                 }} />
 
                 <div className="ml-4 mb-1 font-bold">领取条件</div>
@@ -133,7 +157,7 @@ export const CastPOAP = () => {
                         className="bg-white outline-none rounded-l-3xl w-full px-4 py-2"
                     />
                     <div className={`cursor-pointer w-8 bg-white flex items-center h-10 rounded-r-3xl`} onClick={() => {
-                        openSelect();
+                        isOpenSelect ? closeSelect() : openSelect();
                     }}>
                         <div className="rounded-full flex justify-center items-center" style={{ background: bgColor, width: 20, height: 20, }}>
                             <img className={`${hearderIconCss} transform -rotate-90`} src={back} alt="logo" />
@@ -169,14 +193,12 @@ export const CastPOAP = () => {
                         <input type="file" className="h-0 w-0" name="image" id="image" onChange={handleImage} accept="image/png,image/jpg,image/gif" />
                         <label htmlFor="image">
                             <div>
-                                {img ? <img src={img} className="rounded-3xl" style={{ width: 180, height: 180 }} alt=""/> : "点击上传"}
+                                {img ? <img src={img} className="rounded-3xl" style={{ width: 180, height: 180 }} alt="" /> : "点击上传"}
                             </div>
                         </label>
                     </CardBackground>
                     <div>
-                        请上传1:1正方形图片，
-                        图片大小10MB以内，
-                        支持格式JPG、PNG、GIF。
+                        请上传1:1正方形图片，图片大小10MB以内，支持格式JPG、PNG、GIF。
                     </div>
                 </div>
 

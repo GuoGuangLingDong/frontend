@@ -1,19 +1,28 @@
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
-import { CSSProperties, memo, ReactNode } from "react";
+import { CSSProperties, memo, ReactNode, useState } from "react";
 import logo from "../assets/image/logo.png";
 import menu from "../assets/image/menu.svg";
 import back from "../assets/image/back.svg";
+import closeImg from "../assets/image/close.svg";
+import baidu from "../assets/image//cast-platform/baidu.png";
+import mayi from "../assets/image//cast-platform/mayi.png";
+import qu from "../assets/image//cast-platform/qu.png";
+import guoguanglian from "../assets/image//cast-platform/guoguanglian.png";
+import yitaifang from "../assets/image//cast-platform/yitaifang.png";
+import bsn from "../assets/image//cast-platform/bsn.png";
 import { bgColor, secondColor } from "../theme";
 import { useSwitch } from "./Loading";
-import { DropDown } from "./Select";
+import { DropDown, Radio } from "./Select";
+import { Button } from "./Button";
+import { useMessage } from "./Message";
 
 export const navs = [
   { label: "发现POAP", path: "/home" },
   { label: "铸造POAP", path: "/cast" },
   { label: "我的链接", path: "/follow" },
   { label: "DID积分", path: "/did-score" },
-  { label: "定制主页", path: "/mine" }
+  { label: "个人主页", path: "/mine" }
 ]
 
 export const ArrowImg = ({ color, cursor, handle, css }: { color?: string, cursor?: string, handle?: () => void, css?: string }) => {
@@ -26,10 +35,11 @@ export const ArrowImg = ({ color, cursor, handle, css }: { color?: string, curso
   )
 }
 
-const Memu = ({ isOpen, close }: { isOpen: boolean, close: () => void }) => {
+
+const Memu = ({ isOpen, close, handle }: { isOpen: boolean, close: () => void, handle?: () => void }) => {
   const navigate = useNavigate();
   return (
-    <DropDown isOpen={isOpen} css={{
+    <DropDown isOpen={isOpen} direction="left" css={{
       left: 30,
       top: 65,
       right: "none"
@@ -37,12 +47,104 @@ const Memu = ({ isOpen, close }: { isOpen: boolean, close: () => void }) => {
       <div className="text-center" style={{ fontWeight: 600 }}>
         {navs?.map((item: any, index: number) => {
           return <div key={index} className="py-2" onClick={() => {
-            navigate(item.path);
+            if (handle) {
+              handle();
+            } else {
+              navigate(item.path);
+            }
             close();
           }} style={{
             borderTop: index !== 0 ? "1px solid #EEEFF4" : "none"
           }}>{item.label}</div>
         })}
+      </div>
+    </DropDown>
+  )
+}
+
+const platforms = [
+  {
+    text: "国广链",
+    icon: guoguanglian,
+    isSupport: true
+  },
+  {
+    text: "BSN联盟链",
+    icon: bsn,
+    isSupport: false
+  },
+  {
+    text: "趣链",
+    icon: qu,
+    isSupport: false
+  },
+  {
+    text: "蚂蚁链",
+    icon: mayi,
+    isSupport: false
+  },
+  {
+    text: "百度超级链",
+    icon: baidu,
+    isSupport: false
+  },
+  {
+    text: "以太坊",
+    icon: yitaifang,
+    isSupport: false
+  }
+]
+
+const Diglog = ({ isOpen, close }: { isOpen: boolean, close: () => void }) => {
+  const navigate = useNavigate();
+  const [select, setSelect] = useState(0);
+  const { message } = useMessage();
+
+  return (
+    <DropDown isOpen={isOpen} direction="none" css={{
+      right: "0",
+      left: "0",
+      top: "0",
+      width: "100vw",
+      height: "100vh",
+      background: "transparent"
+    }}>
+      <div className="relative">
+        <div className="bg-white absolute" style={{
+          right: "10vw",
+          left: "10vw",
+          top: "20vh",
+          width: "80vw",
+          borderRadius: "30px"
+        }}>
+          <div className="text-center" style={{ fontWeight: 600 }}>
+            <div className="h-16 flex items-center justify-center relative" style={{
+              background: bgColor,
+              borderTopRightRadius: "30px",
+              borderTopLeftRadius: "30px"
+            }}>选择铸造平台
+              <img src={closeImg} alt="" className="absolute right-2 w-6" onClick={close} />
+            </div>
+            {platforms?.map((item, index: number) => {
+              return <div key={index} className="py-3 flex justify-between items-center px-6" onClick={() => {
+                if (!item.isSupport) {
+                  message(`暂不支持${item.text}`, "warn")
+                  return
+                }
+                setSelect(index);
+              }}><div className="flex items-center">
+                  <img src={item.icon} alt="" className="w-8 mr-2" />
+                  {item.text}
+                </div>  <Radio isSelect={index === select} /></div>
+            })}
+            <Button className="my-6 w-5/6" onClick={() => {
+              // 此处调用立即领取接口函数
+              navigate(`/cast/${select + 1}`);
+            }}>
+              确定
+            </Button>
+          </div>
+        </div>
       </div>
     </DropDown>
   )
@@ -55,6 +157,7 @@ export const Header = memo(({ title, right, css }: { title?: string | ReactNode,
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [isOpenMenu, openMenu, closeMenu] = useSwitch();
+  const [isOpenDiglog, openDiglog, closeDiglog] = useSwitch();
 
   const backTop = () => {
     document.documentElement.scrollTop = 0;
@@ -66,8 +169,9 @@ export const Header = memo(({ title, right, css }: { title?: string | ReactNode,
       {["/home", "/mine"]?.includes(pathname) ? <div className={hearderBoxCss} onClick={() => {
         isOpenMenu ? closeMenu() : openMenu();
       }}>
+        <Diglog isOpen={isOpenDiglog} close={closeDiglog} />
         <img className={hearderIconCss} src={menu} alt="menu" />
-        <Memu isOpen={isOpenMenu} close={closeMenu} />
+        <Memu isOpen={isOpenMenu} close={closeMenu} handle={openDiglog} />
       </div> : <div className={hearderBoxCss} style={{ backgroundColor: bgColor }} onClick={() => {
         navigate(-1);
         backTop();

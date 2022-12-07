@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { bgColor } from "../../../theme"
+import { Radio } from "../../../components/Select";
 
 export const RememberPassword = () => {
     const [remember, setRemember] = useState<boolean>(localStorage.getItem("remember") === "true");
@@ -9,9 +9,7 @@ export const RememberPassword = () => {
             setRemember(!remember);
             localStorage.setItem("remember", `${!remember}`)
         }}>
-            <div className="w-6 h-6 rounded-full mr-1 flex justify-center items-center" style={{ backgroundColor: bgColor }}>
-                {remember && <div className="w-4 h-4 rounded-full" style={{ background: "linear-gradient(90deg, #F6BF75, #4150B1)" }}></div>}
-            </div>
+            <Radio isSelect={remember} />
             记住密码
         </div>
     )
