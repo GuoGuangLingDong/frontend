@@ -3,7 +3,7 @@ import search from "../../assets/image/search.svg";
 import { secondColor } from "../../theme";
 import { useCallback, useRef, useState } from "react";
 import { BodyBox } from "../../components/BodyBox";
-import { ListItem } from "./components/Item";
+import { ListItem } from "./components/ListItem";
 import { isMobile } from "../../helpers/utilities";
 import api from "../../api/index";
 import { Banner } from "./components/Banner";

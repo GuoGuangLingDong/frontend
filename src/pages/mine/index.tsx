@@ -9,7 +9,7 @@ import share from "../../assets/image/share.svg"
 import edit from "../../assets/image/edit.svg"
 import back from "../../assets/image/back.svg";
 import { IPoap } from "../poap";
-import { Holder, Star } from "../poap/components/Item";
+import { Holder, Star } from "../poap/components/ListItem";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { useAuth } from "../../components/UserAuth";
