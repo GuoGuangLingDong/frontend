@@ -46,6 +46,7 @@ export const useParams = () => {
     return [values, setParams] as const
 }
 
+
 export const useRememberPassword = () => {
     const fill = useCallback((setParams: (arg: TAuthParams) => void) => {
         let data: any = localStorage.getItem("auth") || "{}";
@@ -87,6 +88,20 @@ export const useCheckInput = () => {
             message("请输入密码", "warn")
             return
         }
+        // let reg ="^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]{6,16})$";
+        // let flag = passworddata.match(reg)
+        // let isright = flag==null?false:true
+        //       if(isright){
+        //         }else{
+        //           message("密码应为6-16位且至少包含一个数字和一个字母",)
+        //         }
+        // if (params.password == params.password2) {
+        //     console.log('成功');
+
+        // } else {
+        //     console.log('失败');
+
+        // }
         save(params);
         return true
     }, [save, message])
@@ -115,6 +130,9 @@ export const VerifyCode = ({ phone, imageData, from, image_code }: { imageData?:
             imageVerifyId: imageData?.id,
             imageVerify: image_code
         }
+
+        console.log(params, 'params');
+
 
         // 获取手机验证码逻辑
         await getCode(params);
@@ -160,6 +178,7 @@ export const Register = () => {
     const checkValues = useCheckInput();
     const [imageData, setImageData] = useState<TImageCode>();
 
+
     return (<div>
         <AuthBox>
             <InputLabel text="用户名" maxLength={11} value={params.username} onChange={(val) => {
@@ -178,7 +197,7 @@ export const Register = () => {
                 setParams({ password: val })
             }} />
             <InputLabel text="确认密码" type="password" value={params.password2} onChange={(val) => {
-                setParams({ password: val })
+                setParams({ password2: val })
             }} />
             <InputLabel text="邀请码" value={params.invite_code} onChange={(val) => {
                 setParams({ invite_code: val })
