@@ -5,7 +5,6 @@ import { Register } from "../pages/auth/Register";
 import { Test } from "../pages/test/Test"
 import { Home } from "../pages/poap";
 import { PoapDetail } from "../pages/poap/Details";
-import { ClaimPOAP } from "../pages/poap/Claim";
 import { DIDScore } from "../pages/mine/DIDScore";
 import { Mine } from "../pages/mine";
 import { Follow } from "../pages/mine/Follow";
@@ -25,7 +24,6 @@ export const routes = [
   { path: "/share", component: <Share /> },
   { path: "/did-score", component: <DIDScore /> },
   { path: "/detail/:id", component: <PoapDetail /> },
-  { path: "/claim/:id", component: <ClaimPOAP /> },
   { path: "/home", component: <Home /> },
 ]
 

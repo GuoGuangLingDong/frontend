@@ -47,7 +47,7 @@ const Memu = ({ isOpen, close, handle }: { isOpen: boolean, close: () => void, h
       <div className="text-center" style={{ fontWeight: 600 }}>
         {navs?.map((item: any, index: number) => {
           return <div key={index} className="py-2" onClick={() => {
-            if (handle) {
+            if (handle && item.path.includes("cast")) {
               handle();
             } else {
               navigate(item.path);
@@ -169,7 +169,7 @@ export const Header = memo(({ title, right, css }: { title?: string | ReactNode,
       {["/home", "/mine"]?.includes(pathname) ? <div className={hearderBoxCss} onClick={() => {
         isOpenMenu ? closeMenu() : openMenu();
       }}>
-        <Diglog isOpen={isOpenDiglog} close={closeDiglog} />
+        {isOpenDiglog && <Diglog isOpen={isOpenDiglog} close={closeDiglog} />}
         <img className={hearderIconCss} src={menu} alt="menu" />
         <Memu isOpen={isOpenMenu} close={closeMenu} handle={openDiglog} />
       </div> : <div className={hearderBoxCss} style={{ backgroundColor: bgColor }} onClick={() => {

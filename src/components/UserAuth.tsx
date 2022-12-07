@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const resetPassword = useCallback(async (arg: TAuthParams) => {
     openLoading();
     // 重置函数
-
+    
 
     closeLoading();
     message("密码修改成功！", "success");
