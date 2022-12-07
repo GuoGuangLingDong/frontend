@@ -22,13 +22,7 @@ export const Login = () => {
             <InputLabel text="校验码" value={params.image_code} onChange={(val) => {
                 setParams({ image_code: val })
             }} right={<ImageVerifyCode imageData={imageData} setImageData={setImageData} />} />
-            <InputLabel
-                text="验证码"
-                value={params.verify_code}
-                onChange={(val) => {
-                    setParams({ verify_code: val })
-                }}
-                right={<VerifyCode from="login" phone={params.phone_number} imageData={imageData} image_code={params.image_code} />} />
+           
             <InputLabel text="登录密码" type="password" value={params.password} onChange={(val) => {
                 setParams({ password: val })
             }} />

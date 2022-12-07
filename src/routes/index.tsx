@@ -2,7 +2,6 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { useEffect } from "react"
 import { Login } from "../pages/auth/Login";
 import { Register } from "../pages/auth/Register";
-import { Test } from "../pages/test/Test"
 import { Home } from "../pages/poap";
 import { PoapDetail } from "../pages/poap/Details";
 import { ClaimPOAP } from "../pages/poap/Claim";
@@ -17,7 +16,6 @@ export const routes = [
   { path: "/login", component: <Login /> },
   { path: "/register", component: <Register /> },
   { path: "/reset-password", component: <ResetPassword /> },
-  { path: "/test", component: <Test /> },
   { path: "/mine", component: <Mine /> },
   { path: "/share", component: <Share /> },
   { path: "/cast", component: <CastPOAP /> },

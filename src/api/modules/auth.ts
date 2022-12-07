@@ -1,7 +1,7 @@
 const api = {
     login: {
         method: 'post',
-        url: '/user/log_in',
+        url: '/user/sign-in',
     },
     register: {
         method: 'post',
