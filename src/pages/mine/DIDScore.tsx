@@ -1,12 +1,13 @@
 import { BodyBox } from "../../components/BodyBox";
 import { secondColor, textColor } from "../../theme";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IconImage } from "../../components/Image";
 import { Header } from "../../components/Header";
 import { CardBackground } from "../../components/Card";
 import { TextLabel } from "../../components/Label";
 import huizhang from "../../assets/image/huizhang.png";
 import api from "../../api/index";
+import { useAutoRequest } from "../../hooks/useRequest";
 
 interface IDIDScoreItem {
   "opt": string,
@@ -17,7 +18,6 @@ interface IDIDScore {
   "score": string | number,
   "operations": IDIDScoreItem[]
 }
-
 
 export const DIDScore = () => {
   const [data, setData] = useState<IDIDScore>({
@@ -56,16 +56,11 @@ export const DIDScore = () => {
     ]
   });
 
-  const getList = useCallback(async () => {
-    const data = await api.getScore();
-    setData(data);
-  }, [])
-
+  const [value] = useAutoRequest(api.getScore);
   useEffect(() => {
-    getList();
-
-    // eslint-disable-next-line
-  }, [])
+    if (!value) return
+    setData(value as IDIDScore)
+  }, [value])
 
   return (<>
     <Header title={<span className="text-white">DID积分</span>} css={{ background: "transparent", boxShadow: "none" }}></Header>
