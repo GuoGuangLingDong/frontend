@@ -5,7 +5,7 @@ import { InputLabel } from "../../components/Label"
 import { useAuth } from "../../components/UserAuth"
 import { AuthBox } from "./components/AuthBox"
 import { RememberPassword } from "./components/RememberPassword"
-import { ImageVerifyCode, TImageCode, useCheckInput, useParams, VerifyCode } from "./Register"
+import { ImageVerifyCode, TImageCode, useCheckInput, useParams } from "./Register"
 
 export const Login = () => {
     const [params, setParams] = useParams();
