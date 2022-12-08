@@ -21,8 +21,8 @@ export const downloadImg = async (dom: any, afterHandle?: () => void) => {
         let a = document.createElement("a");
         a.style.display = "none";
         a.setAttribute("href", url);
-        //这块是保存图片操作  可以设置保存的图片的信息
-        a.setAttribute("download", "did" + ".png");
+
+        a.setAttribute("download", "did.png");
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
