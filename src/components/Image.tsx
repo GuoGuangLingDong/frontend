@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, ReactNode, useEffect, useState } from "react"
+import { DetailedHTMLProps, useEffect, useState } from "react"
 
 export const LoadImage = (props: DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) => {
   const [isLoad, setIsLoad] = useState(false);

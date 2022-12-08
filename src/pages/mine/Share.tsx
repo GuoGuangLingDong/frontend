@@ -15,7 +15,9 @@ import { useRef } from "react";
 import { useSwitch } from "../../components/Loading";
 
 export const downloadImg = async (dom: any, afterHandle?: () => void) => {
-    await html2canvas(dom).then(canvas => {
+    await html2canvas(dom, {
+        useCORS: true
+    }).then(canvas => {
         const url = canvas.toDataURL("image/png");
 
         let a = document.createElement("a");

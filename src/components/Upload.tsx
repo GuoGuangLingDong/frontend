@@ -41,7 +41,7 @@ export const Upload = ({ width, height, onChange }: { width?: string | number, h
         // const data = 上传函数。。。。
 
         //拿到图片url后，赋值给cover_img
-        // onChange(data)
+        onChange(file)
     }, [onChange]);
 
     return (

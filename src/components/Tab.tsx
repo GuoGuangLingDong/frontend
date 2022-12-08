@@ -17,7 +17,7 @@ export const Tabs = ({ tabs }: { tabs: TTabItem[] }) => {
           return (<div
             key={index}
             style={{ color: isActive ? textColor : "#99A7B5", background: isActive ? "#ffffff" : "#EEEFF4" }}
-            className={`cursor-pointer rounded-t-xl h-10 flex items-center justify-center px-8 mx-1 transition duration-500 border border-white ease-in-out transform ${isActive ? "" : "hover:scale-110"}`}
+            className={`cursor-pointer rounded-t-xl h-10 flex items-center justify-center px-8 mx-1 border border-white`}
             onClick={() => {
               setSelect(index);
             }}

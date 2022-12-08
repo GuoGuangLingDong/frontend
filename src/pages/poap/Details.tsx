@@ -9,10 +9,13 @@ import { useAutoRequest } from "../../hooks/useRequest";
 import api from "../../api/index";
 import { useFollow } from "../mine/Follow";
 import { PoapBaseInfo } from "./components/PoapBaseInfo";
-import { DetailItem, IHolderItem, IPoapDetailsItem } from "./components/DetailsItem";
+import { DetailItem, IHolderItem, IPoapDetailsItem, SharePOAP } from "./components/DetailsItem";
+import share from "../../assets/image/share.svg"
+import { useSwitch } from "../../components/Loading";
 
 export const PoapDetail = () => {
   const param: any = useParams();
+  const [isShare, openShare, closeShare] = useSwitch();
   const [detail, getDetails] = useAutoRequest(api.getDetails, { arg: { poap_id: param?.id } });
   const [holders, getHolders] = useAutoRequest(api.getHolders, { arg: { poap_id: param?.id, from: 1, count: 10 } });
 
@@ -52,7 +55,10 @@ export const PoapDetail = () => {
 
   return (
     <>
-      <Header title={"POAP详情"} />
+      <Header title={"POAP详情"} right={<img src={share} className="w-4 h-4" onClick={() => {
+        isShare ? closeShare() : openShare();
+      }} alt="" />} />
+      <SharePOAP isOpen={isShare} close={closeShare} details={data} />
       <BodyBox css={{ marginBottom: 50, paddingTop: 80 }}>
         <DetailItem item={data} getDetails={getDetails} />
         <div className="h-10"></div>
