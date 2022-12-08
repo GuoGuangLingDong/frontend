@@ -14,7 +14,7 @@ import html2canvas from 'html2canvas'
 import { useRef } from "react";
 import { useSwitch } from "../../components/Loading";
 
-export const downloadImg = async (dom: any, afterHandle?: () => void) => {
+export const downloadImg = async (dom: any, name: string, afterHandle?: () => void) => {
     await html2canvas(dom, {
         useCORS: true
     }).then(canvas => {
@@ -24,7 +24,7 @@ export const downloadImg = async (dom: any, afterHandle?: () => void) => {
         a.style.display = "none";
         a.setAttribute("href", url);
 
-        a.setAttribute("download", "did.png");
+        a.setAttribute("download", `${name}.png`);
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -51,7 +51,7 @@ export const Share = () => {
         }
         if (!dom) return
         openLoading()
-        await downloadImg(dom, closeLoading)
+        await downloadImg(dom, userInfo?.uid || "did", closeLoading)
     };
 
     return (<>

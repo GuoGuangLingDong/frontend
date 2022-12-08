@@ -70,7 +70,7 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
         const dom = ref.current;
         if (!dom) return
         openLoading()
-        downloadImg(dom, () => {
+        downloadImg(dom, details?.poap_id, () => {
             message("保存成功！", "success");
             closeLoading()
         }).catch(() => {
