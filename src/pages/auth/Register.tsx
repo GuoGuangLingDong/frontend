@@ -9,13 +9,14 @@ import api from "../../api/index";
 import { useAutoRequest, useRequest } from "../../hooks/useRequest"
 
 export type TAuthParams = {
-    phone_number?: string,
-    image_code?: string,
+    phonenumber?: string,
+    imageVerify?: string,
     password?: string,
     password2?: string,
     verify_code?: string,
     invite_code?: string,
-    username?: string,
+    // username?: string,
+    imageVerifyId?: string
 }
 
 export type TImageCode = {
@@ -25,13 +26,14 @@ export type TImageCode = {
 
 export const useParams = () => {
     const [values, setValues] = useState<TAuthParams>({
-        phone_number: "",
-        username: "",
-        image_code: "",
+        phonenumber: "",
+        // username: "",
+        imageVerify: "",
         password: "",
         password2: "",
         verify_code: "",
-        invite_code: ""
+        invite_code: "",
+        imageVerifyId:""
     });
     const setParams = useCallback((arg: TAuthParams) => {
         setValues((pre: TAuthParams) => ({ ...pre, ...arg }))
@@ -75,9 +77,12 @@ export const useCheckInput = () => {
     const [, save] = useRememberPassword();
     const { message } = useMessage();
     return useCallback((params: TAuthParams, type?: "resetPassword" | "login" | "register") => {
-        console.log(type)
-        if (!params.phone_number) {
+        if (!params.phonenumber) {
             message("请输入手机号", "warn")
+            return
+        } else if (params.phonenumber.length == 11) {
+        } else {
+            message('手机号格式有误', 'warn')
             return
         }
         if (!params.verify_code) {
@@ -88,26 +93,25 @@ export const useCheckInput = () => {
             message("请输入密码", "warn")
             return
         }
-        // let reg ="^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]{6,16})$";
-        // let flag = passworddata.match(reg)
-        // let isright = flag==null?false:true
-        //       if(isright){
-        //         }else{
-        //           message("密码应为6-16位且至少包含一个数字和一个字母",)
-        //         }
-        // if (params.password == params.password2) {
-        //     console.log('成功');
+        let reg =  /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{6,18}$/
+        if(reg.test(params.password)) {
+        }else{
+            message('密码请输入6-18位数字加字母的组合','warn')
+            return
+        }
 
-        // } else {
-        //     console.log('失败');
+        if (params.password === params.password2) {
+        } else {
+            message('两次密码不一致', 'warn');
+            return
+        }
 
-        // }
         save(params);
         return true
     }, [save, message])
 }
 
-export const VerifyCode = ({ phone, imageData, from, image_code }: { imageData?: TImageCode, phone?: string, from: "register" | "login", image_code?: string }) => {
+export const VerifyCode = ({ phone, imageData, from, imageVerify }: { imageData?: TImageCode, phone?: string, from: "register" | "login", imageVerify?: string }) => {
     const [time, setTimt] = useState(0);
     const [, getCode] = useRequest(api.getVerifyCode);
     const { message } = useMessage();
@@ -118,7 +122,7 @@ export const VerifyCode = ({ phone, imageData, from, image_code }: { imageData?:
             return
         }
 
-        if (!image_code) {
+        if (!imageVerify) {
             message("请输入校验码", "warn")
             return
         }
@@ -128,7 +132,7 @@ export const VerifyCode = ({ phone, imageData, from, image_code }: { imageData?:
             phone,
             from,
             imageVerifyId: imageData?.id,
-            imageVerify: image_code
+            imageVerify: imageVerify
         }
 
         console.log(params, 'params');
@@ -181,18 +185,16 @@ export const Register = () => {
 
     return (<div>
         <AuthBox>
-            <InputLabel text="用户名" maxLength={11} value={params.username} onChange={(val) => {
-                setParams({ username: val })
+
+            <InputLabel text="手机号(+86)" maxLength={11} value={params.phonenumber} onChange={(val) => {
+                setParams({ phonenumber: val })
             }} />
-            <InputLabel text="手机号(+86)" maxLength={11} value={params.phone_number} onChange={(val) => {
-                setParams({ phone_number: val })
-            }} />
-            <InputLabel text="校验码" value={params.image_code} onChange={(val) => {
-                setParams({ image_code: val })
+            <InputLabel text="校验码" value={params.imageVerify} onChange={(val) => {
+                setParams({ imageVerify: val })
             }} right={<ImageVerifyCode imageData={imageData} setImageData={setImageData} />} />
             <InputLabel text="验证码" value={params.verify_code} onChange={(val) => {
                 setParams({ verify_code: val })
-            }} right={<VerifyCode from="register" phone={params.phone_number || ""} imageData={imageData} image_code={params.image_code} />} />
+            }} right={<VerifyCode from="register" phone={params.phonenumber || ""} imageData={imageData} imageVerify={params.imageVerify} />} />
             <InputLabel text="密码" type="password" value={params.password} onChange={(val) => {
                 setParams({ password: val })
             }} />
