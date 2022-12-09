@@ -74,7 +74,7 @@ export const MineBaseInfo = () => {
       </div>
     </PersonBackground>
     <div className="mt-4 text-center">
-      <div className="font-bold text-2xl">{userInfo?.username}</div>
+      {/* <div className="font-bold text-2xl">{userInfo?.username}</div> */}
       <div style={{
         color: "#989CB3"
       }}>@{userInfo?.uid}</div>
@@ -99,10 +99,10 @@ export const Mine = () => {
   const navigate = useNavigate();
   const { userInfo, setUserInfo } = useAuth();
 
-  const getList = useCallback(async () => {
+  const x = useCallback(async () => {
     // const data = await api.getUserInfo();
     setUserInfo({
-      "username": "username",
+      // "username": "username",
       "uid": "uid",
       "user_desc": "user_desc",
       "follow_count": 12312,
@@ -147,7 +147,7 @@ export const Mine = () => {
 
   // @ts-ignore
   useEffect(() => {
-    getList();
+    x();
 
     // eslint-disable-next-line
   }, [])

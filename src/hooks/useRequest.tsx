@@ -9,7 +9,7 @@ export const useRequest = (service: any, options?: any) => {
     // 发接口请求
     let res = await service(arg ? arg : options?.arg);
     if (res.data?.code === 0) {
-      // 请求成功
+      // 请求成功=
       setData(res.data?.data);
       return res.data?.data
     } else {

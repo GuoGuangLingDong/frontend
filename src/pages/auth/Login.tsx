@@ -16,11 +16,11 @@ export const Login = () => {
 
     return (<div>
         <AuthBox>
-            <InputLabel text="手机号(+86)" value={params.phone_number} maxLength={11} onChange={(val) => {
-                setParams({ phone_number: val })
+            <InputLabel text="手机号(+86)" value={params.phonenumber} maxLength={11} onChange={(val) => {
+                setParams({ phonenumber: val })
             }} />
-            <InputLabel text="校验码" value={params.image_code} onChange={(val) => {
-                setParams({ image_code: val })
+            <InputLabel text="校验码" value={params.imageVerify} onChange={(val) => {
+                setParams({ imageVerify: val })
             }} right={<ImageVerifyCode imageData={imageData} setImageData={setImageData} />} />
            
             <InputLabel text="登录密码" type="password" value={params.password} onChange={(val) => {
@@ -35,6 +35,7 @@ export const Login = () => {
             <Button className="mt-10" disabled={loading} loading={loading} onClick={() => {
                 // 此处调用登录接口函数
                 if (checkValues(params, "login")) {
+                    console.log(params,'login_params');
                     login(params);
                 }
             }}>

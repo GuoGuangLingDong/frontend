@@ -18,11 +18,11 @@ export const ResetPassword = () => {
             <Header title={"忘记密码"} />
             <BodyBox css={{ marginTop: 100 }}>
                 <CardBackground>
-                    <InputLabel text="手机号(+86)" value={params.phone_number} maxLength={11} onChange={(val) => {
-                        setParams({ phone_number: val })
+                    <InputLabel text="手机号(+86)" value={params.phonenumber} maxLength={11} onChange={(val) => {
+                        setParams({ phonenumber: val })
                     }} />
-                    <InputLabel text="校验码" value={params.image_code} onChange={(val) => {
-                        setParams({ image_code: val })
+                    <InputLabel text="校验码" value={params.imageVerify} onChange={(val) => {
+                        setParams({ imageVerify: val })
                     }} right={<ImageVerifyCode imageData={imageData} setImageData={setImageData} />} />
                     <InputLabel
                         text="验证码"
@@ -30,7 +30,7 @@ export const ResetPassword = () => {
                         onChange={(val) => {
                             setParams({ verify_code: val })
                         }}
-                        right={<VerifyCode from="login" phone={params.phone_number} imageData={imageData} image_code={params.image_code} />} />
+                        right={<VerifyCode from="login" phone={params.phonenumber} imageData={imageData} imageVerify={params.imageVerify} />} />
                     <InputLabel text="密码" type="password" value={params.password} onChange={(val) => {
                         setParams({ password: val })
                     }} />

@@ -15,5 +15,9 @@ const api = {
         method: 'post',
         url: '/code/image',
     },
+    getRestPassword:{
+        mmethod: 'post',
+        url:'/user/reset-password'
+    }
 }
 export default api;

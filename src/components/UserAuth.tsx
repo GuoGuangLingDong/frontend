@@ -8,7 +8,7 @@ import { IPoap } from "../pages/poap";
 import { useRequest } from "../hooks/useRequest";
 
 export interface IUserInfo {
-  "username": string
+  // "username": string
   "uid": string
   "user_desc": string
   "follow_count": string | number
@@ -18,6 +18,7 @@ export interface IUserInfo {
   "weibo_link": string
   "poap_list": IPoap[]
 }
+
 
 export const AuthContext = createContext(
   {} as {
@@ -42,6 +43,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { message } = useMessage();
   const [, loginFun] = useRequest(api.login);
   const [, registerFUn] = useRequest(api.register);
+  const [,resetpassFun] = useRequest(api.getRestPassword)
   // const { pathname } = useLocation();
   const isLogin = false;
 
@@ -56,18 +58,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = useCallback(async (arg: TAuthParams) => {
     openLoading();
+    console.log(arg,'arg....');
+    
     await loginFun({
-
+      // ...phonenumber
+      // ...password 
+      // ...imageVerify
+      ...arg
     });
     closeLoading();
     message("登录成功！", "success");
     navigate("/home");
-  }, [navigate, closeLoading, message, openLoading, loginFun]);
+  }, [navigate, closeLoading, message, openLoading]);
 
   const resetPassword = useCallback(async (arg: TAuthParams) => {
     openLoading();
     // 重置函数
-    
+    await resetpassFun({...arg})
 
     closeLoading();
     message("密码修改成功！", "success");
@@ -76,12 +83,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const register = useCallback(async (arg: TAuthParams) => {
     openLoading();
-    await registerFUn(arg);
+    await registerFUn({...arg });
     closeLoading();
     message("注册成功！", "success");
     // window.open("http://did.crichain.cn:8080/")
     navigate("/login");
-  }, [navigate, closeLoading, message, openLoading, registerFUn]);
+  }, [navigate, closeLoading, message, openLoading]);
 
   return (
     <AuthContext.Provider value={{ userInfo, setUserInfo, isLogin, login, register, loading, openLoading, closeLoading, resetPassword }}>

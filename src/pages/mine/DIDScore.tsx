@@ -57,6 +57,8 @@ export const DIDScore = () => {
   });
 
   const [value] = useAutoRequest(api.getScore);
+  // console.log(value,'value');
+  
   useEffect(() => {
     if (!value) return
     setData(value as IDIDScore)
