@@ -18,6 +18,10 @@ const api = {
     cancelFollow: {
         method: 'get',
         url: '/user/unfollow'
+    },
+    follow: {
+        method: 'get',
+        url: '/user/follow'
     }
 };
 export default api;

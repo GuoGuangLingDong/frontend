@@ -107,13 +107,13 @@ const Diglog = ({ isOpen, close }: { isOpen: boolean, close: () => void }) => {
       top: "0",
       width: "100vw",
       height: "100vh",
-      background: "transparent"
+      background: "rgba(0,0,0,0.5)"
     }}>
       <div className="relative">
         <div className="bg-white absolute" style={{
           right: "10vw",
           left: "10vw",
-          top: "20vh",
+          top: "15vh",
           width: "80vw",
           borderRadius: "30px"
         }}>

@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { IDIVProps } from "../../poap/components/Item"
+import { IDIVProps } from "../../poap/components/ListItem"
 
 export const PersonBackground = ({ children, image, ...props }: { children?: ReactNode, image: string } & IDIVProps) => {
     return (

@@ -1,7 +1,11 @@
 const api = {
-    getPoapList: {
+    getDetails: {
         method: 'post',
-        url: '/poap/mainpage_list'
+        url: '/poap/details'
+    },
+    getHolders: {
+        method: 'post',
+        url: '/poap/holders'
     },
     mint: {
         method: 'post',

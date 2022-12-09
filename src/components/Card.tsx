@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { IDIVProps } from "../pages/poap/components/Item";
+import { IDIVProps } from "../pages/poap/components/ListItem";
 import { IconImage } from "./Image";
 import { BackgroundLabel } from "./Label";
 

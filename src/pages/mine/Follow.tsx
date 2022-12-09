@@ -5,7 +5,7 @@ import { Header } from "../../components/Header";
 import { CardBackground, IconTextRightCard } from "../../components/Card";
 import api from "../../api/index";
 import { Tabs } from "../../components/Tab";
-import { IDIVProps } from "../poap/components/Item";
+import { IDIVProps } from "../poap/components/ListItem";
 import { Button } from "../../components/Button";
 import follow from "../../assets/image/follow.svg";
 import nft from "../../assets/image/nft.svg";
@@ -43,20 +43,22 @@ export const NFTAmountLink = ({ item, ...props }: { item: IFollowItem } & IDIVPr
   )
 }
 
-export const useFollow = (getData?: () => void) => {
+export const useFollow = (getData?: () => void, rely: any[] = []) => {
   const [, followFun] = useRequest(api.follow);
   const [, unFollowFun] = useRequest(api.cancelFollow);
   const follow = useCallback(async (uid: string) => {
     // 连接接口调用函数
     await followFun({ uid });
     await getData?.();
-  }, [followFun, getData])
+    // eslint-disable-next-line
+  }, [followFun, getData, ...rely])
 
   const unFollow = useCallback(async (uid: string) => {
     // 取消连接接口调用函数
     await unFollowFun({ uid });
     await getData?.();
-  }, [unFollowFun, getData])
+    // eslint-disable-next-line
+  }, [unFollowFun, getData, ...rely])
 
   return {
     follow,
