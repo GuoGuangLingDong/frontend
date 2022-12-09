@@ -33,7 +33,7 @@ export const useParams = () => {
         password2: "",
         verify_code: "",
         invite_code: "",
-        imageVerifyId:""
+        imageVerifyId: ""
     });
     const setParams = useCallback((arg: TAuthParams) => {
         setValues((pre: TAuthParams) => ({ ...pre, ...arg }))
@@ -77,36 +77,46 @@ export const useCheckInput = () => {
     const [, save] = useRememberPassword();
     const { message } = useMessage();
     return useCallback((params: TAuthParams, type?: "resetPassword" | "login" | "register") => {
-        if (!params.phonenumber) {
-            message("请输入手机号", "warn")
-            return
-        } else if (params.phonenumber.length == 11) {
-        } else {
-            message('手机号格式有误', 'warn')
+        if (!params.phonenumber || !/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(params.phonenumber)) {
+            message("请输入11位手机号", "warn")
             return
         }
-        if (!params.verify_code) {
+
+        if (!params.verify_code && type !== "login") {
             message("请输入验证码", "warn")
             return
         }
+
+        if (!params.imageVerify) {
+            message("请输入图片验证码", "warn")
+            return
+        }
+
         if (!params.password) {
             message("请输入密码", "warn")
             return
         }
-        let reg =  /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{6,18}$/
-        if(reg.test(params.password)) {
-        }else{
-            message('密码请输入6-18位数字加字母的组合','warn')
+
+        if (!params.password2 && type !== "login") {
+            message("请再次输入密码", "warn")
             return
         }
 
-        if (params.password === params.password2) {
-        } else {
+        let reg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{6,18}$/
+        if (!reg.test(params.password)) {
+            message('密码请输入6-18位数字加字母的组合', 'warn')
+            return
+        }
+
+        if (params.password !== params.password2 && type !== "login") {
             message('两次密码不一致', 'warn');
             return
         }
 
-        save(params);
+        save({
+            password: params.password,
+            phonenumber: params.phonenumber
+        });
         return true
     }, [save, message])
 }
@@ -181,7 +191,6 @@ export const Register = () => {
     const { register, loading } = useAuth();
     const checkValues = useCheckInput();
     const [imageData, setImageData] = useState<TImageCode>();
-
 
     return (<div>
         <AuthBox>

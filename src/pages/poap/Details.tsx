@@ -1,49 +1,39 @@
 import { useParams } from "react-router-dom";
 import { BodyBox } from "../../components/BodyBox";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Header } from "../../components/Header";
 import { CardBackground, IconTextRightCard } from "../../components/Card";
 import { Button } from "../../components/Button";
 import { Tabs } from "../../components/Tab";
-import { useAutoRequest } from "../../hooks/useRequest";
+import { useAutoRequest, useRequest } from "../../hooks/useRequest";
 import api from "../../api/index";
 import { useFollow } from "../mine/Follow";
-import { PoapBaseInfo } from "./components/PoapBaseInfo";
+import { ellipseAddress, PoapBaseInfo } from "./components/PoapBaseInfo";
 import { DetailItem, IHolderItem, IPoapDetailsItem, SharePOAP } from "./components/DetailsItem";
 import share from "../../assets/image/share.svg"
 import { useSwitch } from "../../components/Loading";
+import { secondColor } from "../../theme";
+import { useAuth } from "../../components/UserAuth";
 
 export const PoapDetail = () => {
   const param: any = useParams();
   const [isShare, openShare, closeShare] = useSwitch();
-  const [detail, getDetails] = useAutoRequest(api.getDetails, { arg: { poap_id: param?.id } });
-  const [holders, getHolders] = useAutoRequest(api.getHolders, { arg: { poap_id: param?.id, from: 1, count: 10 } });
+  const [detail, getDetails] = useRequest(api.getDetails);
+  const [holders, getHolders] = useRequest(api.getHolders);
+  const detailsData = useMemo(() => detail as unknown as any, [detail]);
+  const { userInfo } = useAuth();
 
-  const [data, setData] = useState<IPoapDetailsItem>({
-    "poap_id": '1321321321321',
-    "miner": '0x321312321',
-    "poap_name": "国际青年徽章",
-    "poap_number": 123,
-    "receive_cond": "receive_condition",
-    "cover_img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images",
-    "poap_intro": "poap_intro",
-    "favour_number": 456,
-    "holder_num": 123,
-    "miner_name": "miner_name",
-    "avatar": "https://0.soompi.io/wp-content/uploads/2018/04/20170556/IU-140x140.jpg",
-    "collectable": 1,
-    "favoured": true,
-    "chain": {
-      plat_name: "plat_name",
-      publish_time: "publish_time",
-      contract_no: "contract_no",
-      contract_addr: "contract_addr",
-    }
-  });
+  const [holdersData, setData] = useState<any>();
   useEffect(() => {
-    if (!detail) return
-    setData(detail)
-  }, [detail]);
+    if (!holders) return
+    setData(holders)
+  }, [holders]);
+
+  useEffect(() => {
+    if (!param?.id) return
+    getDetails({ poap_id: param?.id });
+    getHolders({ poap_id: param?.id, from: 0, count: 10 });
+  }, [param?.id])
 
   const { unFollow: unFollowMinter, follow: followMinter } = useFollow(() => {
     getDetails({ poap_id: (param as any)?.id });
@@ -55,12 +45,12 @@ export const PoapDetail = () => {
 
   return (
     <>
-      <Header title={"POAP详情"} right={<img src={share} className="w-4 h-4" onClick={() => {
+      <Header title={"POAP详情"} right={userInfo && <img src={share} className="w-4 h-4" onClick={() => {
         isShare ? closeShare() : openShare();
       }} alt="" />} />
-      <SharePOAP isOpen={isShare} close={closeShare} details={data} />
+      <SharePOAP isOpen={isShare} close={closeShare} details={detailsData} />
       <BodyBox css={{ marginBottom: 50, paddingTop: 80 }}>
-        <DetailItem item={data} getDetails={getDetails} />
+        <DetailItem item={detailsData} getDetails={getDetails} />
         <div className="h-10"></div>
         <Tabs tabs={[
           {
@@ -77,28 +67,28 @@ export const PoapDetail = () => {
                   <div className="text-xs">yong.did</div>
                 </div>
               </IconTextRightCard> */}
-              <IconTextRightCard className="m-4 p-2 mb-6" icon={data.cover_img} right={<Button deep
+              <IconTextRightCard className="m-4 p-2 mb-6" icon={detailsData?.minerIcon} right={<Button deep
                 className="py-2 w-32 text-xs transform scale-75 origin-right"
                 onClick={() => {
                   //根据返回值判断是否关注，但是现在没有返回值，所以随便写了data?.miner
-                  data?.miner ? followMinter(data?.miner) : unFollowMinter(data?.miner);
+                  detailsData?.miner ? followMinter(detailsData?.minerUid) : unFollowMinter(detailsData?.minerUid);
                 }}
               >与发行方 建立连接</Button>}>
                 <div className="ml-2">
-                  <div className="font-bold">{data?.miner_name}</div>
-                  <div className="text-xs">{data?.miner}</div>
+                  <div className="font-bold">{detailsData?.minerName}</div>
+                  <div className="text-xs">{ellipseAddress(detailsData?.minerUid)}</div>
                 </div>
               </IconTextRightCard>
-              <PoapBaseInfo chain={data?.chain} />
+              <PoapBaseInfo chain={detailsData?.chain} />
             </CardBackground>)
           },
           {
             text: "持有者名单",
             children: (<CardBackground className="m-0 py-4 px-0 mt-0">
               {
-                (holders as unknown as IHolderItem[])?.map((item, index) => {
+                holdersData?.lenght ? (holdersData as unknown as IHolderItem[])?.map((item, index) => {
                   return (
-                    <IconTextRightCard key={index} className="m-4 p-2" icon={item.avatar} right={<Button deep
+                    <IconTextRightCard key={index} className="m-4 p-2" icon={item?.avatar} right={<Button deep
                       className="py-2 w-24 text-xs transform scale-75 origin-right"
                       onClick={() => {
                         //根据返回值判断是否关注，但是现在没有返回值，所以随便写了item.uid
@@ -110,7 +100,9 @@ export const PoapDetail = () => {
                         <div className="text-xs">{item.did}</div>
                       </div>
                     </IconTextRightCard>)
-                })
+                }) : <div className="h-40 flex justify-center items-center" style={{ color: secondColor }}>
+                  暂无持有者数据
+                </div>
               }
             </CardBackground>)
           }

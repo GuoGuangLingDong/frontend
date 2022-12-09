@@ -15,14 +15,14 @@ import deleteImg from "../../../assets/image/delete.png";
 import { bgColor } from "../../../theme";
 
 export type TSocialItemParams = {
-    title?: string,
+    linkTitle?: string,
     link?: string,
-    platform?: number
+    linkType?: number
 }
 
 export type TEditParams = {
     username?: string //用户名
-    user_desc?: string//用户描述
+    introduction?: string//用户描述
     links: TSocialItemParams[]
     avatar?: string//用户头像的url
 }
@@ -55,7 +55,7 @@ const SelectIcon = ({ isOpen, close, handle }: { isOpen: boolean, close: () => v
                 {socialIcon?.map((item: string, index: number) => {
                     return <img key={index} className="m-1 w-8 h-8" onClick={() => {
                         close();
-                        handle(index);
+                        handle(index + 1);
                     }} src={item} alt="" />
                 })}
             </div>
@@ -79,7 +79,7 @@ export const SocialItem = ({ link, index, setLinks }: { link: TSocialItemParams,
                 <div className="flex items-center" style={{ color: "#99A7B5" }} onClick={() => {
                     isOpenSelect ? closeSelect() : openSelect();
                 }}>
-                    <img src={socialIcon[link.platform || 0]} className="w-8 h-8 mr-2" alt="" />
+                    <img src={socialIcon[(link.linkType || 1) - 1]} className="w-8 h-8 mr-2" alt="" />
                     选择图标
                 </div>
                 <img src={deleteImg} alt="" className="w-6" onClick={() => {
@@ -92,21 +92,21 @@ export const SocialItem = ({ link, index, setLinks }: { link: TSocialItemParams,
             </div>
             <div className="relative">
                 {isOpenSelect && <SelectIcon isOpen={isOpenSelect} close={closeSelect} handle={(index) => {
-                    setParams({ platform: index })
+                    setParams({ linkType: index })
                 }} />}
             </div>
-            <input type="text" placeholder="请输入标题" value={link.title} maxLength={30}
+            <input type="text" placeholder="请输入标题" value={link.linkTitle} maxLength={30}
                 className="outline-none rounded-3xl w-full px-4 py-3 my-2"
                 style={{ background: bgColor }}
                 onChange={(val) => {
-                    setParams({ title: val.target.value })
+                    setParams({ linkTitle: val.target.value })
                 }} />
 
-            <input type="text" placeholder="请输入链接" value={link.link} 
-            style={{ background: bgColor }}
-            className="bg-white outline-none rounded-3xl w-full px-4 py-4" onChange={(val) => {
-                setParams({ link: val.target.value })
-            }} />
+            <input type="text" placeholder="请输入链接" value={link.link}
+                style={{ background: bgColor }}
+                className="bg-white outline-none rounded-3xl w-full px-4 py-4" onChange={(val) => {
+                    setParams({ link: val.target.value })
+                }} />
         </CardBackground>
     )
 }

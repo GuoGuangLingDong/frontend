@@ -32,36 +32,4 @@ const api = Object.keys(dataObj).reduce((prev: any, cur) => {
   return prev;
 }, {});
 
-
-const useHttpAxios = () => {
-  const { message } = useMessage();
-
-  return useCallback(() => {
-    return httpTool({
-      timeout: 3,
-      failMesage: (msg: string) => {
-        message(msg, "warn");
-      },
-    });
-  }, [message])
-}
-
-export const useAPI = () => {
-  const httpAxios: any = useHttpAxios();
-
-  return useMemo(() => {
-    return Object.keys(dataObj).reduce((prev: any, cur) => {
-      prev[cur] = (data: any, id: any) => {
-        return httpAxios({
-          ...dataObj[cur],
-          // url:id ? dataObj[cur].url+id : dataObj[cur],
-          [dataObj[cur].method === 'get' ? 'params' : 'data']: data,
-        });
-      };
-
-      return prev;
-    }, {});
-  }, [httpAxios])
-}
-
 export default api;

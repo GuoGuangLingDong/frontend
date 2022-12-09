@@ -1,13 +1,13 @@
 import { BodyBox } from "../../components/BodyBox";
 import { secondColor, textColor } from "../../theme";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IconImage } from "../../components/Image";
 import { Header } from "../../components/Header";
 import { CardBackground } from "../../components/Card";
 import { TextLabel } from "../../components/Label";
 import huizhang from "../../assets/image/huizhang.png";
 import api from "../../api/index";
-import { useAutoRequest } from "../../hooks/useRequest";
+import { useAutoRequest, useRequest } from "../../hooks/useRequest";
 
 interface IDIDScoreItem {
   "opt": string,
@@ -16,53 +16,20 @@ interface IDIDScoreItem {
 }
 interface IDIDScore {
   "score": string | number,
-  "operations": IDIDScoreItem[]
+  "oprations": IDIDScoreItem[]
 }
 
 export const DIDScore = () => {
-  const [data, setData] = useState<IDIDScore>({
-    score: "12321",
-    operations: [
-      {
-        opt: "铸造POAP",
-        score: -123,
-        opt_time: "11.21 17:38"
-      },
-      {
-        opt: "兑换DID",
-        score: -123,
-        opt_time: "11.21 17:38"
-      },
-      {
-        opt: "点赞",
-        score: -123,
-        opt_time: "11.21 17:38"
-      },
-      {
-        opt: "建立链接",
-        score: -123,
-        opt_time: "11.21 17:38"
-      },
-      {
-        opt: "领取POAP",
-        score: -123,
-        opt_time: "11.21 17:38"
-      },
-      {
-        opt: "新用户赠送",
-        score: -123,
-        opt_time: "11.21 17:38"
-      }
-    ]
-  });
+  const [value, getScoreFun] = useRequest(api.getScore);
 
-  const [value] = useAutoRequest(api.getScore);
-  // console.log(value,'value');
-  
   useEffect(() => {
-    if (!value) return
-    setData(value as IDIDScore)
-  }, [value])
+    getScoreFun({
+      from: 0,
+      count: 20
+    })
+  }, []);
+
+  const data = useMemo(() => value as unknown as IDIDScore, [value])
 
   return (<>
     <Header title={<span className="text-white">DID积分</span>} css={{ background: "transparent", boxShadow: "none" }}></Header>
@@ -76,9 +43,9 @@ export const DIDScore = () => {
             <IconImage className="h-12 w-12 rounded-none" src={huizhang} />
           </div>
           <div style={{ color: textColor }}>我的积分</div>
-          <div className="font-bold text-2xl">{data.score}</div>
+          <div className="font-bold text-2xl">{data?.score}</div>
         </div>
-        {data?.operations?.map((item: IDIDScoreItem, i: number) => {
+        {data?.oprations?.map((item: IDIDScoreItem, i: number) => {
           return (<TextLabel className="h-12" text={item.opt} right={<div>{item.opt_time}</div>}>
             <span>{item.score}</span>
           </TextLabel>)

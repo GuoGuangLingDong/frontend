@@ -58,6 +58,18 @@ module.exports = {
         excludeAliases: ['console'], //have tried with and without this
       })
     ],
+    devServer: {
+      proxy: {
+        '/httpServer': {
+          target: 'http://60.205.229.57:8080',//后台服务器地址
+          changeOrigin: true,//target为域名时必须设置此项
+          secure: false,//设置支持 https 协议的代理
+          pathRewrite: {
+            '^/httpServer': 'http://localhost:3000',//本地地址
+          },
+        }
+      }
+    }
   },
   plugins: [
     {

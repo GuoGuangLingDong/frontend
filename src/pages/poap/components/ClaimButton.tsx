@@ -5,17 +5,20 @@ import { useMessage } from "../../../components/Message";
 import { useRequest } from "../../../hooks/useRequest";
 import api from "../../../api/index";
 
-export const ClaimButton = ({ poap_id, text, getDetails }: { poap_id: string, text?: string, getDetails: (id: string) => void }) => {
+export const ClaimButton = ({ poap_id, text, getDetails }: { poap_id: string, text?: string, getDetails: (arg: any) => void }) => {
     const [loading, openLoading, closeLoading] = useSwitch();
     const { message } = useMessage();
     const [, claimFun] = useRequest(api.claim);
 
     const claim = useCallback(async (poap_id: string) => {
         openLoading();
-        await claimFun({ poap_id });
-        closeLoading();
-        message("领取成功！", "success");
-        await getDetails(poap_id)
+        claimFun({ poap_id }).then(() => {
+            closeLoading();
+            message("领取成功！", "success");
+            getDetails({ poap_id });
+        }).catch(()=>{
+            closeLoading();
+        })
     }, [message, openLoading, closeLoading, claimFun, getDetails])
 
     return (

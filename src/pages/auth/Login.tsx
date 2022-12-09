@@ -22,21 +22,21 @@ export const Login = () => {
             <InputLabel text="校验码" value={params.imageVerify} onChange={(val) => {
                 setParams({ imageVerify: val })
             }} right={<ImageVerifyCode imageData={imageData} setImageData={setImageData} />} />
-           
+
             <InputLabel text="登录密码" type="password" value={params.password} onChange={(val) => {
                 setParams({ password: val })
             }} />
             <div className="flex justify-between items-center text-sm">
                 <RememberPassword />
-                <div onClick={()=>{
+                <div onClick={() => {
                     navigate("/reset-password")
                 }}>忘记密码</div>
             </div>
             <Button className="mt-10" disabled={loading} loading={loading} onClick={() => {
                 // 此处调用登录接口函数
                 if (checkValues(params, "login")) {
-                    console.log(params,'login_params');
-                    login(params);
+                    console.log(params, 'login_params');
+                    login({ ...params, imageVerifyId: imageData?.id });
                 }
             }}>
                 登陆

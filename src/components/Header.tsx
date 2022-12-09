@@ -16,13 +16,14 @@ import { useSwitch } from "./Loading";
 import { DropDown, Radio } from "./Select";
 import { Button } from "./Button";
 import { useMessage } from "./Message";
+import { useAuth } from "./UserAuth";
 
 export const navs = [
-  { label: "发现POAP", path: "/home" },
-  { label: "铸造POAP", path: "/cast" },
-  { label: "我的链接", path: "/follow" },
-  { label: "DID积分", path: "/did-score" },
-  { label: "个人主页", path: "/mine" }
+  { label: "发现POAP", path: "home" },
+  { label: "铸造POAP", path: "cast" },
+  { label: "我的链接", path: "follow" },
+  { label: "DID积分", path: "did-score" },
+  { label: "个人主页", path: "profile" }
 ]
 
 export const ArrowImg = ({ color, cursor, handle, css }: { color?: string, cursor?: string, handle?: () => void, css?: string }) => {
@@ -38,6 +39,9 @@ export const ArrowImg = ({ color, cursor, handle, css }: { color?: string, curso
 
 const Memu = ({ isOpen, close, handle }: { isOpen: boolean, close: () => void, handle?: () => void }) => {
   const navigate = useNavigate();
+  const { userInfo } = useAuth();
+  const { pathname } = useLocation();
+
   return (
     <DropDown isOpen={isOpen} direction="left" css={{
       left: 30,
@@ -46,11 +50,15 @@ const Memu = ({ isOpen, close, handle }: { isOpen: boolean, close: () => void, h
     }}>
       <div className="text-center" style={{ fontWeight: 600 }}>
         {navs?.map((item: any, index: number) => {
+          if (pathname.includes(item.path)) return null
+
           return <div key={index} className="py-2" onClick={() => {
             if (handle && item.path.includes("cast")) {
               handle();
+            } else if (item.path === "profile") {
+              navigate(`/${item.path}/${userInfo?.did}`);
             } else {
-              navigate(item.path);
+              navigate(`/${item.path}`);
             }
             close();
           }} style={{
@@ -166,7 +174,7 @@ export const Header = memo(({ title, right, css }: { title?: string | ReactNode,
 
   return (
     <div className="flex px-4 lg:px-16 items-center justify-between text-lg fixed w-full h-16 md:h-16 bg-gray-50 md:bg-opacity-90 text-black text-opacity-70 shadow-sm z-50" style={{ background: pathname === "/home" ? bgColor : "white", ...(css || {}) }}>
-      {["/home", "/mine"]?.includes(pathname) ? <div className={hearderBoxCss} onClick={() => {
+      {(["/home"]?.includes(pathname) || pathname.includes("profile")) ? <div className={hearderBoxCss} onClick={() => {
         isOpenMenu ? closeMenu() : openMenu();
       }}>
         {isOpenDiglog && <Diglog isOpen={isOpenDiglog} close={closeDiglog} />}

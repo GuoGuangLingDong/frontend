@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { Button } from "../../components/Button";
 import { useParams } from "react-router-dom";
 import { BodyBox } from "../../components/BodyBox";
@@ -12,6 +12,7 @@ import { useRequest } from "../../hooks/useRequest";
 import { Upload } from "../../components/Upload";
 import edit from "../../assets/image/edit.svg"
 import { SocialItem, TEditParams, TSocialItemParams } from "./components/SocialItem";
+import { useAuth } from "../../components/UserAuth";
 
 
 // 铸造POAP
@@ -19,21 +20,31 @@ export const Edit = () => {
     const param = useParams();
     const [loading, openLoading, closeLoading] = useSwitch();
     const { message } = useMessage();
-    const [, createPoap] = useRequest(api.mint);
+    const { userInfo } = useAuth();
+    const [, setUserInfoFun] = useRequest(api.setUserInfo);
     const [isEdit, openEdit, closeEdit] = useSwitch();
 
-    const [links, setLinks] = useState<TSocialItemParams[]>([{
-        title: "",
-        link: "",
-        platform: 0,
-    }])
+    const [links, setLinks] = useState<TSocialItemParams[]>([])
 
     const [values, setValues] = useState<TEditParams>({
         username: "",
-        user_desc: "",
+        introduction: "",
         links: links,
         avatar: ""
     });
+
+    useEffect(() => {
+        if (!userInfo) return
+        setLinks(userInfo.links || []);
+        setValues({
+            username: userInfo.username,
+            introduction: userInfo.introduction,
+            links: userInfo.links || [],
+            avatar: userInfo.avatar
+        })
+        // setLinks();
+    }, [userInfo])
+
     const setParams = useCallback((arg: Partial<TEditParams>) => {
         setValues((pre: TEditParams) => ({ ...pre, ...arg }))
     }, [])
@@ -44,27 +55,30 @@ export const Edit = () => {
             message("请输入4～30位的用户名", "warn")
             return
         }
-        if (!params.user_desc) {
+        if (!params.introduction) {
             message("请输入用户简介", "warn")
             return
         }
-        if (!values.avatar) {
+        if (!params.avatar) {
             message("请上传用户头像", "warn")
             return
         }
 
         openLoading();
-        await createPoap(param);
-        closeLoading();
-        message("铸造成功！", "success");
+        setUserInfoFun(params).then(() => {
+            closeLoading();
+            message("提交成功！", "success");
+        }).catch(() => {
+            closeLoading();
+        })
         //eslint-disable-next-line
-    }, [param, createPoap, links, values])
+    }, [param, setUserInfoFun, links, values, message])
 
     const add = useCallback(() => {
         setLinks((pre: TSocialItemParams[]) => ([...pre, {
-            title: "",
+            linkTitle: "",
             link: "",
-            platform: pre?.length,
+            linkType: pre?.length + 1,
         }]))
     }, [])
 
@@ -73,7 +87,8 @@ export const Edit = () => {
             <Header title={"定制个人主页"} />
             <BodyBox css={{ marginBottom: 50, paddingTop: 100 }}>
                 <div className="flex justify-center">
-                    <Upload width={180} height={180} onChange={(url) => {
+                    <Upload width={180} height={180} src={userInfo?.avatar} onChange={(url) => {
+                        console.log(url)
                         setParams({ avatar: url })
                     }} />
                 </div>
@@ -86,16 +101,16 @@ export const Edit = () => {
                 </div>
 
                 <CardBackground className="flex justify-center items-center px-2 relative mt-0" style={{ minHeight: 180, minWidth: 180 }}>
-                    <textarea name="" value={values.user_desc} className="outline-none" id="" cols={36} rows={6}
+                    <textarea name="" value={values.introduction} className="outline-none" id="" cols={36} rows={6}
                         placeholder="请输入个人简介"
                         onChange={(val) => {
                             const value = val?.target?.value;
                             if (/[<>]/g.test(value)) return
                             if (value?.length > 160) return
-                            setParams({ user_desc: value })
+                            setParams({ introduction: value })
                         }}
                     ></textarea>
-                    <div className="absolute right-2 bottom-2">{values?.user_desc?.length} / 160</div>
+                    <div className="absolute right-2 bottom-2">{values?.introduction?.length} / 160</div>
                 </CardBackground>
 
                 <div className="font-bold mt-10 flex justify-between items-center">
@@ -107,7 +122,7 @@ export const Edit = () => {
                 {
                     links?.map((item, index) => {
                         return (<SocialItem
-                            key={`${index}_${item.platform}`}
+                            key={`${index}_${item.linkType}`}
                             link={links[index]}
                             setLinks={setLinks}
                             index={index}

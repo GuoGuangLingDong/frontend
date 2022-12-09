@@ -1,8 +1,4 @@
 const api = {
-    getPoapList: {
-        method: 'post',
-        url: '/poap/mainpage_list'
-    },
     getScore: {
         method: 'get',
         url: '/user/score'
@@ -11,16 +7,20 @@ const api = {
         method: 'get',
         url: '/user/profile'
     },
+    setUserInfo: {
+        method: 'post',
+        url: '/user/profile'
+    },
     getFollow: {
         method: 'get',
         url: '/user/follow_all'
     },
     cancelFollow: {
-        method: 'get',
+        method: 'post',
         url: '/user/unfollow'
     },
     follow: {
-        method: 'get',
+        method: 'post',
         url: '/user/follow'
     }
 };

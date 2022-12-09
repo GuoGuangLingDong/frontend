@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-cookies": "^0.1.0",
     "@types/webpack-env": "^1.18.0",
     "autoprefixer": "^10.4.13",
     "babel-plugin-import": "^1.13.5",
@@ -63,6 +64,8 @@
     "postcss": "^8.4.19",
     "postcss-cli": "^10.0.0",
     "prettier": "^2.0.5",
+    "react-cookie": "^4.1.1",
+    "react-cookies": "^0.1.1",
     "react-error-overlay": "^6.0.11",
     "react-hot-loader": "^4.13.0",
     "uglifyjs-webpack-plugin": "^2.2.0",

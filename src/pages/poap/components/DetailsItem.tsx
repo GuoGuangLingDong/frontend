@@ -8,10 +8,13 @@ import stared from "../../../assets/image/select-on.svg";
 import { ClaimButton } from "../components/ClaimButton";
 import { DropDown } from "../../../components/Select";
 import QRCode from "qrcode.react";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { downloadImg } from "../../mine/Share";
 import { useMessage } from "../../../components/Message";
 import { SmallLoading, useSwitch } from "../../../components/Loading";
+import { ellipseAddress } from "./PoapBaseInfo";
+import { useRequest } from "../../../hooks/useRequest";
+import api from "../../../api";
 
 export interface IHolderItem {
     "did": string//用户的did
@@ -34,6 +37,7 @@ export interface IPoapDetailsItem {
     "avatar": string,//发行人头像url
     "collectable": number //# 是否可领取，未持有，未被领完
     "favoured": boolean,//是否已点赞
+    "poap_sum": number,
     "chain": {
         plat_name: string,
         publish_time: string,
@@ -42,7 +46,7 @@ export interface IPoapDetailsItem {
     }
 }
 
-export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: () => void, details: IPoapDetailsItem }) => {
+export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: () => void, details: any }) => {
     const ref = useRef<HTMLDivElement>(null);
     // let timeout: any = useRef(null);
     const { message } = useMessage();
@@ -70,7 +74,7 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
         const dom = ref.current;
         if (!dom) return
         openLoading()
-        downloadImg(dom, details?.poap_id, () => {
+        downloadImg(dom, `poap-${details?.poap_id}`, () => {
             message("保存成功！", "success");
             closeLoading()
         }).catch(() => {
@@ -86,7 +90,8 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
             top: "0",
             width: "100vw",
             height: "100vh",
-            background: "rgba(0,0,0,0.5)"
+            background: "rgba(0,0,0,0.5)",
+            zIndex: 1000
         }}>
             <div className="relative">
                 <div className="bg-transparetn absolute" style={{
@@ -112,18 +117,18 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                                 }}>
                                     <LoadImage
                                         className="rounded-full h-8 w-8 mr-1"
-                                        src={"https://0.soompi.io/wp-content/uploads/2018/04/20170556/IU-140x140.jpg"}
+                                        src={details?.holders?.[0]?.avatar}
                                     />
                                     <div className="flex justify-between items-center w-full pr-2">
-                                        <div>{details.miner_name}</div>
-                                        <div>{details.miner}</div>
+                                        <div>{details?.holders?.[0]?.username}</div>
+                                        <div>{details?.holders?.[0]?.did}</div>
                                     </div>
                                 </div>
                             </div>
                             <div className="h-32 flex justify-between items-center p-4 font-bold">
                                 <div>
-                                    <div>{details.poap_name}</div>
-                                    <div>ID: {details.poap_id}</div>
+                                    <div>{details?.poap_name}</div>
+                                    <div>ID: {details?.poap_id}</div>
                                 </div>
                                 <QRCode
                                     id="qrCode"
@@ -149,9 +154,19 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
     )
 }
 
-export const DetailItem = ({ item, getDetails }: { item: IPoapDetailsItem, getDetails: (id: string) => void }) => {
+export const DetailItem = ({ item, getDetails }: { item: IPoapDetailsItem, getDetails: (arg: any) => void }) => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
+    const [, favourFun] = useRequest(api.favour);
+
+    const favour = useCallback(async () => {
+        await favourFun({
+            poap_id: item.poap_id
+        });
+        await getDetails({
+            poap_id: item.poap_id
+        })
+    }, [item, getDetails, favourFun])
 
     return (<CardBackground className="p-0 m-0">
         <LoadImage
@@ -164,27 +179,27 @@ export const DetailItem = ({ item, getDetails }: { item: IPoapDetailsItem, getDe
             }} />
         <div className="p-4">
             <div className="text-sm">
-                {item.poap_name}
+                {item?.poap_name}
             </div>
             <div className="text-xs flex items-center mt-2" style={{ color: secondColor }}>
-                <Holder amount={item.poap_number} style={{ justifyContent: "start" }} />
-                <Star amount={item.favour_number} />
+                <Holder amount={item?.holder_num} style={{ justifyContent: "start" }} />
+                <Star amount={item?.favour_number} />
                 <div style={{ flex: 4, textAlign: "right" }} >
                     限量发行
-                    <span style={{ color: textColor }}>{item.poap_number || 0}</span>
+                    <span style={{ color: textColor }}>{item?.poap_sum || 0}</span>
                     张
                 </div>
             </div>
             <div className="flex justify-between items-center">
-                <ClaimButton poap_id={item.poap_id} getDetails={getDetails} />
-                <div className="w-6"></div>
+                {<><ClaimButton poap_id={item?.poap_id} getDetails={getDetails} />
+                    <div className="w-6"></div></>}
                 <button className="mt-6 p-0 select-none w-full sm:px-6 font-bold text-sm rounded-full text-white border-0" style={{
                     padding: 2,
                     background: "linear-gradient(90deg, #F6BF75, #D77185, #8766AC, #4150B1)",
                 }} onClick={() => {
                     // 此处调用点赞接口函数
                     if (!item?.favoured) {
-
+                        favour()
                     }
                 }}>
                     <div className="bg-white w-full h-10 rounded-full flex justify-center items-center" style={{ color: textColor }}>

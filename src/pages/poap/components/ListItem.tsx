@@ -30,12 +30,12 @@ export const Holder = ({ amount, ...props }: { amount: number } & IDIVProps) => 
   )
 }
 
-export const ListItem = ({ item, ...props }: { item: IPoap } & IDIVProps) => {
+export const ListItem = ({ item, ...props }: { item: any } & IDIVProps) => {
   const navigate = useNavigate();
 
   return (<CardBackground {...props}>
     <LoadImage
-      src={item?.cover_pic}
+      src={item?.cover_img}
       className="rounded-t-3xl cursor-pointer h-44 w-full"
       style={{ padding: 2 }}
       onClick={() => {
@@ -49,30 +49,30 @@ export const ListItem = ({ item, ...props }: { item: IPoap } & IDIVProps) => {
         <LoadImage
           className="rounded-full h-full mr-1"
           style={{ width: "calc(2rem - 4px)" }}
-          src={"https://0.soompi.io/wp-content/uploads/2018/04/20170556/IU-140x140.jpg"}
+          src={item?.minerIcon}
         />
-        {item.miner}
+        {item.minerName?.slice(0,15)}
       </div>
     </div>
-    <div className="flex items-center justify-between px-2 my-2 text-xs">
+    <div className="flex items-center justify-between px-2 my-2 text-xs" style={{ minHeight: 30 }}>
       <div className="text-xs transform scale-90 origin-left" onClick={() => {
         navigate(`/detail/${item?.poap_id}`)
       }}>
         {item.poap_name}
       </div>
-      <Button
+      {item?.collectable && <Button
         className="w-16 py-1 text-xs transform scale-75 origin-right"
         onClick={() => {
           // 此处调用限时领取接口函数
           navigate(`/claim/${item?.poap_id}`)
         }}>
         限时领取
-      </Button>
+      </Button>}
     </div>
     <div className="text-xs flex items-center border-t h-10" style={{ color: secondColor }}>
-      <Holder amount={item.poap_number} />
+      <Holder amount={item.holder_num} />
       <div style={{ width: 1, height: "100%", backgroundColor: bgColor }}></div>
-      <Star amount={item.favour_number} />
+      <Star amount={item.like_num} />
     </div>
   </CardBackground>
   )

@@ -8,11 +8,11 @@ import { BackgroundLabel } from "../../components/Label";
 import follow from "../../assets/image/follow.svg";
 import { useAuth } from "../../components/UserAuth";
 import QRCode from "qrcode.react";
-import { MineBaseInfo } from ".";
 import CopyToClipboard from "react-copy-to-clipboard";
 import html2canvas from 'html2canvas'
 import { useRef } from "react";
 import { useSwitch } from "../../components/Loading";
+import { MineBaseInfo } from "./components/ProfileInfo";
 
 export const downloadImg = async (dom: any, name: string, afterHandle?: () => void) => {
     await html2canvas(dom, {
@@ -35,7 +35,7 @@ export const downloadImg = async (dom: any, name: string, afterHandle?: () => vo
 export const Share = () => {
     const { userInfo } = useAuth();
     const { message } = useMessage();
-    const link = `did.ren/${userInfo?.uid || "fdsa"}`
+    const link = `${window.location.origin}/#/profile/${userInfo?.did}`;
 
     const refL = useRef<HTMLDivElement>(null);
     const refR = useRef<HTMLDivElement>(null);
@@ -43,15 +43,17 @@ export const Share = () => {
 
     const handle = async (right?: boolean) => {
         // 获取想要转换的 DOM 节点
-        let dom;
+        let dom, name;
         if (right) {
             dom = refR.current;
+            name = `image-share-${userInfo?.did || "image-profile"}`;
         } else {
             dom = refL.current;
+            name = `qrcode-share-${userInfo?.did || "qrcode-profile"}`;
         }
         if (!dom) return
-        openLoading()
-        await downloadImg(dom, userInfo?.uid || "did", closeLoading)
+        openLoading();
+        await downloadImg(dom, name, closeLoading)
     };
 
     return (<>
@@ -78,8 +80,8 @@ export const Share = () => {
             <Tabs tabs={[
                 {
                     text: "永久二维码",
-                    children: (<><CardBackground className="mt-0 text-center" style={{ marginTop: 0, paddingTop: 30 }}>
-                        <div className="mx-6 py-6" ref={refL}>
+                    children: (<><CardBackground className="mt-0 text-center" style={{ marginTop: 0 }}>
+                        <div className="px-4 py-10" ref={refL}>
                             <div className="flex justify-center items-center w-full" style={{ height: 200 }}>
                                 <QRCode
                                     id="qrCode"
@@ -94,7 +96,7 @@ export const Share = () => {
                                 // }}
                                 />
                             </div>
-                            <div>{link}</div>
+                            <div style={{ wordWrap: "break-word" }}>{link}</div>
                         </div>
                         <div className="text-xs" style={{ color: "#99A7B5" }}>您的专属二维码  方便分享给你的好友哦</div>
                     </CardBackground>
@@ -111,8 +113,8 @@ export const Share = () => {
                     children: (<>
                         <div ref={refR}>
                             <CardBackground className="mt-0 text-center" style={{ marginTop: 0 }}>
-                                <MineBaseInfo />
-                                <div className="flex justify-center items-center w-full" style={{ height: 160 }}>
+                                <MineBaseInfo userInfo={userInfo as any} />
+                                <div className="flex justify-center items-center w-full mb-4" style={{ height: 160 }}>
                                     <QRCode
                                         value={link} //value参数为生成二维码的链接
                                         size={160} //二维码的宽高尺寸

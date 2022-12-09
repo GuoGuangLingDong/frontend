@@ -12,14 +12,15 @@ import { LoadPage } from "../../components/LoadPage";
 import { useRequest } from "../../hooks/useRequest";
 
 export interface IPoap {
-  "poap_id": string,
-  "miner": string,
-  "poap_name": string,
-  "poap_number": number,
-  "receive_condition": string,
-  "cover_pic": string,
-  "poap_intro": string,
-  "favour_number": number
+  "poapId": string,
+  "minerUid": string,
+  "minerIcon": string,
+  "poapName": string,
+  "poapSum": number,
+  "receiveCond": number,
+  "coverImg": string,
+  "poapIntro": string,
+  "like_num": number
 }
 
 export const List = ({ data }: { data: IPoap[] }) => {
@@ -51,10 +52,11 @@ export const Home = () => {
   const [data, setData] = useState<IPoap[]>([]);
   const [, getPoapList] = useRequest(api.getPoapList);
   const getList = useCallback(async (pageNo: number) => {
-    await getPoapList({
+    const data = await getPoapList({
       from: pageNo,
       count: 10
     });
+    return data
   }, [getPoapList])
 
   return (
@@ -78,7 +80,7 @@ export const Home = () => {
         </div>} />}
       <main className="mx-auto mb-8 sm:mb-16 pt-16">
         <Banner />
-        <LoadPage setData={setData} getList={getList}>
+        <LoadPage setData={setData} getList={getList} path={"Res"}>
           <List data={data} />
         </LoadPage>
       </main>

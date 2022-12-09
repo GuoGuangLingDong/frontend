@@ -58,10 +58,12 @@ const mockdata = [
 export const LoadPage = ({
     getList,
     setData,
+    path,
     children
 }: {
     getList: (pageNo: number) => Promise<void>,
     setData?: React.Dispatch<React.SetStateAction<any>>
+    path: string,
     children: ReactNode
 }) => {
     const ref = useRef<HTMLDivElement>(null);
@@ -70,11 +72,13 @@ export const LoadPage = ({
     const getListFun = useCallback(async () => {
         console.log("请求");
         setIsVisible(true);
-        await getList?.(pageNo);
+        const data: any = await getList?.(pageNo);
         console.log("请求成功", pageNo);
         setIsVisible(false);
-        setData?.((pre: any[]) => ([...pre, ...mockdata]));
-    }, [setIsVisible, pageNo, getList, setData])
+        console.log(data)
+        if (!data?.[path]) return
+        setData?.((pre: any[]) => ([...pre, ...data[path]]));
+    }, [setIsVisible, pageNo, getList, setData, path])
 
     useEffect(() => {
         getListFun();

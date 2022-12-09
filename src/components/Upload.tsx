@@ -2,11 +2,15 @@ import { useCallback, useState } from 'react'
 import { CardBackground } from './Card';
 import { useMessage } from './Message';
 import camera from "../assets/image/camera.svg";
+import { useRequest } from '../hooks/useRequest';
+import api from "../api/index";
+import axios from 'axios';
 
-export const Upload = ({ width, height, onChange }: { width?: string | number, height?: string | number, onChange: (url: string) => void }) => {
+export const Upload = ({ width, height, onChange, src }: { width?: string | number, height?: string | number, src?: string, onChange: (url: string) => void }) => {
     // 图片预览数据，接口接收的是url链接，所以在此之前还需要将图片数据上传到服务器，然后将返回的图片url赋值给 cover_img
     const [img, setImg] = useState<any>(null)
     const { message } = useMessage();
+    const [data, getToken] = useRequest(api.getToken)
     const handleImage = (e: any) => {
         const file = e?.target?.files?.[0];
         if (!file?.size) return
@@ -34,14 +38,29 @@ export const Upload = ({ width, height, onChange }: { width?: string | number, h
         };
     }
 
-    const uploadImage = useCallback((file) => {
-        console.log(file);
+    const uploadImage = useCallback(async (file) => {
+        const data = await getToken({ name: file?.name })
 
-        //上传图片的逻辑
-        // const data = 上传函数。。。。
+        const formData = new FormData()
+        formData.append('token', data.token)
+        formData.append('key', data.uploadKey);
+        formData.append('file', file);
 
-        //拿到图片url后，赋值给cover_img
-        onChange(file)
+        const response = await axios("https://up-z2.qiniup.com/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            data: formData
+        });
+
+        if (response.data.key) {
+            console.log(`${data.cdn}${response.data.key}`)
+            onChange(`${data.cdn}${response.data.key}`)
+        } else {
+            message("上传失败，请重新上传！", 'error')
+        }
+        // onChange("https://website-cdn.gfanx.com/did/856d20631ed681aa9c22e6a0ac79519c.jpg")
     }, [onChange]);
 
     return (
@@ -49,10 +68,12 @@ export const Upload = ({ width, height, onChange }: { width?: string | number, h
             <input type="file" className="h-0 w-0" name="image" id="image" onChange={handleImage} accept="image/png,image/jpg,image/gif" />
             <label htmlFor="image">
                 <div>
-                    {img ? <img src={img} className="rounded-3xl" style={{ width: width, height: height }} alt="" /> : <div className="text-center">
-                        <img src={camera} alt="" className="m-auto" />
-                        点击上传
-                    </div>}
+                    {img ? <img src={img} className="rounded-3xl" style={{ width: width, height: height }} alt="" /> : (
+                        src ? <img src={src} className="rounded-3xl" style={{ width: width, height: height }} alt="" /> :
+                            <div className="text-center">
+                                <img src={camera} alt="" className="m-auto" />
+                                点击上传
+                            </div>)}
                 </div>
             </label>
         </CardBackground>

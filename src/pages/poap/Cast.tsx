@@ -72,6 +72,7 @@ export const CastPOAP = () => {
     }, [])
 
     const cast = useCallback(async () => {
+        console.log(values);
         if (!values.poap_name || values.poap_name?.length < 4 || values?.poap_name?.length > 30) {
             message("请输入4～30位的POAP名称", "warn")
             return
@@ -90,17 +91,21 @@ export const CastPOAP = () => {
         }
 
         openLoading();
-        await createPoap(param);
-        closeLoading();
-        message("铸造成功！", "success");
+        createPoap(values).then(() => {
+            closeLoading();
+            message("铸造成功！", "success");
+        }).catch(() => {
+            closeLoading();
+        })
+
         //eslint-disable-next-line
-    }, [param, createPoap])
+    }, [param, createPoap, values])
 
     return (
         <>
             <Header title={"铸造POAP"} />
             <BodyBox css={{ marginBottom: 50, paddingTop: 80 }}>
-                <div className="ml-4 mb-1 font-bold">Poap名称</div>
+                <div className="ml-4 mb-1 font-bold">POAP名称</div>
                 <input type="text" placeholder="请输入4～30位的POAP名称" value={values.poap_name} maxLength={30} className="bg-white outline-none rounded-3xl w-full px-4 py-2 mb-6" onChange={(val) => {
                     setParams({ poap_name: val.target.value })
                 }} />
@@ -134,7 +139,7 @@ export const CastPOAP = () => {
 
                 {values.receive_cond === 2 && <><div className="ml-4 mb-1 font-bold">领取人名单</div>
                     <CardBackground className="flex justify-center items-center px-2 relative mt-0 mb-6" style={{ minHeight: 180, minWidth: 180 }}>
-                        <textarea name="" value={values.collect_list} className="outline-none" id="" cols={36} rows={10}
+                        <textarea name="" value={values.collect_list} className="outline-none" cols={36} rows={10}
                             placeholder="请输入领取人的手机号或did，以#号分割开，例如： 17712345678#wodedid.did#18812345678，最多输入1000个名单！"
                             onChange={(val) => {
                                 let content = val?.target?.value;
@@ -149,7 +154,7 @@ export const CastPOAP = () => {
                         <div className="absolute right-2 bottom-2">{values?.collect_list?.split("#")?.length} / 1000</div>
                     </CardBackground></>}
 
-                <div className="ml-4 mb-1 font-bold">Poap封面图片</div>
+                <div className="ml-4 mb-1 font-bold">POAP封面图片</div>
                 <div className="flex items-center font-bold mb-6" style={{ color: "#99A7B5" }}>
                     <Upload width={180} height={180} onChange={(url) => {
                         setParams({ cover_img: url })
@@ -159,9 +164,9 @@ export const CastPOAP = () => {
                     </div>
                 </div>
 
-                <div className="ml-4 mb-1 font-bold">Poap简介</div>
+                <div className="ml-4 mb-1 font-bold">POAP简介</div>
                 <CardBackground className="flex justify-center items-center px-2 relative mt-0" style={{ minHeight: 180, minWidth: 180 }}>
-                    <textarea name="" value={values.poap_intro} className="outline-none" id="" cols={36} rows={10}
+                    <textarea name="" value={values.poap_intro} className="outline-none" cols={36} rows={10}
                         placeholder="文字描述最多200字"
                         onChange={(val) => {
                             const value = val?.target?.value;
@@ -173,7 +178,9 @@ export const CastPOAP = () => {
                     <div className="absolute right-2 bottom-2">{values?.poap_intro?.length} / 200</div>
                 </CardBackground>
 
-                <Button className="my-10" loading={loading} disabled={loading} onClick={cast}>
+                <Button className="my-10" loading={loading} disabled={loading} onClick={() => {
+                    cast();
+                }}>
                     铸造POAP
                 </Button>
             </BodyBox>

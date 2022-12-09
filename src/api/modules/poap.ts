@@ -1,4 +1,8 @@
 const api = {
+    getPoapList: {
+        method: 'post',
+        url: '/poap/mainpage_list'
+    },
     getDetails: {
         method: 'post',
         url: '/poap/details'
@@ -14,6 +18,14 @@ const api = {
     claim: {
         method: 'post',
         url: '/poap/collect'
+    },
+    getToken: {
+        method: 'post',
+        url: '/upload/token'
+    },
+    favour: {
+        method: 'post',
+        url: '/poap/favor'
     }
 };
 export default api;
