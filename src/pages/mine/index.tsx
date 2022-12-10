@@ -1,18 +1,15 @@
 import { BodyBox } from "../../components/BodyBox";
-import { bgColor, secondColor } from "../../theme";
-import { useCallback, useEffect, useState } from "react";
-import { LoadImage } from "../../components/Image";
-import { CardBackground, IconTextRightCard } from "../../components/Card";
+import { bgColor } from "../../theme";
+import { useEffect } from "react";
+import { IconTextRightCard } from "../../components/Card";
 import back from "../../assets/image/back.svg";
-import { Holder, Star } from "../poap/components/ListItem";
-import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "../../components/Button";
+import { useParams } from "react-router-dom";
 import { Header } from "../../components/Header";
 import { useRequest } from "../../hooks/useRequest";
 import api from "../../api";
 import { MineBaseInfo } from "./components/ProfileInfo";
 import { socialIcon, TSocialItemParams } from "./components/SocialItem";
-import { LoadPage } from "../../components/LoadPage";
+import { MinePOAPList } from "./components/POAPList";
 
 const SocialItem = ({ logo, text, url }: { logo: string, text: string, url: string }) => {
   return (
@@ -32,19 +29,8 @@ const SocialItem = ({ logo, text, url }: { logo: string, text: string, url: stri
 }
 
 export const Mine = () => {
-  const navigate = useNavigate();
   const params: any = useParams();
   const [userInfoData, getUserInfoFun] = useRequest(api.getUserInfo);
-  const [userInfo, setData] = useState<any[]>([]);
-
-  const getUserInfo = useCallback(async (page: number) => {
-    const data = await getUserInfoFun({
-      did: params.did,
-      from: page,
-      count: 6
-    });
-    return data
-  }, [getUserInfoFun, params.did])
 
   useEffect(() => {
     if (!params.did) return
@@ -54,7 +40,7 @@ export const Mine = () => {
       count: 1
     })
     //eslint-disable-next-line
-  }, [getUserInfo, params.did])
+  }, [params.did])
 
   return (<>
     <Header css={{ boxShadow: "none", background: "transparent" }} />
@@ -65,44 +51,7 @@ export const Mine = () => {
           return (<SocialItem key={index} text={item.linkTitle || ""} logo={socialIcon[(item.linkType || 1) - 1]} url={item.link || ""} />)
         })
       }
-      <div>
-        <div className="flex mt-6 flex-wrap w-full">
-          <LoadPage getList={getUserInfo} setData={setData} dataLength={userInfo?.length} path="poap_list">
-            {userInfo?.map((item: any, i: number) => {
-              return (<CardBackground className="p-0 m-0" key={i}>
-                <LoadImage
-                  src={item?.minerIcon}
-                  className="rounded-t-3xl cursor-pointer h-96 w-full"
-                  style={{ padding: 2 }}
-                  onClick={() => {
-                    navigate(`/detail/${item?.poap_id}`)
-                  }} />
-                <div className="p-4" onClick={() => {
-                  navigate(`/detail/${item?.poap_id}`)
-                }}>
-                  <div className="text-sm">
-                    {item.poapName}
-                  </div>
-                  <div className="text-sm flex items-center justify-between mt-2" style={{ color: secondColor }}>
-                    <div className="flex items-center">
-                      <Holder amount={item.holder_num} className="mr-4" />
-                      <Star amount={item.favour_number} />
-                    </div>
-                    {item?.collectable && <Button
-                      className="w-16 py-1 text-xs transform scale-75 origin-right"
-                      onClick={() => {
-                        // 此处调用限时领取接口函数
-                        navigate(`/detail/${item?.poap_id}`)
-                      }}>
-                      限时领取
-                    </Button>}
-                  </div>
-                </div>
-              </CardBackground>)
-            })}
-          </LoadPage>
-        </div>
-      </div>
+      <MinePOAPList />
     </BodyBox>
   </>
   );

@@ -12,8 +12,10 @@ import { useRequest } from "../../hooks/useRequest";
 import { DetailsPulse } from "./components/DetailsItem";
 import { NoData } from "./Details";
 
+
 export interface IPoap {
   "poapId": string,
+  "poap_id": string,
   "minerUid": string,
   "minerIcon": string,
   "poapName": string,
@@ -101,7 +103,7 @@ export const Home = () => {
         </div>} />}
       <main className="mx-auto mb-8 sm:mb-16 pt-16">
         <Banner />
-        <LoadPage setData={setData} getList={getList} path={"list"} dataLength={data?.length}>
+        <LoadPage setData={setData} getList={getList} id="home-list" path={"list"} dataLength={data?.length}>
           {loading ? <DetailsPulse /> : (!listData?.list?.length && !data?.length ? <NoData /> : <List data={data} />)}
         </LoadPage>
       </main>

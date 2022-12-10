@@ -93,10 +93,10 @@ const FollowItem = ({ item, handle, isFollow }: { item: IFollowItem, handle: () 
 
 export const Follow = () => {
   const [dataFoolowers, setFollowersData] = useState<IFollowItem[]>([]);
-  // const [dataFoolowees, setFooloweesData] = useState<IFollowItem[]>([]);
+  const [dataFoolowees, setFooloweesData] = useState<IFollowItem[]>([]);
 
   const [, getFollowersFun] = useRequest(api.getFollowers);
-  // const [, getFolloweesFun] = useRequest(api.getFollowees);
+  const [, getFolloweesFun] = useRequest(api.getFollowees);
 
   const getFollowers = useCallback(async (pageNo: number) => {
     const data = await getFollowersFun({
@@ -106,20 +106,21 @@ export const Follow = () => {
     return data
   }, [getFollowersFun]);
 
-  // const getFollowees = useCallback(async (pageNo: number) => {
-  //   await getFolloweesFun({
-  //     from: pageNo,
-  //     count: 10
-  //   });
-  // }, [getFolloweesFun])
+  const getFollowees = useCallback(async (pageNo: number) => {
+    const data = await getFolloweesFun({
+      from: pageNo,
+      count: 10
+    });
+    return data
+  }, [getFolloweesFun])
 
   const { unFollow } = useFollow(() => {
     getFollowers(0);
   }, [setFollowersData]);
 
-  // const { follow } = useFollow(() => {
-  //   getFollowees(0);
-  // }, [getFollowers]);
+  const { follow } = useFollow(() => {
+    getFollowees(0);
+  }, [getFollowers]);
 
   return (<>
     <Header title={"我的链接"}></Header>
@@ -130,7 +131,7 @@ export const Follow = () => {
         {
           text: "我的连接",
           children: (<CardBackground className="mt-0" style={{ marginTop: 0 }}>
-            <LoadPage setData={setFollowersData} getList={getFollowers} path={"list"} dataLength={dataFoolowers?.length}>
+            <LoadPage setData={setFollowersData} getList={getFollowers} id="follower" path={"list"} dataLength={dataFoolowers?.length}>
               {dataFoolowers?.length
                 ? dataFoolowers?.map((item: IFollowItem, i: number) => {
                   return (<FollowItem key={`${i}-follower`} item={item} isFollow handle={() => {
@@ -145,13 +146,15 @@ export const Follow = () => {
         {
           text: "与我连接",
           children: (<CardBackground className="mt-0" style={{ marginTop: 0 }}>
-            {
-              // dataFoolowees?.followee?.map((item: IFollowItem, i: number) => {
-              //   return (<FollowItem key={`${i}-followee`} item={item} handle={() => {
-              //     follow(item.did);
-              //   }} />)
-              // })
-            }
+            <LoadPage setData={setFooloweesData} getList={getFollowees} id="followee" path={"list"} dataLength={dataFoolowees?.length}>
+              {
+                dataFoolowees?.map((item: IFollowItem, i: number) => {
+                  return (<FollowItem key={`${i}-followee`} item={item} handle={() => {
+                    follow(item.did);
+                  }} />)
+                })
+              }
+            </LoadPage>
           </CardBackground>)
         }
       ]} />

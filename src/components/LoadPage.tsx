@@ -7,12 +7,14 @@ export const LoadPage = ({
     setData,
     path,
     dataLength,
+    id,
     children
 }: {
     getList: (from: number) => Promise<void>,
     setData?: React.Dispatch<React.SetStateAction<any>>
     path: string,
     dataLength: number,
+    id: string,
     children: ReactNode
 }) => {
     const ref = useRef<HTMLDivElement>(null);
@@ -31,6 +33,8 @@ export const LoadPage = ({
 
     }, [setIsVisible, from, getList, setData, path])
 
+    console.log(path)
+
     useEffect(() => {
         from.current = dataLength;
     }, [dataLength])
@@ -38,6 +42,7 @@ export const LoadPage = ({
     useEffect(() => {
         const dom = ref?.current;
         if (!dom) return
+        console.log(dom)
         const io = new IntersectionObserver((entries) => {
             entries.forEach(item => {
                 if (item.isIntersecting) {
@@ -52,12 +57,12 @@ export const LoadPage = ({
         io.observe(dom)
 
     //eslint-disable-next-line
-    }, [ref])
+    }, [ref, id])
 
     return (
         <>
             {children}
-            <div ref={ref} className="flex justify-center mt-10 w-full">
+            <div ref={ref} id={id} className="flex justify-center mt-10 w-full">
                 {isVisible && <SmallLoading color={textColor} size={30} />}
             </div>
         </>
