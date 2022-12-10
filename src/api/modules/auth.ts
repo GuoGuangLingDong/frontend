@@ -7,6 +7,10 @@ const api = {
         method: 'post',
         url: '/user/sign-up',
     },
+    reset: {
+        method: 'post',
+        url: '/user/reset-password',
+    },
     getVerifyCode: {
         method: 'post',
         url: '/code/send',
@@ -14,10 +18,6 @@ const api = {
     getImageCode: {
         method: 'post',
         url: '/code/image',
-    },
-    getRestPassword:{
-        mmethod: 'post',
-        url:'/user/reset-password'
     }
 }
 export default api;

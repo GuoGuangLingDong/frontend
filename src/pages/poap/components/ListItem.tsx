@@ -6,7 +6,6 @@ import star from "../../../assets/image/star.svg";
 import { Button } from "../../../components/Button";
 import { CardBackground } from "../../../components/Card";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
-import { IPoap } from "..";
 
 export type IDIVProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLInputElement>
 
@@ -51,7 +50,7 @@ export const ListItem = ({ item, ...props }: { item: any } & IDIVProps) => {
           style={{ width: "calc(2rem - 4px)" }}
           src={item?.minerIcon}
         />
-        {item.minerName?.slice(0,15)}
+        {item.minerName?.slice(0, 15)}
       </div>
     </div>
     <div className="flex items-center justify-between px-2 my-2 text-xs" style={{ minHeight: 30 }}>

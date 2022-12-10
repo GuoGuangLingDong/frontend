@@ -2,17 +2,16 @@ import { useCallback, useEffect, useState } from 'react';
 import { useMessage } from '../components/Message';
 
 export const useRequest = (service: any, options?: any) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<any>(null);
   const { message } = useMessage();
   const [error, setError] = useState({});
   const requset = useCallback(async (arg?: any) => {
     // 发接口请求
-    console.log(arg)
     let res = await service(arg ? arg : options?.arg);
     if (res.data?.code === 0) {
       // 请求成功=
       setData(res.data?.data);
-      return res.data?.data
+      return Promise.resolve(res.data?.data)
     } else {
       // 失败
       setError(res.data?.message);

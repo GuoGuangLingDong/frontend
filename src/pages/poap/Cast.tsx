@@ -156,7 +156,7 @@ export const CastPOAP = () => {
 
                 <div className="ml-4 mb-1 font-bold">POAP封面图片</div>
                 <div className="flex items-center font-bold mb-6" style={{ color: "#99A7B5" }}>
-                    <Upload width={180} height={180} onChange={(url) => {
+                    <Upload closeLoading={closeLoading} openLoading={openLoading} width={180} height={180} onChange={(url) => {
                         setParams({ cover_img: url })
                     }} />
                     <div>

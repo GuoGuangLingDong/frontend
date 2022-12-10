@@ -8,13 +8,14 @@ import stared from "../../../assets/image/select-on.svg";
 import { ClaimButton } from "../components/ClaimButton";
 import { DropDown } from "../../../components/Select";
 import QRCode from "qrcode.react";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { downloadImg } from "../../mine/Share";
 import { useMessage } from "../../../components/Message";
 import { SmallLoading, useSwitch } from "../../../components/Loading";
 import { ellipseAddress } from "./PoapBaseInfo";
 import { useRequest } from "../../../hooks/useRequest";
 import api from "../../../api";
+import { BodyBox } from "../../../components/BodyBox";
 
 export interface IHolderItem {
     "did": string//用户的did
@@ -51,24 +52,6 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
     // let timeout: any = useRef(null);
     const { message } = useMessage();
     const [loading, openLoading, closeLoading] = useSwitch();
-    useEffect(() => {
-        const dom = ref.current;
-        if (!dom) return
-        // dom.addEventListener('touchstart', () => {
-        //     timeout.current = setTimeout(() => {
-        //         downloadImg(dom, () => {
-        //             message("保存成功！", "success");
-        //             clearTimeout(timeout.current);
-        //         }).catch(() => {
-        //             message("保存失败！", "error");
-        //         })
-        //     }, 800); // 长按时间超过800ms，则执行传入的方法 
-        // }, false);
-        // dom.addEventListener('touchend', () => {
-        //     clearTimeout(timeout.current); // 长按时间少于800ms，不会执行传入的方法
-        // }, false);
-        // eslint-disable-next-line
-    }, [ref])
 
     const save = () => {
         const dom = ref.current;
@@ -109,7 +92,7 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                                 className="rounded-3xl cursor-pointer w-full"
                                 style={{ padding: 2, width: "80vw", height: "80vw" }}
                             />
-                            <div className="absolute px-3 pt-2 w-full top-0 left-0">
+                            {/* <div className="absolute px-3 pt-2 w-full top-0 left-0">
                                 <div className="rounded-full w-full flex items-center text-white" style={{
                                     background: "rgba(0,0,0,0.5)",
                                     padding: 2,
@@ -124,11 +107,11 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                                         <div>{details?.holders?.[0]?.did}</div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="h-32 flex justify-between items-center p-4 font-bold">
                                 <div>
                                     <div>{details?.poap_name}</div>
-                                    <div>ID: {details?.poap_id}</div>
+                                    <div>ID: {details?.poap_id?.length <= 16 ? details?.poap_id : ellipseAddress(details?.poap_id, 6)}</div>
                                 </div>
                                 <QRCode
                                     id="qrCode"
@@ -151,6 +134,27 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                 </div>
             </div>
         </DropDown>
+    )
+}
+
+export const DetailsPulse = () => {
+    return (
+        <BodyBox>
+            <div className="rounded-md max-w-sm w-full mx-auto mt-4">
+                <div className="animate-pulse">
+                    <div className="rounded-3xl bg-gray-400 h-60 w-full my-2"></div>
+                    <div className="py-1 space-y-2">
+                        <div className="h-10 bg-gray-400 rounded"></div>
+                        <div className="flex justify-between items-center">
+                            <div className="h-4 bg-gray-400 rounded w-20"></div>
+                            <div className="h-4 bg-gray-400 rounded w-20"></div>
+                        </div>
+                        <div className="h-4 bg-gray-400 rounded w-5/6"></div>
+                        <div className="h-4 bg-gray-400 rounded"></div>
+                    </div>
+                </div>
+            </div>
+        </BodyBox>
     )
 }
 
@@ -191,7 +195,7 @@ export const DetailItem = ({ item, getDetails }: { item: IPoapDetailsItem, getDe
                 </div>
             </div>
             <div className="flex justify-between items-center">
-                {<><ClaimButton poap_id={item?.poap_id} getDetails={getDetails} />
+                {item?.collectable && <><ClaimButton poap_id={item?.poap_id} getDetails={getDetails} />
                     <div className="w-6"></div></>}
                 <button className="mt-6 p-0 select-none w-full sm:px-6 font-bold text-sm rounded-full text-white border-0" style={{
                     padding: 2,

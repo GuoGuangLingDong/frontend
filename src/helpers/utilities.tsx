@@ -1,4 +1,5 @@
-import { RefObject } from "react";
+import { RefObject, useCallback, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function isMobile(): boolean {
   let mobile: boolean = false;
@@ -54,4 +55,42 @@ export const hashClick = (e?: any, id?: string) => {
   if (!id) return
   const element = document.getElementById(id);
   element && element.scrollIntoView({ block: 'start', behavior: 'smooth' });
+}
+
+export const useQueryString = () => {
+  const { search } = useLocation();
+  const navigate = useNavigate()
+  const setSearchString = useCallback((obj: any) => {
+    let path = window.location.hash?.slice(1);
+    let index = path?.indexOf("?");
+    path = index > 0 ? path.slice(0, index) : path;
+    console.log(path, "path", obj)
+    let str = `${path}?`
+    for (let i in obj) {
+      if (!obj[i]) continue
+      str += `${i}=${obj[i]}&`
+    }
+    console.log(str)
+    navigate(str?.slice(0, -1))
+  }, [navigate]);
+
+  const getSearchObj = useCallback((str: string) => {
+    let queryArray = str.split('&');
+    const obj: any = {};
+    queryArray.map((query) => {
+      let temp = query.split('=');
+      if (temp.length > 1) {
+        obj[temp[0]] = temp[1];
+      }
+      return query
+    })
+    return obj
+  }, [])
+
+  const searchString = useMemo(() => {
+    const str = search.slice(1);
+    return getSearchObj(str)
+  }, [search, getSearchObj]);
+
+  return { searchString, setSearchString, getSearchObj }
 }

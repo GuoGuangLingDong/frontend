@@ -183,7 +183,7 @@ export const ImageVerifyCode = ({ imageData, setImageData }: { imageData?: TImag
         // eslint-disable-next-line
     }, [data])
 
-    return (<img src={imageData?.base64} alt="" style={{ width: 60, height: 30 }} onClick={() => { getImageVerifyCode() }} />)
+    return (<img src={imageData?.base64} alt="" style={{ width:100, height: 40, borderTopRightRadius: 40, borderBottomRightRadius: 40, marginRight: -10 }} onClick={() => { getImageVerifyCode() }} />)
 }
 
 export const Register = () => {

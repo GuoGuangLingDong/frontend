@@ -9,7 +9,7 @@ const httpTool = ({
   // withCredentials = true 
   // gfsessionid 1bkj0dombrtl00cowz16h0xydn600882 60.205.229.57 	/ 2022-12-10T03:36:38.786Z 43 —— ——  —— —— ——   Medium
   const httpAxios = axios.create({
-    timeout: timeout * 100,
+    timeout: timeout * 1000,
     baseURL: process.env.REACT_APP_BASE_URL,
     // withCredentials: true,
     // retry: 3, // 设置最大次数
@@ -24,8 +24,7 @@ const httpTool = ({
         ...config,
         headers: {
           ...config.headers,
-          "gfsessionid": "1b64g2tmbrtl00cox68pcmfx12400i8u",
-          // Cookie: "gfsessionid="
+          "gfsessionid": window.localStorage.getItem("sessionId") || ""
         }
       });
     },
@@ -39,7 +38,6 @@ const httpTool = ({
   httpAxios.interceptors.response.use(
     function (response) {
       // response.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=None")
-      console.log(response);
       // Do something with response data
       return response;
     },

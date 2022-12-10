@@ -1,6 +1,6 @@
 import { BodyBox } from "../../components/BodyBox";
 import { secondColor } from "../../theme";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Header } from "../../components/Header";
 import { CardBackground, IconTextRightCard } from "../../components/Card";
 import api from "../../api/index";
@@ -10,17 +10,16 @@ import { Button } from "../../components/Button";
 import follow from "../../assets/image/follow.svg";
 import nft from "../../assets/image/nft.svg";
 import { useRequest } from "../../hooks/useRequest";
+import { LoadPage } from "../../components/LoadPage";
+import { NoData } from "../poap/Details";
 
 interface IFollowItem {
   username: string
   uid: string
+  did: string
   follow_count: number
   poap_count: number
-}
-
-interface IFollow {
-  followee: IFollowItem[]
-  follower: IFollowItem[]
+  avatar: string
 }
 
 export const FollowLink = ({ item, ...props }: { item: IFollowItem } & IDIVProps) => {
@@ -66,14 +65,13 @@ export const useFollow = (getData?: () => void, rely: any[] = []) => {
   }
 }
 
-const FollowItem = ({ item }: { item: IFollowItem }) => {
-  const { unFollow } = useFollow();
+const FollowItem = ({ item, handle, isFollow }: { item: IFollowItem, handle: () => void, isFollow?: boolean }) => {
 
   return (<div className="border rounded-3xl mb-2">
-    <IconTextRightCard className="p-2 mb-0" style={{ backgroundColor: "transparent" }} icon={item.username}>
+    <IconTextRightCard className="p-2 mb-0" style={{ backgroundColor: "transparent" }} icon={item.avatar}>
       <div className="ml-2">
         <div className="font-bold">{item.username}</div>
-        <div className="text-xs">{item.uid}</div>
+        <div className="text-xs">{item.did}</div>
       </div>
     </IconTextRightCard>
     <div className="text-sm flex items-center justify-between border-t pl-12 pr-2 h-12" style={{ color: secondColor }}>
@@ -85,67 +83,43 @@ const FollowItem = ({ item }: { item: IFollowItem }) => {
         className="w-20 py-2 text-xs transform scale-75 origin-right"
         style={{ background: "#99A7B5" }}
         onClick={() => {
-          unFollow(item?.uid);
+          handle()
         }}>
-        取消连接
+        {isFollow ? "取消连接" : "建立连接"}
       </Button>
     </div>
   </div>)
 }
 
 export const Follow = () => {
-  const [data, setData] = useState<IFollow>({
-    followee: [
-      {
-        username: "username1",
-        uid: "uid",
-        follow_count: 100,
-        poap_count: 200,
-      },
-      {
-        username: "username2",
-        uid: "uid",
-        follow_count: 100,
-        poap_count: 200,
-      },
-      {
-        username: "username3",
-        uid: "uid",
-        follow_count: 100,
-        poap_count: 200,
-      },
-    ],
-    follower: [
-      {
-        username: "username4",
-        uid: "uid",
-        follow_count: 100,
-        poap_count: 200,
-      },
-      {
-        username: "username5",
-        uid: "uid",
-        follow_count: 100,
-        poap_count: 200,
-      },
-      {
-        username: "username6",
-        uid: "uid",
-        follow_count: 100,
-        poap_count: 200,
-      },
-    ]
-  });
+  const [dataFoolowers, setFollowersData] = useState<IFollowItem[]>([]);
+  // const [dataFoolowees, setFooloweesData] = useState<IFollowItem[]>([]);
 
-  const getList = useCallback(async () => {
-    const data = await api.getFollow();
-    setData(data);
-  }, [])
+  const [, getFollowersFun] = useRequest(api.getFollowers);
+  // const [, getFolloweesFun] = useRequest(api.getFollowees);
 
-  useEffect(() => {
-    getList();
-    // eslint-disable-next-line
-  }, [])
+  const getFollowers = useCallback(async (pageNo: number) => {
+    const data = await getFollowersFun({
+      from: pageNo,
+      count: 10
+    });
+    return data
+  }, [getFollowersFun]);
+
+  // const getFollowees = useCallback(async (pageNo: number) => {
+  //   await getFolloweesFun({
+  //     from: pageNo,
+  //     count: 10
+  //   });
+  // }, [getFolloweesFun])
+
+  const { unFollow } = useFollow(() => {
+    getFollowers(0);
+  }, [setFollowersData]);
+
+  // const { follow } = useFollow(() => {
+  //   getFollowees(0);
+  // }, [getFollowers]);
 
   return (<>
     <Header title={"我的链接"}></Header>
@@ -156,20 +130,27 @@ export const Follow = () => {
         {
           text: "我的连接",
           children: (<CardBackground className="mt-0" style={{ marginTop: 0 }}>
-            {
-              data?.follower?.map((item: IFollowItem, i: number) => {
-                return (<FollowItem key={`${i}-follower`} item={item} />)
-              })
-            }
+            <LoadPage setData={setFollowersData} getList={getFollowers} path={"list"} dataLength={dataFoolowers?.length}>
+              {dataFoolowers?.length
+                ? dataFoolowers?.map((item: IFollowItem, i: number) => {
+                  return (<FollowItem key={`${i}-follower`} item={item} isFollow handle={() => {
+                    unFollow(item.uid);
+                  }} />)
+                })
+                : <NoData />
+              }
+            </LoadPage>
           </CardBackground>)
         },
         {
           text: "与我连接",
           children: (<CardBackground className="mt-0" style={{ marginTop: 0 }}>
             {
-              data?.followee?.map((item: IFollowItem, i: number) => {
-                return (<FollowItem key={`${i}-followee`} item={item} />)
-              })
+              // dataFoolowees?.followee?.map((item: IFollowItem, i: number) => {
+              //   return (<FollowItem key={`${i}-followee`} item={item} handle={() => {
+              //     follow(item.did);
+              //   }} />)
+              // })
             }
           </CardBackground>)
         }

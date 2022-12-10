@@ -1,17 +1,14 @@
 import { BodyBox } from "../../components/BodyBox";
 import { bgColor, secondColor } from "../../theme";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { LoadImage } from "../../components/Image";
 import { CardBackground, IconTextRightCard } from "../../components/Card";
-import { PersonBackground } from "../auth/components/PersonBackground";
 import back from "../../assets/image/back.svg";
-import { IPoap } from "../poap";
 import { Holder, Star } from "../poap/components/ListItem";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
-import { IUserInfo, useAuth } from "../../components/UserAuth";
 import { Header } from "../../components/Header";
-import { useAutoRequest, useRequest } from "../../hooks/useRequest";
+import { useRequest } from "../../hooks/useRequest";
 import api from "../../api";
 import { MineBaseInfo } from "./components/ProfileInfo";
 import { socialIcon, TSocialItemParams } from "./components/SocialItem";
@@ -38,72 +35,72 @@ export const Mine = () => {
   const navigate = useNavigate();
   const params: any = useParams();
   const [userInfoData, getUserInfoFun] = useRequest(api.getUserInfo);
-  const [ userInfo, setData ] = useState<IUserInfo>();
+  const [userInfo, setData] = useState<any[]>([]);
 
   const getUserInfo = useCallback(async (page: number) => {
-    await getUserInfoFun({
+    const data = await getUserInfoFun({
       did: params.did,
       from: page,
-      count: 4
+      count: 6
     });
+    return data
   }, [getUserInfoFun, params.did])
 
   useEffect(() => {
     if (!params.did) return
-    getUserInfo(0);
+    getUserInfoFun({
+      did: params.did,
+      from: 0,
+      count: 1
+    })
+    //eslint-disable-next-line
   }, [getUserInfo, params.did])
-
-  console.log(userInfo)
-  useEffect(()=>{
-    if(!userInfoData) return
-    setData(userInfoData)
-  }, [userInfoData])
 
   return (<>
     <Header css={{ boxShadow: "none", background: "transparent" }} />
-    <MineBaseInfo userInfo={userInfo as any} />
+    <MineBaseInfo userInfo={userInfoData as any} />
     <BodyBox>
       {
-        userInfo?.links?.map((item: TSocialItemParams, index: number) => {
-          return (<SocialItem text={item.linkTitle || ""} logo={socialIcon[(item.linkType || 1) - 1]} url={item.link || ""} />)
+        userInfoData?.links?.map((item: TSocialItemParams, index: number) => {
+          return (<SocialItem key={index} text={item.linkTitle || ""} logo={socialIcon[(item.linkType || 1) - 1]} url={item.link || ""} />)
         })
       }
       <div>
-        <div className="flex mt-6 flex-wrap">
-          {/* <LoadPage getList={getUserInfo} setData={setData}>
-            {userInfo?.poap_list?.map((item: IPoap, i: number) => {
+        <div className="flex mt-6 flex-wrap w-full">
+          <LoadPage getList={getUserInfo} setData={setData} dataLength={userInfo?.length} path="poap_list">
+            {userInfo?.map((item: any, i: number) => {
               return (<CardBackground className="p-0 m-0" key={i}>
                 <LoadImage
                   src={item?.minerIcon}
                   className="rounded-t-3xl cursor-pointer h-96 w-full"
                   style={{ padding: 2 }}
                   onClick={() => {
-                    navigate(`/detail/${item?.poapId}`)
+                    navigate(`/detail/${item?.poap_id}`)
                   }} />
                 <div className="p-4" onClick={() => {
-                  navigate(`/detail/${item?.poapId}`)
+                  navigate(`/detail/${item?.poap_id}`)
                 }}>
                   <div className="text-sm">
                     {item.poapName}
                   </div>
                   <div className="text-sm flex items-center justify-between mt-2" style={{ color: secondColor }}>
                     <div className="flex items-center">
-                      <Holder amount={item.poapSum} className="mr-4" />
-                      <Star amount={item.like_num} />
+                      <Holder amount={item.holder_num} className="mr-4" />
+                      <Star amount={item.favour_number} />
                     </div>
-                    <Button
+                    {item?.collectable && <Button
                       className="w-16 py-1 text-xs transform scale-75 origin-right"
                       onClick={() => {
                         // 此处调用限时领取接口函数
-                        // navigate(`/detail/${item?.poapId}`)
+                        navigate(`/detail/${item?.poap_id}`)
                       }}>
                       限时领取
-                    </Button>
+                    </Button>}
                   </div>
                 </div>
               </CardBackground>)
             })}
-          </LoadPage> */}
+          </LoadPage>
         </div>
       </div>
     </BodyBox>

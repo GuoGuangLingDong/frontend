@@ -23,7 +23,8 @@ export const navs = [
   { label: "铸造POAP", path: "cast" },
   { label: "我的链接", path: "follow" },
   { label: "DID积分", path: "did-score" },
-  { label: "个人主页", path: "profile" }
+  { label: "个人主页", path: "profile" },
+  { label: "退出登录", path: "login" }
 ]
 
 export const ArrowImg = ({ color, cursor, handle, css }: { color?: string, cursor?: string, handle?: () => void, css?: string }) => {
@@ -57,6 +58,9 @@ const Memu = ({ isOpen, close, handle }: { isOpen: boolean, close: () => void, h
               handle();
             } else if (item.path === "profile") {
               navigate(`/${item.path}/${userInfo?.did}`);
+            } else if (item.path === "login") {
+              window.localStorage.setItem("sessionId", "");
+              navigate(`/login`);
             } else {
               navigate(`/${item.path}`);
             }

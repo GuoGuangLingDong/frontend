@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { Button } from "../../components/Button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BodyBox } from "../../components/BodyBox";
 import { useState } from "react";
 import { Header } from "../../components/Header";
@@ -20,7 +20,8 @@ export const Edit = () => {
     const param = useParams();
     const [loading, openLoading, closeLoading] = useSwitch();
     const { message } = useMessage();
-    const { userInfo } = useAuth();
+    const { userInfo, getUserInfo } = useAuth();
+    const navigator = useNavigate();
     const [, setUserInfoFun] = useRequest(api.setUserInfo);
     const [isEdit, openEdit, closeEdit] = useSwitch();
 
@@ -65,14 +66,16 @@ export const Edit = () => {
         }
 
         openLoading();
-        setUserInfoFun(params).then(() => {
+        setUserInfoFun(params).then(async () => {
+            await getUserInfo()
             closeLoading();
-            message("提交成功！", "success");
+            navigator(-1);
         }).catch(() => {
             closeLoading();
         })
+
         //eslint-disable-next-line
-    }, [param, setUserInfoFun, links, values, message])
+    }, [param, setUserInfoFun, links, values, message, navigator, getUserInfo])
 
     const add = useCallback(() => {
         setLinks((pre: TSocialItemParams[]) => ([...pre, {
@@ -87,8 +90,7 @@ export const Edit = () => {
             <Header title={"定制个人主页"} />
             <BodyBox css={{ marginBottom: 50, paddingTop: 100 }}>
                 <div className="flex justify-center">
-                    <Upload width={180} height={180} src={userInfo?.avatar} onChange={(url) => {
-                        console.log(url)
+                    <Upload width={180} height={180} closeLoading={closeLoading} openLoading={openLoading} src={userInfo?.avatar} onChange={(url) => {
                         setParams({ avatar: url })
                     }} />
                 </div>

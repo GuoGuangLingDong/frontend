@@ -5,15 +5,21 @@ import { Header } from "../../components/Header";
 import { CardBackground, IconTextRightCard } from "../../components/Card";
 import { Button } from "../../components/Button";
 import { Tabs } from "../../components/Tab";
-import { useAutoRequest, useRequest } from "../../hooks/useRequest";
 import api from "../../api/index";
 import { useFollow } from "../mine/Follow";
 import { ellipseAddress, PoapBaseInfo } from "./components/PoapBaseInfo";
-import { DetailItem, IHolderItem, IPoapDetailsItem, SharePOAP } from "./components/DetailsItem";
+import { DetailItem, IHolderItem, SharePOAP } from "./components/DetailsItem";
 import share from "../../assets/image/share.svg"
 import { useSwitch } from "../../components/Loading";
 import { secondColor } from "../../theme";
 import { useAuth } from "../../components/UserAuth";
+import { useRequest } from "../../hooks/useRequest";
+
+export const NoData = () => {
+  return <div className="h-40 flex justify-center items-center" style={{ color: secondColor }}>
+    暂无数据
+  </div>
+}
 
 export const PoapDetail = () => {
   const param: any = useParams();
@@ -22,8 +28,8 @@ export const PoapDetail = () => {
   const [holders, getHolders] = useRequest(api.getHolders);
   const detailsData = useMemo(() => detail as unknown as any, [detail]);
   const { userInfo } = useAuth();
-
   const [holdersData, setData] = useState<any>();
+
   useEffect(() => {
     if (!holders) return
     setData(holders)
@@ -33,6 +39,7 @@ export const PoapDetail = () => {
     if (!param?.id) return
     getDetails({ poap_id: param?.id });
     getHolders({ poap_id: param?.id, from: 0, count: 10 });
+  //eslint-disable-next-line
   }, [param?.id])
 
   const { unFollow: unFollowMinter, follow: followMinter } = useFollow(() => {
@@ -71,9 +78,9 @@ export const PoapDetail = () => {
                 className="py-2 w-32 text-xs transform scale-75 origin-right"
                 onClick={() => {
                   //根据返回值判断是否关注，但是现在没有返回值，所以随便写了data?.miner
-                  detailsData?.miner ? followMinter(detailsData?.minerUid) : unFollowMinter(detailsData?.minerUid);
+                  !detailsData?.follow_miner ? followMinter(detailsData?.minerUid) : unFollowMinter(detailsData?.minerUid);
                 }}
-              >与发行方 建立连接</Button>}>
+              >{!detailsData?.follow_miner ? "与发行方 建立连接" : "取消连接"}</Button>}>
                 <div className="ml-2">
                   <div className="font-bold">{detailsData?.minerName}</div>
                   <div className="text-xs">{ellipseAddress(detailsData?.minerUid)}</div>
@@ -100,9 +107,7 @@ export const PoapDetail = () => {
                         <div className="text-xs">{item.did}</div>
                       </div>
                     </IconTextRightCard>)
-                }) : <div className="h-40 flex justify-center items-center" style={{ color: secondColor }}>
-                  暂无持有者数据
-                </div>
+                }) : <NoData />
               }
             </CardBackground>)
           }

@@ -6,7 +6,6 @@ import { useMessage } from "./Message";
 import api from "../api/index";
 import { IPoap } from "../pages/poap";
 import { useRequest } from "../hooks/useRequest";
-import { useCookies } from 'react-cookie'
 import { TSocialItemParams } from "../pages/mine/components/SocialItem";
 
 export interface IUserInfo {
@@ -26,13 +25,13 @@ export const AuthContext = createContext(
   {} as {
     userInfo?: IUserInfo;
     setUserInfo: React.Dispatch<IUserInfo>;
-    isLogin: boolean,
     login: (arg: TAuthParams) => void,
     register: (arg: TAuthParams) => void,
     resetPassword: (arg: TAuthParams) => void,
     loading: boolean,
     openLoading: () => void,
-    closeLoading: () => void
+    closeLoading: () => void,
+    getUserInfo: () => Promise<void>
   },
 );
 
@@ -45,21 +44,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { message } = useMessage();
   const [, loginFun] = useRequest(api.login);
   const [, registerFun] = useRequest(api.register);
-  const [, resetpassFun] = useRequest(api.getRestPassword)
-  const [userInfoData, getUserInfo] = useRequest(api.getUserInfo);
-  const [cookies, setCookie] = useCookies(['gfsessionid'])
-  // const { pathname } = useLocation();
-  const isLogin = false;
-  setCookie("gfsessionid", "1b64g2tmbrtl00cox68pcmfx12400i8u; Path=/; Expires=Sat, 10 Dec 2022 09:15:35 GMT")
+  const [, resetpassFun] = useRequest(api.reset)
+  const [, getUserInfoFun] = useRequest(api.getUserInfo);
 
-  // useEffect(() => {
-  //   if (isLogin) return
-  //   if (pathname === "/register") {
-  //     navigate("/register");
-  //   } else {
-  //     navigate("/login");
-  //   }
-  // }, [isLogin]);
+  const getUserInfo = useCallback(async () => {
+    const data = await getUserInfoFun({
+      from: 0,
+      count: 1
+    })
+    setUserInfo(data);
+  }, [getUserInfoFun, setUserInfo])
 
   const login = useCallback(async (arg: TAuthParams) => {
     openLoading();
@@ -69,34 +63,35 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       imageVerify: arg.imageVerify,
       imageVerifyId: arg.imageVerifyId,
       password: arg.password
-    }).then(async () => {
+    }).then(async (res) => {
+      window.localStorage.setItem("sessionId", res?.sessionId)
+      await getUserInfo();
       closeLoading();
       message("登录成功！", "success");
-      await getUserInfo({
-        did: "73686"
-      });
-      // navigate("/home");
+      navigate("/home");
     }).catch(() => {
       closeLoading();
     })
-
   }, [navigate, closeLoading, message, openLoading, loginFun, getUserInfo]);
 
   useEffect(() => {
-    getUserInfo().then((res) => {
-      setUserInfo(res);
-    })
+    const hash = window.location.hash;
+    if (hash.includes("login") || hash?.includes("register")) return
+    getUserInfo()
+  //eslint-disable-next-line
   }, [])
 
   const resetPassword = useCallback(async (arg: TAuthParams) => {
     openLoading();
     // 重置函数
-    await resetpassFun({ ...arg })
-
-    closeLoading();
-    message("密码修改成功！", "success");
-    navigate("/login");
-  }, [navigate, closeLoading, message, openLoading]);
+    resetpassFun({ ...arg }).then(() => {
+      closeLoading();
+      message("密码修改成功！", "success");
+      navigate("/login");
+    }).catch(() => {
+      closeLoading();
+    })
+  }, [navigate, closeLoading, message, openLoading, resetpassFun]);
 
   const register = useCallback(async (arg: TAuthParams) => {
     openLoading();
@@ -108,10 +103,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       closeLoading();
     })
 
-  }, [navigate, closeLoading, message, openLoading]);
+  }, [navigate, closeLoading, message, openLoading, registerFun]);
 
   return (
-    <AuthContext.Provider value={{ userInfo, setUserInfo, isLogin, login, register, loading, openLoading, closeLoading, resetPassword }}>
+    <AuthContext.Provider value={{ userInfo, setUserInfo, getUserInfo, login, register, loading, openLoading, closeLoading, resetPassword }}>
       {children}
     </AuthContext.Provider>
   )

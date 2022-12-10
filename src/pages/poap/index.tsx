@@ -1,15 +1,16 @@
 import { Header, hearderBoxCss, hearderIconCss } from "../../components/Header";
 import search from "../../assets/image/search.svg";
-import { secondColor } from "../../theme";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BodyBox } from "../../components/BodyBox";
 import { ListItem } from "./components/ListItem";
-import { isMobile } from "../../helpers/utilities";
+import { isMobile, useQueryString } from "../../helpers/utilities";
 import api from "../../api/index";
 import { Banner } from "./components/Banner";
 import { useSwitch } from "../../components/Loading";
 import { LoadPage } from "../../components/LoadPage";
 import { useRequest } from "../../hooks/useRequest";
+import { DetailsPulse } from "./components/DetailsItem";
+import { NoData } from "./Details";
 
 export interface IPoap {
   "poapId": string,
@@ -27,37 +28,56 @@ export const List = ({ data }: { data: IPoap[] }) => {
   const ref = useRef<HTMLDivElement>(null);
   const mobile = isMobile();
 
-  return (data?.length > 0 ?
-    <BodyBox>
-      <div className="flex mt-6 flex-wrap" ref={ref}>
-        {data?.map((item, i) => {
-          return (<ListItem
-            key={i}
-            item={item}
-            className="relative p-0 m-0"
-            style={{
-              width: mobile ? "49%" : 300,
-              marginLeft: i % 2 === 0 ? "0px" : "1%",
-              marginRight: i % 2 === 1 ? "0px" : "1%",
-            }} />)
-        })}
-      </div>
-    </BodyBox> : <div className="w-full h-32 flex justify-center items-center font-bold" style={{ color: secondColor, height: "calc(100vh - 40px)" }}>No Data</div>
+  return (<BodyBox>
+    <div className="flex mt-6 flex-wrap" ref={ref}>
+      {data?.map((item, i) => {
+        return (<ListItem
+          key={i}
+          item={item}
+          className="relative p-0 m-0"
+          style={{
+            width: mobile ? "49%" : 300,
+            marginLeft: i % 2 === 0 ? "0px" : "1%",
+            marginRight: i % 2 === 1 ? "0px" : "1%",
+          }} />)
+      })}
+    </div>
+  </BodyBox>
   );
 };
 
 export const Home = () => {
-  const [searchValue, setSearchValue] = useState("");
+  const { searchString } = useQueryString();
+  const [searchValue, setSearchValue] = useState(searchString?.condition || "");
+  const value = useRef(searchString?.condition || "");
   const [isOpenSearch, openSearch, closeSearch] = useSwitch();
+  const [loading, openLoading, closeLoading] = useSwitch();
   const [data, setData] = useState<IPoap[]>([]);
-  const [, getPoapList] = useRequest(api.getPoapList);
+  const [listData, getPoapList] = useRequest(api.getPoapList);
   const getList = useCallback(async (pageNo: number) => {
     const data = await getPoapList({
       from: pageNo,
-      count: 10
+      count: 4,
+      condition: value.current
     });
     return data
-  }, [getPoapList])
+  }, [getPoapList, value]);
+
+  useEffect(() => {
+    value.current = searchValue;
+    //eslint-disable-next-line
+  }, [searchValue])
+
+  const searchFun = useCallback(async (pageNo: number) => {
+    pageNo === 0 && openLoading();
+    const data = await getPoapList({
+      from: pageNo,
+      count: 4,
+      condition: value.current
+    });
+    pageNo === 0 && closeLoading()
+    setData(data?.list);
+  }, [getPoapList, value, setData, closeLoading, openLoading]);
 
   return (
     <>
@@ -70,6 +90,7 @@ export const Home = () => {
             }}
           />
           <div className={`cursor-pointer w-8 bg-white flex items-center h-10 rounded-r-3xl`} onClick={() => {
+            searchFun(0);
             closeSearch();
           }}>
             <img className={hearderIconCss} src={search} alt="logo" />
@@ -80,8 +101,8 @@ export const Home = () => {
         </div>} />}
       <main className="mx-auto mb-8 sm:mb-16 pt-16">
         <Banner />
-        <LoadPage setData={setData} getList={getList} path={"Res"}>
-          <List data={data} />
+        <LoadPage setData={setData} getList={getList} path={"list"} dataLength={data?.length}>
+          {loading ? <DetailsPulse /> : (!listData?.list?.length && !data?.length ? <NoData /> : <List data={data} />)}
         </LoadPage>
       </main>
     </>

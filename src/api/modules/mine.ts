@@ -11,9 +11,13 @@ const api = {
         method: 'post',
         url: '/user/profile'
     },
-    getFollow: {
+    getFollowers: {
         method: 'get',
-        url: '/user/follow_all'
+        url: '/user/followers'
+    },
+    getFollowees: {
+        method: 'get',
+        url: '/user/followees'
     },
     cancelFollow: {
         method: 'post',

@@ -24,12 +24,11 @@ export const LoadPage = ({
         setIsVisible(false);
         if (!data?.[path]) return
         if (from.current === 0) {
-            setData?.(data?.[path]);
+            setData?.(data);
         } else {
             setData?.((pre: any[]) => ([...pre, ...data[path]]));
         }
-
-    }, [setIsVisible, from, getList, setData, path])
+    }, [setIsVisible, from.current, getList, setData, path])
 
     useEffect(() => {
         from.current = dataLength;
@@ -50,16 +49,14 @@ export const LoadPage = ({
         })
 
         io.observe(dom)
-
-    //eslint-disable-next-line
     }, [ref])
 
     return (
-        <>
+        <div>
             {children}
-            <div ref={ref} className="flex justify-center mt-10 w-full">
+            <div ref={ref} className="flex justify-center mt-10">
                 {isVisible && <SmallLoading color={textColor} size={30} />}
             </div>
-        </>
+        </div>
     )
 }
