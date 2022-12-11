@@ -14,7 +14,7 @@ export const LoadImage = (props: DetailedHTMLProps<React.ImgHTMLAttributes<HTMLI
   return (
     isLoad
       ? <img alt="img" {...props} style={props.style || {}} />
-      : <div className={`animate-pulse bg-gray-400 ${props.className || ""}`} style={props.style || {}}>
+      : <div className={`animate-pulse bg-gray-400 ${props.className || ""}`} style={props.style || {}} onClick={props?.onClick}>
       </div>
   )
 }

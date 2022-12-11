@@ -8,7 +8,7 @@ const api = {
         url: '/poap/details'
     },
     getHolders: {
-        method: 'post',
+        method: 'get',
         url: '/poap/holders'
     },
     mint: {

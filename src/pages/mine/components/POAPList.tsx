@@ -29,14 +29,14 @@ export const MinePOAPList = () => {
   return (<div className="flex mt-6 flex-wrap" ref={ref}>
     <LoadPage getList={getUserInfo} setData={setData} dataLength={userInfo?.length} id="poap_list" path="poap_list">
       {userInfo?.map((item: any, i: number) => {
-        return (<CardBackground className="p-0 m-0 relative w-full" key={i}>
+        return (<CardBackground className="p-0 m-0 relative w-full" key={i} onClick={() => {
+          navigate(`/detail/${item?.poap_id}?minerID=${item?.minerUid}&minerIcon=${encodeURIComponent(item?.minerIcon)}&minerName=${encodeURIComponent(item?.minerName)}`)
+        }}>
           <LoadImage
-            src={item?.minerIcon}
+            src={item?.cover_img}
             className="rounded-t-3xl cursor-pointer h-96 w-full"
             style={{ padding: 2 }}
-            onClick={() => {
-              navigate(`/detail/${item?.poap_id}`)
-            }} />
+          />
           <div className="absolute px-3 pt-2 w-full top-0 left-0">
             <div className="rounded-full w-full h-12 flex items-center text-white text-sm" style={{
               background: "rgba(0,0,0,0.3)",
@@ -46,6 +46,10 @@ export const MinePOAPList = () => {
                 className="rounded-full h-full mr-1 w-full"
                 style={{ width: "calc(3rem - 4px)" }}
                 src={item?.minerIcon}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/profile/${item?.minerUid}`)
+                }}
               />
               <div>
                 <div>{ellipseAddress(item.minerName, 10)}</div>
@@ -53,9 +57,7 @@ export const MinePOAPList = () => {
               </div>
             </div>
           </div>
-          <div className="p-4" onClick={() => {
-            navigate(`/detail/${item?.poap_id}`)
-          }}>
+          <div className="p-4">
             <div className="text-sm flex justify-between items-center">
               <div>{item.poap_name}</div>
               <div>#{ellipseAddress(item.poap_id, 6)}</div>

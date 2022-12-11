@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
-import { CSSProperties, memo, ReactNode, useState } from "react";
+import { CSSProperties, memo, ReactNode, useMemo, useState } from "react";
 import logo from "../assets/image/logo.png";
 import menu from "../assets/image/menu.svg";
 import back from "../assets/image/back.svg";
@@ -23,7 +23,7 @@ export const navs = [
   { label: "铸造POAP", path: "cast" },
   { label: "我的链接", path: "follow" },
   { label: "DID积分", path: "did-score" },
-  { label: "个人主页", path: "profile" },
+  { label: "我的主页", path: "profile" },
   { label: "退出登录", path: "login" }
 ]
 
@@ -42,6 +42,10 @@ const Memu = ({ isOpen, close, handle }: { isOpen: boolean, close: () => void, h
   const navigate = useNavigate();
   const { userInfo } = useAuth();
   const { pathname } = useLocation();
+  const isNeedLogin = useMemo(() => {
+    if (["/login", "/register", "reset-password"].includes(pathname)) return false
+    if (!userInfo?.did) return true
+  }, [userInfo, pathname])
 
   return (
     <DropDown isOpen={isOpen} direction="left" css={{
@@ -52,12 +56,13 @@ const Memu = ({ isOpen, close, handle }: { isOpen: boolean, close: () => void, h
       <div className="text-center" style={{ fontWeight: 600 }}>
         {navs?.map((item: any, index: number) => {
           if (pathname.includes(item.path)) return null
+          if (isNeedLogin && ["cast", "follow", "did-score", "profile"].includes(item.path)) return null
 
           return <div key={index} className="py-2" onClick={() => {
             if (handle && item.path.includes("cast")) {
               handle();
             } else if (item.path === "profile") {
-              navigate(`/${item.path}/${userInfo?.did}`);
+              navigate(`/${item.path}/${userInfo?.uid}`);
             } else if (item.path === "login") {
               window.localStorage.setItem("sessionId", "");
               navigate(`/login`);
@@ -67,7 +72,7 @@ const Memu = ({ isOpen, close, handle }: { isOpen: boolean, close: () => void, h
             close();
           }} style={{
             borderTop: index !== 0 ? "1px solid #EEEFF4" : "none"
-          }}>{item.label}</div>
+          }}>{isNeedLogin && item.path === "login" ? "去登录" : item.label}</div>
         })}
       </div>
     </DropDown>

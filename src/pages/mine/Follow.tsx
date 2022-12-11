@@ -68,7 +68,7 @@ export const useFollow = (getData?: () => void, rely: any[] = []) => {
 const FollowItem = ({ item, handle, isFollow }: { item: IFollowItem, handle: () => void, isFollow?: boolean }) => {
 
   return (<div className="border rounded-3xl mb-2">
-    <IconTextRightCard className="p-2 mb-0" style={{ backgroundColor: "transparent" }} icon={item.avatar}>
+    <IconTextRightCard className="p-2 mb-0" style={{ backgroundColor: "transparent" }} icon={item.avatar} uid={item?.uid}>
       <div className="ml-2">
         <div className="font-bold">{item.username}</div>
         <div className="text-xs">{item.did}</div>

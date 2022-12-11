@@ -68,7 +68,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await getUserInfo();
       closeLoading();
       message("登录成功！", "success");
-      navigate("/home");
+
+      let href = window.location.href;
+      const index = href?.indexOf("redirect=");
+      if (index > 0) {
+        const hash = decodeURIComponent(href?.slice(index + 9));
+        console.log(href);
+        navigate(hash);
+      } else {
+        navigate("/home");
+      }
     }).catch(() => {
       closeLoading();
     })
@@ -78,7 +87,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const hash = window.location.hash;
     if (hash.includes("login") || hash?.includes("register")) return
     getUserInfo()
-  //eslint-disable-next-line
+    //eslint-disable-next-line
   }, [])
 
   const resetPassword = useCallback(async (arg: TAuthParams) => {

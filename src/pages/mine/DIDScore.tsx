@@ -1,13 +1,13 @@
 import { BodyBox } from "../../components/BodyBox";
 import { secondColor, textColor } from "../../theme";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { IconImage } from "../../components/Image";
 import { Header } from "../../components/Header";
 import { CardBackground } from "../../components/Card";
 import { TextLabel } from "../../components/Label";
 import huizhang from "../../assets/image/huizhang.png";
 import api from "../../api/index";
-import { useAutoRequest, useRequest } from "../../hooks/useRequest";
+import { useRequest } from "../../hooks/useRequest";
 
 interface IDIDScoreItem {
   "opt": string,
@@ -27,16 +27,20 @@ export const DIDScore = () => {
       from: 0,
       count: 20
     })
+
+    // eslint-disable-next-line
   }, []);
 
   const data = useMemo(() => value as unknown as IDIDScore, [value])
 
   return (<>
-    <Header title={<span className="text-white">DID积分</span>} css={{ background: "transparent", boxShadow: "none" }}></Header>
+
     <BodyBox css={{
       background: "linear-gradient(360deg, transparent 60%, #EEEFF4, #F6BF75, #D77185, #8766AC, #4150B1)",
       paddingTop: 100,
+      position: "relative"
     }}>
+      <Header title={<span className="text-white">DID积分</span>} css={{ background: "transparent", boxShadow: "none", position: "absolute", zIndex: 50, top: 10, left: 0 }}></Header>
       <CardBackground className="m-0 p-4">
         <div className="text-center -mt-12 mb-10">
           <div className="m-auto w-24 h-24 rounded-full flex justify-center items-center mb-4" style={{ background: "#EEEFF4", border: "3px solid white" }}>

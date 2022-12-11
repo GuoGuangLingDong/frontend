@@ -50,6 +50,10 @@ export const ListItem = ({ item, ...props }: { item: any } & IDIVProps) => {
           className="rounded-full h-full mr-1"
           style={{ width: "calc(2rem - 4px)" }}
           src={item?.minerIcon}
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/profile/${item?.did}`)
+          }}
         />
         <div>
           <div>{ellipseAddress(item.minerName, 8)}</div>

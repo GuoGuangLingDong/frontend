@@ -13,6 +13,7 @@ import html2canvas from 'html2canvas'
 import { useRef } from "react";
 import { useSwitch } from "../../components/Loading";
 import { MineBaseInfo } from "./components/ProfileInfo";
+import { ellipseAddress } from "../poap/components/PoapBaseInfo";
 
 export const downloadImg = async (dom: any, name: string, afterHandle?: () => void) => {
     await html2canvas(dom, {
@@ -35,7 +36,7 @@ export const downloadImg = async (dom: any, name: string, afterHandle?: () => vo
 export const Share = () => {
     const { userInfo } = useAuth();
     const { message } = useMessage();
-    const link = `${window.location.origin}/#/profile/${userInfo?.did}`;
+    const link = `${window.location.origin}/#/profile/${userInfo?.uid}`;
 
     const refL = useRef<HTMLDivElement>(null);
     const refR = useRef<HTMLDivElement>(null);
@@ -64,7 +65,7 @@ export const Share = () => {
             <BackgroundLabel className={`flex justify-between items-center h-12 px-2`} style={{ background: "white" }}>
                 <div className="flex items-center">
                     <img src={follow} className="w-4 mr-2" alt="" />
-                    <div>{link}</div>
+                    <div>{ellipseAddress(link, 12)}</div>
                 </div>
                 <CopyToClipboard text={link}
                     onCopy={() => message("复制成功！", "success")}>

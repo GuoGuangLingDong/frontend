@@ -25,6 +25,7 @@ export const LoadPage = ({
         const data: any = await getList?.(from.current);
         setIsVisible(false);
         if (!data?.[path]) return
+        console.log(data?.[path])
         if (from.current === 0) {
             setData?.(data?.[path]);
         } else {
@@ -33,8 +34,6 @@ export const LoadPage = ({
 
     }, [setIsVisible, from, getList, setData, path])
 
-    console.log(path)
-
     useEffect(() => {
         from.current = dataLength;
     }, [dataLength])
@@ -42,7 +41,6 @@ export const LoadPage = ({
     useEffect(() => {
         const dom = ref?.current;
         if (!dom) return
-        console.log(dom)
         const io = new IntersectionObserver((entries) => {
             entries.forEach(item => {
                 if (item.isIntersecting) {

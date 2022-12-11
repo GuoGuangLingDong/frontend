@@ -6,7 +6,7 @@ export type TTabItem = {
   children: ReactNode
 }
 
-export const Tabs = ({ tabs }: { tabs: TTabItem[] }) => {
+export const Tabs = ({ tabs, setTab }: { tabs: TTabItem[], setTab?: React.Dispatch<React.SetStateAction<number>> }) => {
   const [select, setSelect] = useState(0);
 
   return (
@@ -20,6 +20,7 @@ export const Tabs = ({ tabs }: { tabs: TTabItem[] }) => {
             className={`cursor-pointer rounded-t-xl h-10 flex items-center justify-center px-8 mx-1 border border-white`}
             onClick={() => {
               setSelect(index);
+              setTab?.(index);
             }}
           >{item.text} </div>)
         })}

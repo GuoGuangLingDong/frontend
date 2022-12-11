@@ -3,7 +3,7 @@ import axios from 'axios';
 const httpTool = ({
   timeout = 100,
   failMesage = (msg: string) => {
-    alert(msg);
+    // alert(msg);
   },
 }) => {
   // withCredentials = true 
@@ -37,11 +37,14 @@ const httpTool = ({
   // Add a response interceptor
   httpAxios.interceptors.response.use(
     function (response) {
-      // response.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=None")
       // Do something with response data
       return response;
     },
     function (err) {
+      if (err?.request?.status === 403) {
+        window.location.hash = `#/login?redirect=${encodeURIComponent(window.location.hash?.slice(1))}`;
+        return
+      }
       let config = err.config; // 如果config不存在或未设置重试选项，请拒绝
       // console.log(config, 'config');
       if (!config || !config.retry) return Promise.reject(err); // 设置变量跟踪重试次数

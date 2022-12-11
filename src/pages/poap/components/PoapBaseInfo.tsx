@@ -21,7 +21,7 @@ export const PoapBaseInfo = ({ chain }: { chain: any }) => {
         <>
             <Label text="发行平台" value={chain?.plat_form} />
             <Label text="发行时间" value={chain?.publish_time?.slice(0, 10)} />
-            <Label text="合约编号" value={chain?.contract_no} />
+            <Label text="合约编号" value={ellipseAddress(chain?.contract_no)} />
             <Label text="合约地址" value={ellipseAddress(chain?.contract_addr)} />
             {/* <div className="w-full border-t" style={{ borderColor: "#EEEFF4" }}></div>
         <Label text="师门" value="优版权" />

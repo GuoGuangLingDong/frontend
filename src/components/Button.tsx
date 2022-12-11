@@ -2,6 +2,13 @@ import { ButtonHTMLAttributes, ReactNode } from "react";
 import { SmallLoading } from "./Loading";
 
 export const Button = ({ children, deep, loading, ...props }: { children: ReactNode, loading?: boolean, deep?: boolean } & ButtonHTMLAttributes<HTMLButtonElement>) => {
+  // const { userInfo } = useAuth();
+  // const { pathname } = useLocation();
+  // const isNeedLogin = useMemo(() => {
+  //   if (["/login", "/register", "reset-password"].includes(pathname)) return false
+  //   if (!userInfo?.did) return true
+  // }, [userInfo, pathname])
+
   return (
     <button
       {...props}
@@ -12,7 +19,8 @@ export const Button = ({ children, deep, loading, ...props }: { children: ReactN
       }}
     >
       <div className="flex items-center justify-center">
-        {loading && <><SmallLoading />&nbsp;</>}{children}
+        {/* {isNeedLogin ? "去登录" : <>{(loading && <><SmallLoading />&nbsp;</>)}{children}</>} */}
+        {(loading && <><SmallLoading />&nbsp;</>)}{children}
       </div>
     </button>
   );

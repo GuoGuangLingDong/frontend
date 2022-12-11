@@ -8,14 +8,14 @@ export const useRequest = (service: any, options?: any) => {
   const requset = useCallback(async (arg?: any) => {
     // 发接口请求
     let res = await service(arg ? arg : options?.arg);
-    if (res.data?.code === 0) {
+    if (res?.data?.code === 0) {
       // 请求成功=
-      setData(res.data?.data);
-      return Promise.resolve(res.data?.data)
+      setData(res?.data?.data);
+      return Promise.resolve(res?.data?.data)
     } else {
       // 失败
-      setError(res.data?.message);
-      message(res.data?.message, "error");
+      setError(res?.data?.message);
+      message(res?.data?.message, "error");
       return Promise.reject(res?.data);
     }
   }, [setData, setError, message, service, options?.arg]);
