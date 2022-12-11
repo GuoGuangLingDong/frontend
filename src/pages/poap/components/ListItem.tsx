@@ -52,7 +52,7 @@ export const ListItem = ({ item, ...props }: { item: any } & IDIVProps) => {
           src={item?.minerIcon}
           onClick={(e) => {
             e.stopPropagation();
-            navigate(`/profile/${item?.did}`)
+            navigate(`/profile/${item?.uid}`)
           }}
         />
         <div>

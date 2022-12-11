@@ -16,7 +16,7 @@ export const routes = [
   { path: "/login", component: <Login /> },
   { path: "/register", component: <Register /> },
   { path: "/reset-password", component: <ResetPassword /> },
-  { path: "/profile/:did", component: <Mine /> },
+  { path: "/profile/:uid", component: <Mine /> },
   { path: "/edit", component: <Edit /> },
   { path: "/share", component: <Share /> },
   { path: "/cast/:id", component: <CastPOAP /> },

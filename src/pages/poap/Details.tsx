@@ -122,7 +122,7 @@ export const PoapDetail = () => {
                         >{item?.follow === 1 ? "取消连接" : "建立连接"}</Button>}>
                           <div className="ml-2">
                             <div className="font-bold">{ellipseAddress(item?.username)}</div>
-                            <div className="text-xs">{ellipseAddress(item?.did)}</div>
+                            <div className="text-xs">{ellipseAddress(item?.uid)}</div>
                           </div>
                         </IconTextRightCard>)
                     }) : <NoData />

@@ -12,7 +12,7 @@ export const MineBaseInfo = ({ userInfo }: { userInfo: IUserInfo }) => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const { userInfo: info } = useAuth();
-    const isUser = useMemo(() => info?.did === userInfo?.did && info?.did, [info, userInfo]);
+    const isUser = useMemo(() => info?.uid === userInfo?.uid && info?.uid, [info, userInfo]);
     return <>
         <PersonBackground image={person} className={pathname === "/share" ? "rounded-t-3xl" : "rounded-none"}>
             <div className="relative h-full">
@@ -24,7 +24,7 @@ export const MineBaseInfo = ({ userInfo }: { userInfo: IUserInfo }) => {
                     <img className="w-24 rounded-full" src={userInfo?.avatar} alt="" />
                 </div>
 
-                {pathname !== "/share" && info?.did === userInfo?.did && isUser && <><div className="absolute flex justify-center items-center bg-white rounded-full" style={{
+                {pathname !== "/share" && info?.uid === userInfo?.uid && isUser && <><div className="absolute flex justify-center items-center bg-white rounded-full" style={{
                     bottom: "-14%",
                     width: `14vw`,
                     height: `14vw`,

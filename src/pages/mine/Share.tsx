@@ -47,10 +47,10 @@ export const Share = () => {
         let dom, name;
         if (right) {
             dom = refR.current;
-            name = `image-share-${userInfo?.did || "image-profile"}`;
+            name = `image-share-${userInfo?.uid || "image-profile"}`;
         } else {
             dom = refL.current;
-            name = `qrcode-share-${userInfo?.did || "qrcode-profile"}`;
+            name = `qrcode-share-${userInfo?.uid || "qrcode-profile"}`;
         }
         if (!dom) return
         openLoading();

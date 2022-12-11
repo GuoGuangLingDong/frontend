@@ -41,7 +41,7 @@ export const Holders = () => {
             >建立连接</Button>}>
               <div className="ml-2">
                 <div className="font-bold">{ellipseAddress(item?.username)}</div>
-                <div className="text-xs">{ellipseAddress(item?.did)}</div>
+                <div className="text-xs">{ellipseAddress(item?.uid)}</div>
               </div>
             </IconTextRightCard>)
         }) : <NoData />

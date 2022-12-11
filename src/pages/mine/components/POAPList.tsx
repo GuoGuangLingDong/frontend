@@ -19,12 +19,12 @@ export const MinePOAPList = () => {
 
   const getUserInfo = useCallback(async (page: number) => {
     const data = await getUserInfoFun({
-      did: params.did,
+      uid: params.uid,
       from: page,
       count: 6
     });
     return data
-  }, [getUserInfoFun, params.did])
+  }, [getUserInfoFun, params.uid])
 
   return (<div className="flex mt-6 flex-wrap" ref={ref}>
     <LoadPage getList={getUserInfo} setData={setData} dataLength={userInfo?.length} id="poap_list" path="poap_list">

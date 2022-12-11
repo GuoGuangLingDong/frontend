@@ -12,6 +12,7 @@ import nft from "../../assets/image/nft.svg";
 import { useRequest } from "../../hooks/useRequest";
 import { LoadPage } from "../../components/LoadPage";
 import { NoData } from "../poap/Details";
+import { ellipseAddress } from "../poap/components/PoapBaseInfo";
 
 interface IFollowItem {
   username: string
@@ -70,8 +71,8 @@ const FollowItem = ({ item, handle, isFollow }: { item: IFollowItem, handle: () 
   return (<div className="border rounded-3xl mb-2">
     <IconTextRightCard className="p-2 mb-0" style={{ backgroundColor: "transparent" }} icon={item.avatar} uid={item?.uid}>
       <div className="ml-2">
-        <div className="font-bold">{item.username}</div>
-        <div className="text-xs">{item.did}</div>
+        <div className="font-bold">{ellipseAddress(item.username)}</div>
+        <div className="text-xs">{ellipseAddress(item.uid)}</div>
       </div>
     </IconTextRightCard>
     <div className="text-sm flex items-center justify-between border-t pl-12 pr-2 h-12" style={{ color: secondColor }}>
@@ -150,7 +151,7 @@ export const Follow = () => {
               {
                 dataFoolowees?.map((item: IFollowItem, i: number) => {
                   return (<FollowItem key={`${i}-followee`} item={item} handle={() => {
-                    follow(item.did);
+                    follow(item.uid);
                   }} />)
                 })
               }

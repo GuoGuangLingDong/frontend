@@ -33,14 +33,14 @@ export const Mine = () => {
   const [userInfoData, getUserInfoFun] = useRequest(api.getUserInfo);
 
   useEffect(() => {
-    if (!params.did) return
+    if (!params.uid) return
     getUserInfoFun({
-      did: params.did,
+      uid: params.uid,
       from: 0,
       count: 1
     })
     //eslint-disable-next-line
-  }, [params.did])
+  }, [params.uid])
 
   return (<>
     <Header css={{ boxShadow: "none", background: "transparent" }} />
