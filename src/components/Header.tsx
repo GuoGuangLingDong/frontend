@@ -72,7 +72,7 @@ const Memu = ({ isOpen, close, handle }: { isOpen: boolean, close: () => void, h
             close();
           }} style={{
             borderTop: index !== 0 ? "1px solid #EEEFF4" : "none"
-          }}>{isNeedLogin && item.path === "login" ? "去登录" : item.label}</div>
+          }}>{isNeedLogin && item.path === "login" ? "立即登录" : item.label}</div>
         })}
       </div>
     </DropDown>

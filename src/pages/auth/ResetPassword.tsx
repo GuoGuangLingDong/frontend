@@ -27,9 +27,9 @@ export const ResetPassword = () => {
                     }} right={<ImageVerifyCode imageData={imageData} setImageData={setImageData} />} />
                     <InputLabel
                         text="验证码"
-                        value={params.verify_code}
+                        value={params.verifycode}
                         onChange={(val) => {
-                            setParams({ verify_code: val })
+                            setParams({ verifycode: val })
                         }}
                         right={<VerifyCode from="login" phone={params.phonenumber} imageData={imageData} imageVerify={params.imageVerify} />} />
                     <InputLabel text="密码" type="password" value={params.password} onChange={(val) => {

@@ -35,7 +35,6 @@ export const Login = () => {
             <Button className="mt-10" disabled={loading} loading={loading} onClick={() => {
                 // 此处调用登录接口函数
                 if (checkValues(params, "login")) {
-                    console.log(params, 'login_params');
                     login({ ...params, imageVerifyId: imageData?.id });
                 }
             }}>

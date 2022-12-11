@@ -6,8 +6,6 @@ const httpTool = ({
     // alert(msg);
   },
 }) => {
-  // withCredentials = true 
-  // gfsessionid 1bkj0dombrtl00cowz16h0xydn600882 60.205.229.57 	/ 2022-12-10T03:36:38.786Z 43 —— ——  —— —— ——   Medium
   const httpAxios = axios.create({
     timeout: timeout * 1000,
     baseURL: process.env.REACT_APP_BASE_URL,

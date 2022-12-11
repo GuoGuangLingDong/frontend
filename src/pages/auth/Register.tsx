@@ -13,9 +13,8 @@ export type TAuthParams = {
     imageVerify?: string,
     password?: string,
     password2?: string,
-    verify_code?: string,
-    invite_code?: string,
-    // username?: string,
+    verifycode?: string,
+    invitecode?: string,
     imageVerifyId?: string
 }
 
@@ -27,12 +26,11 @@ export type TImageCode = {
 export const useParams = () => {
     const [values, setValues] = useState<TAuthParams>({
         phonenumber: "",
-        // username: "",
         imageVerify: "",
         password: "",
         password2: "",
-        verify_code: "",
-        invite_code: "",
+        verifycode: "",
+        invitecode: "",
         imageVerifyId: ""
     });
     const setParams = useCallback((arg: TAuthParams) => {
@@ -82,7 +80,7 @@ export const useCheckInput = () => {
             return
         }
 
-        if (!params.verify_code && type !== "login") {
+        if (!params.verifycode && type !== "login") {
             message("请输入验证码", "warn")
             return
         }
@@ -145,9 +143,6 @@ export const VerifyCode = ({ phone, imageData, from, imageVerify }: { imageData?
             imageVerify: imageVerify
         }
 
-        console.log(params, 'params');
-
-
         // 获取手机验证码逻辑
         await getCode(params);
         setTimt(60);
@@ -183,7 +178,7 @@ export const ImageVerifyCode = ({ imageData, setImageData }: { imageData?: TImag
         // eslint-disable-next-line
     }, [data])
 
-    return (<img src={imageData?.base64} alt="" style={{ width:100, height: 40, borderTopRightRadius: 40, borderBottomRightRadius: 40, marginRight: -10 }} onClick={() => { getImageVerifyCode() }} />)
+    return (<img src={imageData?.base64} alt="" style={{ width: 100, height: 40, borderTopRightRadius: 40, borderBottomRightRadius: 40, marginRight: -10 }} onClick={() => { getImageVerifyCode() }} />)
 }
 
 export const Register = () => {
@@ -201,8 +196,8 @@ export const Register = () => {
             <InputLabel text="校验码" value={params.imageVerify} onChange={(val) => {
                 setParams({ imageVerify: val })
             }} right={<ImageVerifyCode imageData={imageData} setImageData={setImageData} />} />
-            <InputLabel text="验证码" value={params.verify_code} onChange={(val) => {
-                setParams({ verify_code: val })
+            <InputLabel text="验证码" value={params.verifycode} onChange={(val) => {
+                setParams({ verifycode: val })
             }} right={<VerifyCode from="register" phone={params.phonenumber || ""} imageData={imageData} imageVerify={params.imageVerify} />} />
             <InputLabel text="密码" type="password" value={params.password} onChange={(val) => {
                 setParams({ password: val })
@@ -210,8 +205,8 @@ export const Register = () => {
             <InputLabel text="确认密码" type="password" value={params.password2} onChange={(val) => {
                 setParams({ password2: val })
             }} />
-            <InputLabel text="邀请码" value={params.invite_code} onChange={(val) => {
-                setParams({ invite_code: val })
+            <InputLabel text="邀请码" value={params.invitecode} onChange={(val) => {
+                setParams({ invitecode: val })
             }} />
             <RememberPassword />
             <Button className="mt-10" disabled={loading} loading={loading} onClick={() => {
