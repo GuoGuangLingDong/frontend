@@ -12,6 +12,7 @@ packages/hardhat-ts/cache
 packages/subgraph/config/config.json
 tenderly.yaml
 
+/website
 # dependencies
 /node_modules
 /.pnp

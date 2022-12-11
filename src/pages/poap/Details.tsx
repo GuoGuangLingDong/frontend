@@ -96,7 +96,7 @@ export const PoapDetail = () => {
                   //根据返回值判断是否关注，但是现在没有返回值，所以随便写了data?.miner
                   !isMinerIsUser && (!detailsData?.follow_miner ? followMinter(detailsData?.minerUid) : unFollowMinter(detailsData?.minerUid));
                 }}
-              >{!isMinerIsUser ? (!detailsData?.follow_miner ? "与发行方 建立连接" : "与发行方 取消连接") : "当前用户"}</Button>}>
+              >{!isMinerIsUser ? (!detailsData?.follow_miner ? "与发行方 建立连接" : "取消连接发行方") : "当前用户"}</Button>}>
                 <div className="ml-2">
                   <div className="font-bold">{ellipseAddress(detailsData?.minerName)}</div>
                   <div className="text-xs">{ellipseAddress(detailsData?.minerUid)}</div>
