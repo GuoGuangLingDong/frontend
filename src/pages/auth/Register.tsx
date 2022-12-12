@@ -120,7 +120,7 @@ export const useCheckInput = () => {
     }, [save, message])
 }
 
-export const VerifyCode = ({ phone, imageData, from, imageVerify }: { imageData?: TImageCode, phone?: string, from: "register" | "login" | "reset-pass", imageVerify?: string }) => {
+export const VerifyCode = ({ phone, imageData, from, imageVerify }: { imageData?: TImageCode, phone?: string, from: "register" | "login" | "reset_pass", imageVerify?: string }) => {
     const [time, setTimt] = useState(0);
     const [, getCode] = useRequest(api.getVerifyCode);
     const { message } = useMessage();

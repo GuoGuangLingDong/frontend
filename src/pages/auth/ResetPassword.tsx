@@ -31,7 +31,7 @@ export const ResetPassword = () => {
                         onChange={(val) => {
                             setParams({ verifycode: val })
                         }}
-                        right={<VerifyCode from="reset-pass" phone={params.phonenumber} imageData={imageData} imageVerify={params.imageVerify} />} />
+                        right={<VerifyCode from="reset_pass" phone={params.phonenumber} imageData={imageData} imageVerify={params.imageVerify} />} />
                     <InputLabel text="密码" type="password" value={params.password} onChange={(val) => {
                         setParams({ password: val })
                     }} />
@@ -42,7 +42,7 @@ export const ResetPassword = () => {
                     <Button className="mt-10" disabled={loading} loading={loading} onClick={() => {
                         // 此处调用重置密码接口函数
                         if (checkValues(params, "resetPassword")) {
-                            resetPassword({ ...params, from: "reset-pass" });
+                            resetPassword({ ...params, from: "reset_pass" });
                         }
                     }}>
                         提交
