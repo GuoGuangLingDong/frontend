@@ -9,6 +9,7 @@ import api from "../../api/index";
 import { useAutoRequest, useRequest } from "../../hooks/useRequest"
 
 export type TAuthParams = {
+    from?: string,
     phonenumber?: string,
     imageVerify?: string,
     password?: string,
@@ -119,7 +120,7 @@ export const useCheckInput = () => {
     }, [save, message])
 }
 
-export const VerifyCode = ({ phone, imageData, from, imageVerify }: { imageData?: TImageCode, phone?: string, from: "register" | "login", imageVerify?: string }) => {
+export const VerifyCode = ({ phone, imageData, from, imageVerify }: { imageData?: TImageCode, phone?: string, from: "register" | "login" | "reset-pass", imageVerify?: string }) => {
     const [time, setTimt] = useState(0);
     const [, getCode] = useRequest(api.getVerifyCode);
     const { message } = useMessage();
