@@ -121,7 +121,7 @@ export const PoapDetail = () => {
                           className="py-2 w-24 text-xs transform scale-75 origin-right"
                           onClick={() => {
                             //根据返回值判断是否关注，但是现在没有返回值，所以随便写了item.uid
-                            !isCurrentUser && item?.follow === 1 ? unFollowHolder(item?.uid) : followHolder(item?.uid);
+                            !isCurrentUser && (item?.follow === 1 ? unFollowHolder(item?.uid) : followHolder(item?.uid));
                           }}
                         >{!isCurrentUser ? (item?.follow === 1 ? "取消连接" : "建立连接") : "当前用户"}</Button>}>
                           <div className="ml-2">
