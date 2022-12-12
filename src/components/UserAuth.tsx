@@ -73,7 +73,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const index = href?.indexOf("redirect=");
       if (index > 0) {
         const hash = decodeURIComponent(href?.slice(index + 9));
-        console.log(href);
         navigate(hash);
       } else {
         navigate("/home");
@@ -104,15 +103,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const register = useCallback(async (arg: TAuthParams) => {
     openLoading();
-    registerFun(arg).then(() => {
+    registerFun(arg).then(async (res) => {
+      window.localStorage.setItem("sessionId", res?.sessionId)
+      await getUserInfo();
       closeLoading();
       message("注册成功！", "success");
-      navigate("/login");
+      navigate("/home");
     }).catch(() => {
       closeLoading();
     })
 
-  }, [navigate, closeLoading, message, openLoading, registerFun]);
+  }, [navigate, closeLoading, message, openLoading, registerFun, getUserInfo]);
 
   return (
     <AuthContext.Provider value={{ userInfo, setUserInfo, getUserInfo, login, register, loading, openLoading, closeLoading, resetPassword }}>
