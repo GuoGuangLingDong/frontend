@@ -103,6 +103,7 @@ const FollowMe = () => {
     });
     return data
   }, [getFolloweesFun])
+
   const { follow, unFollow: unFollowMyLink } = useFollow(async () => {
     const data = await getFolloweesFun({
       from: 0,
@@ -128,9 +129,7 @@ const FollowMe = () => {
 
 const MeFollow = () => {
   const [dataFoolowers, setFollowersData] = useState<IFollowItem[]>([]);
-
   const [, getFollowersFun] = useRequest(api.getFollowers);
-
   const getFollowers = useCallback(async (pageNo: number) => {
     const data = await getFollowersFun({
       from: pageNo,
@@ -139,14 +138,13 @@ const MeFollow = () => {
     return data
   }, [getFollowersFun]);
 
-
   const { unFollow } = useFollow(async () => {
     const data = await getFollowersFun({
       from: 0,
       count: 10
     });
     setFollowersData(data?.list);
-  }, [setFollowersData]);
+  }, [setFollowersData, getFollowersFun]);
 
   return (
     <CardBackground className="mt-0" style={{ marginTop: 0 }}>
