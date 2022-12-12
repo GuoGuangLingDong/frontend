@@ -1,20 +1,22 @@
 import { useRef, useState } from "react";
 import { Carousel } from 'antd';
 import { BodyBox } from "../../../components/BodyBox";
-
+import pic1 from "../../../assets/image/pic4.jpg"
+import pic2 from "../../../assets/image/pic2.jpg"
+import pic3 from "../../../assets/image/pic3.jpg"
 export const Banner = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [data] = useState<{ src: string, link: string }[]>([{
-    link: "https://www.baidu.com",
-    src: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images"
+    link: "http://60.205.229.57:3000/#/detail/a4394025ff7e4b02bd5695688d62695c",
+    src: pic1
   },
   {
-    link: "https://www.baidu.com",
-    src: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images"
+    link: "https://mp.weixin.qq.com/s/TlceZj-GLUJri3q3B6sOWw",
+    src: pic2
   },
   {
-    link: "https://www.baidu.com",
-    src: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.Ql85M6yQTO7A_EhXvJYlYwHaHa%26pid%3DApi&f=1&ipt=f47527d1e54aca19b58d9c2a5bc259742fd7487d0d5a11f11f498a1c02a8aa13&ipo=images"
+    link: "https://mp.weixin.qq.com/s/cPg46md2dQzCRoF-XA6QWw",
+    src: pic3
   }]);
 
   return (

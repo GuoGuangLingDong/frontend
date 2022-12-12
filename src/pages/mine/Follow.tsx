@@ -124,7 +124,7 @@ export const Follow = () => {
   }, [getFollowers]);
 
   return (<>
-    <Header title={"我的链接"}></Header>
+    <Header title={"我的连接"}></Header>
     <BodyBox css={{
       paddingTop: 100,
     }}>

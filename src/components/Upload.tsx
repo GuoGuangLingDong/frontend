@@ -31,11 +31,11 @@ export const Upload = ({ width, height, onChange, src, closeLoading, openLoading
             image.onload = function (e: any) {
                 const w = e?.path?.[0]?.width;
                 const h = e?.path?.[0]?.height;
-                if (w > 0 && h > 0 && w === h) {
+                if (w > 0 && h > 0 ) {
                     setImg(event?.target?.result);
                     uploadImage(file);
                 } else {
-                    message("图片高宽比应为1:1", "warn")
+                    message("请上传jpg,jpeg,png,gif格式的文件", "warn")
                 }
             }
         };
@@ -69,7 +69,7 @@ export const Upload = ({ width, height, onChange, src, closeLoading, openLoading
 
     return (
         <CardBackground className="flex justify-center items-center mr-4 mt-0 p-0" style={{ minHeight: height, minWidth: width, maxHeight: height, maxWidth: width }}>
-            <input type="file" className="h-0 w-0" name="image" id="image" onChange={handleImage} accept="image/png,image/jpg,image/gif" />
+            <input type="file" className="h-0 w-0" name="image" id="image" onChange={handleImage} accept="image/png,image/jpg,image/gif, image/jpeg" />
             <label htmlFor="image">
                 <div>
                     {img ? <img src={img} className="rounded-3xl" style={{ width: width, height: height }} alt="" /> : (

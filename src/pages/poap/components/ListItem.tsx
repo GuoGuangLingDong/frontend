@@ -72,7 +72,7 @@ export const ListItem = ({ item, ...props }: { item: any } & IDIVProps) => {
     <div className="text-xs flex items-center border-t h-10" style={{ color: secondColor }}>
       <Holder amount={item.holder_num} />
       <div style={{ width: 1, height: "100%", backgroundColor: bgColor }}></div>
-      <Star amount={item.like_num} />
+      <Star amount={item.favour_number} />
     </div>
   </CardBackground>
   )

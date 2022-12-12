@@ -20,8 +20,8 @@ import { useAuth } from "./UserAuth";
 
 export const navs = [
   { label: "发现POAP", path: "home" },
-  { label: "铸造POAP", path: "cast" },
-  { label: "我的链接", path: "follow" },
+//  { label: "铸造POAP", path: "cast" },
+  { label: "我的连接", path: "follow" },
   { label: "DID积分", path: "did-score" },
   { label: "我的主页", path: "profile" },
   { label: "退出登录", path: "login" }
