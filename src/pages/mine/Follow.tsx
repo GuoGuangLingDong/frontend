@@ -21,6 +21,7 @@ interface IFollowItem {
   follow_count: number
   poap_count: number
   avatar: string
+  follow?: number
 }
 
 export const FollowLink = ({ item, ...props }: { item: IFollowItem } & IDIVProps) => {
@@ -86,7 +87,7 @@ const FollowItem = ({ item, handle, isFollow }: { item: IFollowItem, handle: () 
         onClick={() => {
           handle()
         }}>
-        {isFollow ? "取消连接" : "建立连接"}
+        {isFollow ? "取消连接" : (!item?.follow ? "建立连接" : "取消连接")}
       </Button>
     </div>
   </div>)
@@ -94,7 +95,7 @@ const FollowItem = ({ item, handle, isFollow }: { item: IFollowItem, handle: () 
 
 export const Follow = () => {
   const [dataFoolowers, setFollowersData] = useState<IFollowItem[]>([]);
-  const [dataFoolowees, setFooloweesData] = useState<IFollowItem[]>([]);
+  const [dataFoolowees, setFolloweesData] = useState<IFollowItem[]>([]);
 
   const [, getFollowersFun] = useRequest(api.getFollowers);
   const [, getFolloweesFun] = useRequest(api.getFollowees);
@@ -115,13 +116,21 @@ export const Follow = () => {
     return data
   }, [getFolloweesFun])
 
-  const { unFollow } = useFollow(() => {
-    getFollowers(0);
+  const { unFollow } = useFollow(async () => {
+    const data = await getFollowersFun({
+      from: 0,
+      count: 10
+    });
+    setFollowersData(data?.list);
   }, [setFollowersData]);
 
-  const { follow } = useFollow(() => {
-    getFollowees(0);
-  }, [getFollowers]);
+  const { follow, unFollow: unFollowMyLink } = useFollow(async () => {
+    const data = await getFolloweesFun({
+      from: 0,
+      count: 10
+    });
+    setFolloweesData(data?.list);
+  }, [getFollowers, setFolloweesData]);
 
   return (<>
     <Header title={"我的连接"}></Header>
@@ -147,11 +156,11 @@ export const Follow = () => {
         {
           text: "与我连接",
           children: (<CardBackground className="mt-0" style={{ marginTop: 0 }}>
-            <LoadPage setData={setFooloweesData} getList={getFollowees} id="followee" path={"list"} dataLength={dataFoolowees?.length}>
+            <LoadPage setData={setFolloweesData} getList={getFollowees} id="followee" path={"list"} dataLength={dataFoolowees?.length}>
               {
                 dataFoolowees?.map((item: IFollowItem, i: number) => {
                   return (<FollowItem key={`${i}-followee`} item={item} handle={() => {
-                    follow(item.uid);
+                    !item?.follow ? follow(item.uid) : unFollowMyLink(item.uid);
                   }} />)
                 })
               }
