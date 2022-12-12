@@ -93,12 +93,43 @@ const FollowItem = ({ item, handle, isFollow }: { item: IFollowItem, handle: () 
   </div>)
 }
 
-export const Follow = () => {
-  const [dataFoolowers, setFollowersData] = useState<IFollowItem[]>([]);
+const FollowMe = () => {
   const [dataFoolowees, setFolloweesData] = useState<IFollowItem[]>([]);
+  const [, getFolloweesFun] = useRequest(api.getFollowees);
+  const getFollowees = useCallback(async (pageNo: number) => {
+    const data = await getFolloweesFun({
+      from: pageNo,
+      count: 10
+    });
+    return data
+  }, [getFolloweesFun])
+  const { follow, unFollow: unFollowMyLink } = useFollow(async () => {
+    const data = await getFolloweesFun({
+      from: 0,
+      count: 10
+    });
+    setFolloweesData(data?.list);
+  }, [getFolloweesFun, setFolloweesData]);
+
+  return (
+    <CardBackground className="mt-0" style={{ marginTop: 0 }}>
+      <LoadPage setData={setFolloweesData} getList={getFollowees} id="followee" path={"list"} dataLength={dataFoolowees?.length}>
+        {
+          dataFoolowees?.map((item: IFollowItem, i: number) => {
+            return (<FollowItem key={`${i}-followee`} item={item} handle={() => {
+              !item?.follow ? follow(item.uid) : unFollowMyLink(item.uid);
+            }} />)
+          })
+        }
+      </LoadPage>
+    </CardBackground>
+  )
+}
+
+const MeFollow = () => {
+  const [dataFoolowers, setFollowersData] = useState<IFollowItem[]>([]);
 
   const [, getFollowersFun] = useRequest(api.getFollowers);
-  const [, getFolloweesFun] = useRequest(api.getFollowees);
 
   const getFollowers = useCallback(async (pageNo: number) => {
     const data = await getFollowersFun({
@@ -108,13 +139,6 @@ export const Follow = () => {
     return data
   }, [getFollowersFun]);
 
-  const getFollowees = useCallback(async (pageNo: number) => {
-    const data = await getFolloweesFun({
-      from: pageNo,
-      count: 10
-    });
-    return data
-  }, [getFolloweesFun])
 
   const { unFollow } = useFollow(async () => {
     const data = await getFollowersFun({
@@ -124,13 +148,23 @@ export const Follow = () => {
     setFollowersData(data?.list);
   }, [setFollowersData]);
 
-  const { follow, unFollow: unFollowMyLink } = useFollow(async () => {
-    const data = await getFolloweesFun({
-      from: 0,
-      count: 10
-    });
-    setFolloweesData(data?.list);
-  }, [getFollowers, setFolloweesData]);
+  return (
+    <CardBackground className="mt-0" style={{ marginTop: 0 }}>
+      <LoadPage setData={setFollowersData} getList={getFollowers} id="follower" path={"list"} dataLength={dataFoolowers?.length}>
+        {dataFoolowers?.length
+          ? dataFoolowers?.map((item: IFollowItem, i: number) => {
+            return (<FollowItem key={`${i}-follower`} item={item} isFollow handle={() => {
+              unFollow(item.uid);
+            }} />)
+          })
+          : <NoData />
+        }
+      </LoadPage>
+    </CardBackground>
+  )
+}
+
+export const Follow = () => {
 
   return (<>
     <Header title={"我的连接"}></Header>
@@ -140,32 +174,11 @@ export const Follow = () => {
       <Tabs tabs={[
         {
           text: "我的连接",
-          children: (<CardBackground className="mt-0" style={{ marginTop: 0 }}>
-            <LoadPage setData={setFollowersData} getList={getFollowers} id="follower" path={"list"} dataLength={dataFoolowers?.length}>
-              {dataFoolowers?.length
-                ? dataFoolowers?.map((item: IFollowItem, i: number) => {
-                  return (<FollowItem key={`${i}-follower`} item={item} isFollow handle={() => {
-                    unFollow(item.uid);
-                  }} />)
-                })
-                : <NoData />
-              }
-            </LoadPage>
-          </CardBackground>)
+          children: (<MeFollow />)
         },
         {
           text: "与我连接",
-          children: (<CardBackground className="mt-0" style={{ marginTop: 0 }}>
-            <LoadPage setData={setFolloweesData} getList={getFollowees} id="followee" path={"list"} dataLength={dataFoolowees?.length}>
-              {
-                dataFoolowees?.map((item: IFollowItem, i: number) => {
-                  return (<FollowItem key={`${i}-followee`} item={item} handle={() => {
-                    !item?.follow ? follow(item.uid) : unFollowMyLink(item.uid);
-                  }} />)
-                })
-              }
-            </LoadPage>
-          </CardBackground>)
+          children: (<FollowMe />)
         }
       ]} />
     </BodyBox>
