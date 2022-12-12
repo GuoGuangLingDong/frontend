@@ -21,27 +21,30 @@ export const Upload = ({ width, height, onChange, src, closeLoading, openLoading
             message("图片尺寸太大！", "warn")
             return
         }
-        if (file?.type?.includes("jpg") || file?.type?.includes("jpeg") || file?.type?.includes("png") || file?.type?.includes("gif")) {
-            const reads = new FileReader();
-            reads.readAsDataURL(file as any);
-            reads.onload = function (event) {
-                let image = new Image();
-                if (!event?.target?.result) return
-                image.src = event?.target?.result as any;
-                image.onload = function (e: any) {
-                    let w = e?.path?.[0]?.width || e?.target?.width;
-                    let h = e?.path?.[0]?.height || e?.target?.height;
-                    // if (w > 0 && h > 0 && w === h) {
-                    if (w > 0 && h > 0) {
-                        setImg(event?.target?.result);
-                        uploadImage(file);
-                    }
-                }
-            };
-        } else {
+
+        const type = file?.type?.slice(6);
+        console.log(type);
+        if (!["jpg", "jpeg", "png", "gif"]?.includes(type)) {
             message("请上传jpg,jpeg,png,gif格式的文件", "warn")
             return
         }
+
+        const reads = new FileReader();
+        reads.readAsDataURL(file as any);
+        reads.onload = function (event) {
+            let image = new Image();
+            if (!event?.target?.result) return
+            image.src = event?.target?.result as any;
+            image.onload = function (e: any) {
+                let w = e?.target?.width || e?.path?.[0]?.width;
+                let h = e?.target?.height || e?.path?.[0]?.height;
+                // if (w > 0 && h > 0 && w === h) {
+                if (w > 0 && h > 0) {
+                    setImg(event?.target?.result);
+                    uploadImage(file);
+                }
+            }
+        };
     }
 
     const uploadImage = useCallback(async (file) => {
