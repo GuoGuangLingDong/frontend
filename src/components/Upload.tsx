@@ -21,25 +21,27 @@ export const Upload = ({ width, height, onChange, src, closeLoading, openLoading
             message("图片尺寸太大！", "warn")
             return
         }
-
-        const reads = new FileReader();
-        reads.readAsDataURL(file as any);
-        reads.onload = function (event) {
-            let image = new Image();
-            if (!event?.target?.result) return
-            image.src = event?.target?.result as any;
-            image.onload = function (e: any) {
-                let w = e?.path?.[0]?.width || e?.target?.width;
-                let h = e?.path?.[0]?.height || e?.target?.height;
-                // if (w > 0 && h > 0 && w === h) {
-                if (w > 0 && h > 0) {
-                    setImg(event?.target?.result);
-                    uploadImage(file);
-                } else {
-                    message("请上传jpg,jpeg,png,gif格式的文件", "warn")
+        if (file?.type?.includes("jpg") || file?.type?.includes("jpeg") || file?.type?.includes("png") || file?.type?.includes("gif")) {
+            const reads = new FileReader();
+            reads.readAsDataURL(file as any);
+            reads.onload = function (event) {
+                let image = new Image();
+                if (!event?.target?.result) return
+                image.src = event?.target?.result as any;
+                image.onload = function (e: any) {
+                    let w = e?.path?.[0]?.width || e?.target?.width;
+                    let h = e?.path?.[0]?.height || e?.target?.height;
+                    // if (w > 0 && h > 0 && w === h) {
+                    if (w > 0 && h > 0) {
+                        setImg(event?.target?.result);
+                        uploadImage(file);
+                    }
                 }
-            }
-        };
+            };
+        } else {
+            message("请上传jpg,jpeg,png,gif格式的文件", "warn")
+            return
+        }
     }
 
     const uploadImage = useCallback(async (file) => {
@@ -70,7 +72,7 @@ export const Upload = ({ width, height, onChange, src, closeLoading, openLoading
 
     return (
         <CardBackground className="flex justify-center items-center mr-4 mt-0 p-0" style={{ minHeight: height, minWidth: width, maxHeight: height, maxWidth: width }}>
-            <input type="file" className="h-0 w-0" name="image" id="image" onChange={handleImage} accept="image/png,image/jpg,image/gif, image/jpeg" />
+            <input type="file" className="h-0 w-0" name="image" id="image" onChange={handleImage} />
             <label htmlFor="image">
                 <div>
                     {img ? <img src={img} className="rounded-3xl" style={{ width: width, height: height }} alt="" /> : (
