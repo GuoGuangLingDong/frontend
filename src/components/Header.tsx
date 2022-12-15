@@ -20,7 +20,7 @@ import { useAuth } from "./UserAuth";
 
 export const navs = [
   { label: "发现POAP", path: "home" },
-//  { label: "铸造POAP", path: "cast" },
+  { label: "铸造POAP", path: "cast" },
   { label: "我的连接", path: "follow" },
   { label: "DID积分", path: "did-score" },
   { label: "我的主页", path: "profile" },
@@ -124,7 +124,8 @@ const Diglog = ({ isOpen, close }: { isOpen: boolean, close: () => void }) => {
       top: "0",
       width: "100vw",
       height: "100vh",
-      background: "rgba(0,0,0,0.5)"
+      background: "rgba(0,0,0,0.5)",
+      zIndex: 100
     }}>
       <div className="relative">
         <div className="bg-white absolute" style={{
@@ -143,9 +144,11 @@ const Diglog = ({ isOpen, close }: { isOpen: boolean, close: () => void }) => {
               <img src={closeImg} alt="" className="absolute right-2 w-6" onClick={close} />
             </div>
             {platforms?.map((item, index: number) => {
-              return <div key={index} className="py-3 flex justify-between items-center px-6" onClick={() => {
+              return <div key={index} className="py-3 flex justify-between items-center px-6" style={{
+                // filter: item.isSupport ? "grayscale(0)" : "grayscale(1)"
+              }} onClick={() => {
                 if (!item.isSupport) {
-                  message(`暂不支持${item.text}`, "warn")
+                  message(`尚未开放，敬请期待`, "warn")
                   return
                 }
                 setSelect(index);

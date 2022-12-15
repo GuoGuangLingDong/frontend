@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Button } from "../../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import { BodyBox } from "../../components/BodyBox";
@@ -22,6 +22,7 @@ export const Edit = () => {
     const { message } = useMessage();
     const { userInfo, getUserInfo } = useAuth();
     const navigator = useNavigate();
+    const inputRef = useRef<HTMLInputElement>(null)
     const [, setUserInfoFun] = useRequest(api.setUserInfo);
     const [isEdit, openEdit, closeEdit] = useSwitch();
 
@@ -95,11 +96,14 @@ export const Edit = () => {
                     }} />
                 </div>
                 <div className="flex justify-center items-center mt-4 mb-6">
-                    <input type="text" value={values.username} onChange={(val) => {
+                    <input type="text" ref={inputRef} value={values.username} onChange={(val) => {
                         setParams({ username: val.target.value })
                     }} maxLength={30} className="outline-none p-2 text-center" placeholder="请输入用户名" readOnly={!isEdit} onBlur={() => {
                         closeEdit();
-                    }} /> {!isEdit && <img src={edit} onClick={openEdit} className="w-4 ml-2" alt="" />}
+                    }} /> {!isEdit && <img src={edit} onClick={()=>{
+                        openEdit()
+                        inputRef?.current?.focus();
+                    }} className="w-4 ml-2" alt="" />}
                 </div>
 
                 <CardBackground className="flex justify-center items-center px-2 relative mt-0" style={{ minHeight: 180, minWidth: 180 }}>

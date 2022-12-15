@@ -25,13 +25,14 @@ export const LoadPage = ({
         const data: any = await getList?.(from.current);
         setIsVisible(false);
         if (!data?.[path]) return
-        console.log(data?.[path])
         if (from.current === 0) {
             setData?.(data?.[path]);
         } else {
-            setData?.((pre: any[]) => ([...pre, ...data[path]]));
+            setData?.((pre: any[]) => {
+                const oldData = pre?.slice(0, from.current);
+                return ([...oldData, ...data[path]]);
+            });
         }
-
     }, [setIsVisible, from, getList, setData, path])
 
     useEffect(() => {
@@ -54,7 +55,7 @@ export const LoadPage = ({
 
         io.observe(dom)
 
-    //eslint-disable-next-line
+        //eslint-disable-next-line
     }, [ref, id])
 
     return (

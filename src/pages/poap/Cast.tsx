@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { Button } from "../../components/Button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BodyBox } from "../../components/BodyBox";
 import { useState } from "react";
 import { Header, hearderIconCss } from "../../components/Header";
@@ -56,6 +56,7 @@ export const CastPOAP = () => {
     const [isOpenSelect, openSelect, closeSelect] = useSwitch();
     const { message } = useMessage();
     const [, createPoap] = useRequest(api.mint);
+    const navigate = useNavigate();
 
     const [values, setValues] = useState<TCastPoapParams>({
         poap_name: "",
@@ -72,7 +73,6 @@ export const CastPOAP = () => {
     }, [])
 
     const cast = useCallback(async () => {
-        console.log(values);
         if (!values.poap_name || values.poap_name?.length < 4 || values?.poap_name?.length > 30) {
             message("请输入4～30位的POAP名称", "warn")
             return
@@ -85,8 +85,16 @@ export const CastPOAP = () => {
             message("请上传封面图片", "warn")
             return
         }
+        if (!values.poap_intro) {
+            message("请输入POAP简介", "warn")
+            return
+        }
         if (values.receive_cond === 2 && !values.collect_list) {
             message("请输入领取的名单", "warn")
+            return
+        }
+        if (values.receive_cond === 2 && ((values.collect_list?.split("#")?.length || 0) > Number(values.poap_sum))) {
+            message("领取的名单数量超过POAP总量", "warn")
             return
         }
 
@@ -94,6 +102,7 @@ export const CastPOAP = () => {
         createPoap(values).then(() => {
             closeLoading();
             message("铸造成功！", "success");
+            navigate("/home");
         }).catch(() => {
             closeLoading();
         })
@@ -151,7 +160,7 @@ export const CastPOAP = () => {
                                 setParams({ collect_list: val?.target?.value })
                             }}
                         ></textarea>
-                        <div className="absolute right-2 bottom-2">{values?.collect_list?.split("#")?.length} / 1000</div>
+                        <div className="absolute right-2 bottom-2">{(values?.collect_list || "")?.length >= 1 ? values?.collect_list?.split("#")?.length : 0} / 1000</div>
                     </CardBackground></>}
 
                 <div className="ml-4 mb-1 font-bold">POAP封面图片</div>
@@ -181,7 +190,7 @@ export const CastPOAP = () => {
                 <Button className="my-10" loading={loading} disabled={loading} onClick={() => {
                     cast();
                 }}>
-                    铸造POAP
+                    { loading ? "上传图片..." : "铸造POAP"}
                 </Button>
             </BodyBox>
         </>

@@ -1,6 +1,6 @@
 import { BodyBox } from "../../components/BodyBox";
 import { secondColor } from "../../theme";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Header } from "../../components/Header";
 import { CardBackground, IconTextRightCard } from "../../components/Card";
 import api from "../../api/index";
@@ -81,14 +81,14 @@ const FollowItem = ({ item, handle, isFollow }: { item: IFollowItem, handle: () 
         <FollowLink item={item} className="mr-4" />
         <NFTAmountLink item={item} />
       </div>
-      <Button
+      {(isFollow || !item?.follow) && <Button
         className="w-20 py-2 text-xs transform scale-75 origin-right"
         style={{ background: "#99A7B5" }}
         onClick={() => {
           handle()
         }}>
         {isFollow ? "取消连接" : (!item?.follow ? "建立连接" : "取消连接")}
-      </Button>
+      </Button>}
     </div>
   </div>)
 }
@@ -96,6 +96,7 @@ const FollowItem = ({ item, handle, isFollow }: { item: IFollowItem, handle: () 
 const FollowMe = () => {
   const [dataFoolowees, setFolloweesData] = useState<IFollowItem[]>([]);
   const [, getFolloweesFun] = useRequest(api.getFollowees);
+  const editIndex = useRef(0);
   const getFollowees = useCallback(async (pageNo: number) => {
     const data = await getFolloweesFun({
       from: pageNo,
@@ -106,11 +107,14 @@ const FollowMe = () => {
 
   const { follow, unFollow: unFollowMyLink } = useFollow(async () => {
     const data = await getFolloweesFun({
-      from: 0,
+      from: editIndex.current,
       count: 10
     });
-    setFolloweesData(data?.list);
-  }, [getFolloweesFun, setFolloweesData]);
+    setFolloweesData((pre: any[]) => {
+      const oldData = JSON.parse(JSON.stringify(pre?.slice(0, editIndex.current)));
+      return ([...oldData, ...(data?.list || [])]);
+    });
+  }, [getFolloweesFun, setFolloweesData, editIndex]);
 
   return (
     <CardBackground className="mt-0" style={{ marginTop: 0 }}>
@@ -118,6 +122,7 @@ const FollowMe = () => {
         {
           dataFoolowees?.map((item: IFollowItem, i: number) => {
             return (<FollowItem key={`${i}-followee`} item={item} handle={() => {
+              editIndex.current = i;
               !item?.follow ? follow(item.uid) : unFollowMyLink(item.uid);
             }} />)
           })
@@ -130,6 +135,7 @@ const FollowMe = () => {
 const MeFollow = () => {
   const [dataFoolowers, setFollowersData] = useState<IFollowItem[]>([]);
   const [, getFollowersFun] = useRequest(api.getFollowers);
+  const editIndex = useRef(0);
   const getFollowers = useCallback(async (pageNo: number) => {
     const data = await getFollowersFun({
       from: pageNo,
@@ -140,11 +146,14 @@ const MeFollow = () => {
 
   const { unFollow } = useFollow(async () => {
     const data = await getFollowersFun({
-      from: 0,
+      from: editIndex.current,
       count: 10
     });
-    setFollowersData(data?.list);
-  }, [setFollowersData, getFollowersFun]);
+    setFollowersData((pre: any[]) => {
+      const oldData = JSON.parse(JSON.stringify(pre?.slice(0, editIndex.current)));
+      return ([...oldData, ...(data?.list || [])]);
+    });
+  }, [setFollowersData, getFollowersFun, editIndex]);
 
   return (
     <CardBackground className="mt-0" style={{ marginTop: 0 }}>
@@ -152,6 +161,7 @@ const MeFollow = () => {
         {dataFoolowers?.length
           ? dataFoolowers?.map((item: IFollowItem, i: number) => {
             return (<FollowItem key={`${i}-follower`} item={item} isFollow handle={() => {
+              editIndex.current = i;
               unFollow(item.uid);
             }} />)
           })
