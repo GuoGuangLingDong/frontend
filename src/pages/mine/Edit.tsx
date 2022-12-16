@@ -98,12 +98,7 @@ export const Edit = () => {
                 <div className="flex justify-center items-center mt-4 mb-6">
                     <input type="text" ref={inputRef} value={values.username} onChange={(val) => {
                         setParams({ username: val.target.value })
-                    }} maxLength={30} className="outline-none p-2 text-center" placeholder="请输入用户名" readOnly={!isEdit} onBlur={() => {
-                        closeEdit();
-                    }} /> {!isEdit && <img src={edit} onClick={()=>{
-                        openEdit()
-                        inputRef?.current?.focus();
-                    }} className="w-4 ml-2" alt="" />}
+                    }} maxLength={30} className="outline-none p-2 text-center" placeholder="请输入用户名"/>
                 </div>
 
                 <CardBackground className="flex justify-center items-center px-2 relative mt-0" style={{ minHeight: 180, minWidth: 180 }}>
