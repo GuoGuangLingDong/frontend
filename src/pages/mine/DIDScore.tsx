@@ -1,6 +1,6 @@
 import { BodyBox } from "../../components/BodyBox";
 import { secondColor, textColor } from "../../theme";
-import { useEffect, useMemo } from "react";
+import { useCallback, useState } from "react";
 import { IconImage } from "../../components/Image";
 import { Header } from "../../components/Header";
 import { CardBackground } from "../../components/Card";
@@ -8,33 +8,26 @@ import { TextLabel } from "../../components/Label";
 import huizhang from "../../assets/image/huizhang.png";
 import api from "../../api/index";
 import { useRequest } from "../../hooks/useRequest";
+import { LoadPage } from "../../components/LoadPage";
 
 interface IDIDScoreItem {
   "opt": string,
   "score": string | number,
   "opt_time": string | number,
 }
-interface IDIDScore {
-  "score": string | number,
-  "oprations": IDIDScoreItem[]
-}
 
 export const DIDScore = () => {
   const [value, getScoreFun] = useRequest(api.getScore);
-
-  useEffect(() => {
-    getScoreFun({
-      from: 0,
-      count: 20
-    })
-
-    // eslint-disable-next-line
-  }, []);
-
-  const data = useMemo(() => value as unknown as IDIDScore, [value])
+  const [data, setData] = useState<IDIDScoreItem[]>([]);
+  const getScore = useCallback(async (pageNo: number) => {
+    const data = await getScoreFun({
+      from: pageNo,
+      count: 10
+    });
+    return data
+  }, [getScoreFun]);
 
   return (<>
-
     <BodyBox css={{
       background: "linear-gradient(360deg, transparent 60%, #EEEFF4, #F6BF75, #D77185, #8766AC, #4150B1)",
       paddingTop: 100,
@@ -47,13 +40,16 @@ export const DIDScore = () => {
             <IconImage className="h-12 w-12 rounded-none" src={huizhang} />
           </div>
           <div style={{ color: textColor }}>我的积分</div>
-          <div className="font-bold text-2xl">{data?.score}</div>
+          <div className="font-bold text-2xl">{value?.score}</div>
         </div>
-        {data?.oprations?.map((item: IDIDScoreItem, i: number) => {
-          return (<TextLabel className="h-12" text={item.opt} right={<div>{item.opt_time}</div>}>
-            <span>{item.score}</span>
-          </TextLabel>)
-        })}
+
+        <LoadPage setData={setData} getList={getScore} id="did-score" path={"oprations"} dataLength={data?.length}>
+          {data?.map((item: IDIDScoreItem, i: number) => {
+            return (<TextLabel className="h-12" text={item.opt} key={i} right={<div>{item.opt_time}</div>}>
+              <span>{item.score}</span>
+            </TextLabel>)
+          })}
+        </LoadPage>
       </CardBackground>
       <CardBackground className="m-0 p-4 py-6 mt-6 text-xs" style={{ color: secondColor }}>
         积分规则：

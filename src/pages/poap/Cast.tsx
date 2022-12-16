@@ -120,9 +120,9 @@ export const CastPOAP = () => {
                 }} />
 
                 <div className="ml-4 mb-1 font-bold" >铸造数量</div>
-                <input type="number" placeholder="请输入10000以内的数量" className="bg-white outline-none rounded-3xl w-full px-4 py-2 mb-6" value={values.poap_sum} onChange={(val) => {
+                <input placeholder="请输入10000以内的数量" className="bg-white outline-none rounded-3xl w-full px-4 py-2 mb-6" value={values.poap_sum} onChange={(val) => {
                     const value = val.target.value;
-                    if (value && Number(value) <= 10000) {
+                    if (Number(value) <= 10000 && Number(value) >= 0) {
                         setParams({ poap_sum: val.target.value })
                     }
                 }} />
@@ -190,7 +190,7 @@ export const CastPOAP = () => {
                 <Button className="my-10" loading={loading} disabled={loading} onClick={() => {
                     cast();
                 }}>
-                    { loading ? "上传图片..." : "铸造POAP"}
+                    {loading ? "上传图片..." : "铸造POAP"}
                 </Button>
             </BodyBox>
         </>
