@@ -85,13 +85,15 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                     borderRadius: "30px"
                 }}>
                     {/* <div className="absolute -top-10 text-center text-white w-full font-bold">长按保存至相册</div> */}
-                    <div ref={ref}>
-                        <CardBackground className="p-0 m-0 mt-0">
-                            <LoadImage
-                                src={details?.cover_img}
-                                className="rounded-3xl cursor-pointer w-full"
-                                style={{ padding: 2, width: "80vw", height: "80vw" }}
-                            />
+                    <div ref={ref} >
+                        <CardBackground className="p-0 m-0 mt-0 border-4" style={{ borderColor: "rgba(224,204,168)", padding: 5  }} >
+                            <div className="rounded-3xl border-4 border-black p-1" style={{ borderColor: "rgba(224,204,168)" }} >
+                                <LoadImage
+                                    src={details?.cover_img}
+                                    className="rounded-3xl cursor-pointer w-full bg-white"
+                                    style={{ width: "80vw", height: "80vw" }}
+                                />
+                            </div>
                             {/* <div className="absolute px-3 pt-2 w-full top-0 left-0">
                                 <div className="rounded-full w-full flex items-center text-white" style={{
                                     background: "rgba(0,0,0,0.5)",
@@ -111,7 +113,7 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                             <div className="h-32 flex justify-between items-center p-4 font-bold">
                                 <div>
                                     <div>{details?.poap_name}</div>
-                                    <div>ID: {details?.poap_id?.length <= 16 ? details?.poap_id : ellipseAddress(details?.poap_id, 6)}</div>
+                                    <div style={{fontSize:12}}>链上ID: 0x{details?.chain?.contract_addr?.length <= 16 ? details?.chain?.contract_addr : ellipseAddress(details?.poap_id, 6)}</div>
                                 </div>
                                 <QRCode
                                     id="qrCode"
