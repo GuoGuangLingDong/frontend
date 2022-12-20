@@ -6,8 +6,10 @@ import person from "../../../assets/image/person.png"
 import share from "../../../assets/image/share.svg"
 import edit from "../../../assets/image/edit.svg"
 import { useMemo } from "react";
+import { isMobile } from "../../../helpers/utilities";
 
 export const MineBaseInfo = ({ userInfo }: { userInfo: IUserInfo }) => {
+    const mobile = isMobile();
     const w = 24;
     const navigate = useNavigate();
     const { pathname } = useLocation();
@@ -17,18 +19,18 @@ export const MineBaseInfo = ({ userInfo }: { userInfo: IUserInfo }) => {
         <PersonBackground image={person} className={pathname === "/share" ? "rounded-t-3xl" : "rounded-none"}>
             <div className="relative h-full">
                 <div className="absolute flex justify-center items-center rounded-full" style={{
-                    bottom: pathname === "/share" ? "17%" : "-5%",
+                    bottom: pathname === "/share" ? ( mobile ? "17%" : "-3%") : "-5%",
                     width: `${w}%`,
                     left: `calc(50% - ${w / 2}%)`
                 }}>
                     <img className="w-24 rounded-full" src={userInfo?.avatar} alt="" />
                 </div>
 
-                {pathname !== "/share" && info?.uid === userInfo?.uid && isUser && <><div className="absolute flex justify-center items-center bg-white rounded-full" style={{
+                {pathname !== "/share" && info?.uid === userInfo?.uid && isUser && <><div className="absolute flex justify-center items-center bg-white rounded-full cursor-pointer" style={{
                     bottom: "-14%",
-                    width: `14vw`,
-                    height: `14vw`,
-                    left: `6.5%`
+                    width: mobile ? `14vw` : 60,
+                    height: mobile ? `14vw` : 60,
+                    left: mobile ? `6.5%` : "calc(50% - 500px)"
                 }}
                     onClick={() => {
                         navigate(`/edit`)
@@ -37,12 +39,12 @@ export const MineBaseInfo = ({ userInfo }: { userInfo: IUserInfo }) => {
                     <img src={edit} className="w-6 h-6" alt="" />
                 </div>
 
-                    <div className="absolute flex justify-center items-center bg-white rounded-full"
+                    <div className="absolute flex justify-center items-center bg-white rounded-full cursor-pointer"
                         style={{
                             bottom: "-14%",
-                            width: `14vw`,
-                            height: `14vw`,
-                            right: `6.5%`
+                            width: mobile ? `14vw` : 60,
+                            height: mobile ? `14vw` : 60,
+                            right: mobile ? `6.5%` : "calc(50% - 500px)"
                         }}
                         onClick={() => {
                             navigate("/share")
@@ -62,7 +64,9 @@ export const MineBaseInfo = ({ userInfo }: { userInfo: IUserInfo }) => {
         </div>
 
         <BodyBox>
-            <div className="flex justify-between items-center my-4">
+            <div className="flex justify-between items-center my-4" style={{
+                width: pathname === "/share" ? "24rem" : "100%"
+            }}>
                 <div className="flex-1 bg-white h-12 rounded-full mr-2 flex items-center justify-between px-6">
                     <div>Links</div>
                     <div>{userInfo?.follow_count || 0}</div>
@@ -72,5 +76,6 @@ export const MineBaseInfo = ({ userInfo }: { userInfo: IUserInfo }) => {
                     <div>{userInfo?.poap_count || 0}</div>
                 </div>
             </div>
-        </BodyBox></>
+        </BodyBox>
+    </>
 }

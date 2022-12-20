@@ -16,6 +16,7 @@ import { ellipseAddress } from "./PoapBaseInfo";
 import { useRequest } from "../../../hooks/useRequest";
 import api from "../../../api";
 import { BodyBox } from "../../../components/BodyBox";
+import { isMobile } from "../../../helpers/utilities";
 
 export interface IHolderItem {
     "did": string//用户的did
@@ -51,6 +52,7 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
     const ref = useRef<HTMLDivElement>(null);
     // let timeout: any = useRef(null);
     const { message } = useMessage();
+    const mobile = isMobile();
     const [loading, openLoading, closeLoading] = useSwitch();
 
     const save = () => {
@@ -78,10 +80,10 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
         }}>
             <div className="relative">
                 <div className="bg-transparetn absolute" style={{
-                    right: "10vw",
-                    left: "10vw",
-                    top: "16vh",
-                    width: "80vw",
+                    right: mobile ? "10vw" : "37vw",
+                    left: mobile ? "10vw" : "37vw",
+                    top: mobile ? "16vh" : "10vh",
+                    width: mobile ? "80vw" : "26vw",
                     borderRadius: "30px"
                 }}>
                     {/* <div className="absolute -top-10 text-center text-white w-full font-bold">长按保存至相册</div> */}
@@ -90,7 +92,7 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                             <LoadImage
                                 src={details?.cover_img}
                                 className="rounded-3xl cursor-pointer w-full"
-                                style={{ padding: 2, width: "80vw", height: "80vw" }}
+                                style={{ padding: 2, width: mobile ? "80vw" : "26vw", height: mobile ? "80vw" : '26vw' }}
                             />
                             {/* <div className="absolute px-3 pt-2 w-full top-0 left-0">
                                 <div className="rounded-full w-full flex items-center text-white" style={{
@@ -111,7 +113,7 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                             <div className="h-32 flex justify-between items-center p-4 font-bold">
                                 <div>
                                     <div>{details?.poap_name}</div>
-                                    <div>ID: {details?.poap_id?.length <= 16 ? details?.poap_id : ellipseAddress(details?.poap_id, 6)}</div>
+                                    <div>ID: {details?.poap_id?.length <= 16 ? details?.poap_id : `${details?.poap_id.slice(0, 6)}...${details?.poap_id.slice(-6)}`}</div>
                                 </div>
                                 <QRCode
                                     id="qrCode"
@@ -158,10 +160,11 @@ export const DetailsPulse = () => {
     )
 }
 
-export const DetailItem = ({ item, getDetails }: { item: IPoapDetailsItem, getDetails: (arg: any) => void }) => {
+export const DetailItem = ({ item, getDetails, openShare }: { item: IPoapDetailsItem, getDetails: (arg: any) => void, openShare: () => void }) => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const [, favourFun] = useRequest(api.favour);
+    const mobile = isMobile();
 
     const favour = useCallback(async () => {
         await favourFun({
@@ -172,29 +175,40 @@ export const DetailItem = ({ item, getDetails }: { item: IPoapDetailsItem, getDe
         })
     }, [item, getDetails, favourFun])
 
-    return (<CardBackground className="p-0 m-0">
+    return (<CardBackground className="p-0 m-0 md:flex items-center">
         <LoadImage
             src={item?.cover_img}
             className="rounded-3xl cursor-pointer h-96 w-full"
-            style={{ padding: 2 }}
+            style={{ padding: 2, width: mobile ? "100%" : "24rem" }}
             onClick={() => {
                 if (pathname?.includes("detail")) return
                 navigate(`/detail/${item?.poap_id}`)
             }} />
-        <div className="p-4">
-            <div className="text-sm">
-                {item?.poap_name}
-            </div>
-            <div className="text-xs flex items-center mt-2" style={{ color: secondColor }}>
-                <Holder amount={item?.holder_num} style={{ justifyContent: "start" }} />
-                <Star amount={item?.favour_number} />
-                <div style={{ flex: 4, textAlign: "right" }} >
-                    限量发行
-                    <span style={{ color: textColor }}>{item?.poap_sum || 0}</span>
-                    张
+        <div className="p-4 md:flex-1 md:h-96 md:flex md:flex-col md:justify-between">
+            <div>
+                <div className="text-sm md:text-2xl md:font-bold md:py-4">
+                    {item?.poap_name}
+                </div>
+                <div className="hidden md:block text-xs pb-4">
+                    {item?.poap_intro}
+                </div>
+                <div className="text-xs flex items-center mt-2" style={{ color: secondColor }}>
+                    <Holder amount={item?.holder_num} style={{ justifyContent: "start" }} />
+                    <div className="w-4"></div>
+                    <Star amount={item?.favour_number} />
+                    {!mobile && <><div className="w-4"></div>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42.98 41.97" onClick={() => {
+                            openShare();
+                        }} className="h-3 cursor-pointer"><defs><style></style></defs><g id="图层_2" data-name="图层 2"><g id="图层_1-2" data-name="图层 1"><path className="cls-1" d="M35.11,15.8a7.82,7.82,0,0,1-6-2.82l-9.81,4.71a10.11,10.11,0,0,1-.06,7.86L27,29.6A8,8,0,0,1,38.11,27a8.13,8.13,0,0,1,2.56,11.15,8,8,0,0,1-11.08,2.58A8.12,8.12,0,0,1,26,32.36L17.68,28A10,10,0,0,1,3.57,29.26a10.13,10.13,0,0,1-1.22-14.2,10,10,0,0,1,14.11-1.22,10.36,10.36,0,0,1,1.35,1.38l9.9-4.75a7.92,7.92,0,0,1,4.86-10,7.89,7.89,0,0,1,5.11,14.94A7.75,7.75,0,0,1,35.11,15.8Z" fill="#99A7B5" /></g></g></svg>
+                    </>}
+                    <div style={{ flex: 4, textAlign: "right" }} >
+                        限量发行
+                        <span style={{ color: textColor }}>{item?.poap_sum || 0}</span>
+                        张
+                    </div>
                 </div>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center align-bottom">
                 {item?.collectable && <><ClaimButton poap_id={item?.poap_id} getDetails={getDetails} />
                     <div className="w-6"></div></>}
                 <button className="mt-6 p-0 select-none w-full sm:px-6 font-bold text-sm rounded-full text-white border-0" style={{

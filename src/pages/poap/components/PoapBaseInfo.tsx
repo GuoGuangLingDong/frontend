@@ -1,10 +1,12 @@
+import { isMobile } from "../../../helpers/utilities";
 import { secondColor } from "../../../theme"
 
 export function ellipseAddress(
     address: string = "",
     width: number = 8
 ): string {
-    return address?.length < width * 2 ? address : `${address.slice(0, width)}...${address.slice(-width)}`;
+    const mobile = isMobile();
+    return (address?.length < width * 2 || !mobile) ? address : `${address.slice(0, width)}...${address.slice(-width)}`;
 }
 
 const Label = ({ text, value }: { text: string, value: string }) => {

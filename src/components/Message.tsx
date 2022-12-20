@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { isMobile } from "../helpers/utilities";
 
 export type TMessageType = "error" | "warn" | "success" | "info"
 
@@ -15,6 +16,7 @@ export const MessageProvider = ({ children }: { children: React.ReactNode }) => 
     const [text, setText] = useState("");
     const [type, setType] = useState<TMessageType>("info");
     const { pathname } = useLocation();
+    const mobile = isMobile();
 
     const message = useCallback((text: string, type?: TMessageType) => {
         setText(text);
@@ -42,7 +44,7 @@ export const MessageProvider = ({ children }: { children: React.ReactNode }) => 
 
     return (
         <MessageContext.Provider value={{ message }}>
-            {text && <div className="fixed w-full z-50 bottom-32" style={{ zIndex: pathname?.includes("home") ? 1000 : 0 }}>
+            {text && <div className={`fixed w-full z-50 ${ mobile ? "bottom-32" : "top-16" }`} style={{ zIndex: pathname?.includes("home") ? 1000 : 0 }}>
                 <div className="absolute w-full flex justify-center px-6">
                     <div className="bg-gray-400 rounded-md px-4 py-3 text-white transform ease-in-out duration-500"
                         style={{

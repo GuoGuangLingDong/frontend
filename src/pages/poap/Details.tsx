@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { BodyBox } from "../../components/BodyBox";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Header } from "../../components/Header";
+import { GoBack, Header } from "../../components/Header";
 import { CardBackground, IconTextRightCard } from "../../components/Card";
 import { Button } from "../../components/Button";
 import { Tabs } from "../../components/Tab";
@@ -15,6 +15,7 @@ import { secondColor } from "../../theme";
 import { useAuth } from "../../components/UserAuth";
 import { useRequest } from "../../hooks/useRequest";
 import { LoadPage } from "../../components/LoadPage";
+import { isMobile } from "../../helpers/utilities";
 
 export const NoData = () => {
   return <div className="h-40 flex justify-center items-center" style={{ color: secondColor }}>
@@ -29,6 +30,7 @@ export const PoapDetail = () => {
   const detailsData = useMemo(() => detail as unknown as any, [detail]);
   const [, getHolders] = useRequest(api.getHolders);
   const [holdersData, setData] = useState<any[]>([]);
+  const mobile = isMobile();
   // const { searchString } = useQueryString();
 
   const { unFollow: unFollowHolder, follow: followHolder } = useFollow(async () => {
@@ -68,12 +70,13 @@ export const PoapDetail = () => {
 
   return (
     <>
-      <Header title={"POAP详情"} right={userInfo && <img src={share} className="w-4 h-4" onClick={() => {
+      <Header title={"POAP详情"} right={userInfo && mobile && <img src={share} className="w-4 h-4" onClick={() => {
         isShare ? closeShare() : openShare();
       }} alt="" />} />
       <SharePOAP isOpen={isShare} close={closeShare} details={detailsData} />
       <BodyBox css={{ marginBottom: 50, paddingTop: 80 }}>
-        <DetailItem item={detailsData} getDetails={getDetails} />
+        {!mobile && <GoBack /> }
+        <DetailItem item={detailsData} getDetails={getDetails} openShare={openShare}/>
         <div className="h-10"></div>
         <Tabs tabs={[
           {
@@ -91,7 +94,7 @@ export const PoapDetail = () => {
                 </div>
               </IconTextRightCard>} */}
               <IconTextRightCard className="m-4 p-2 mb-6" icon={detailsData?.minerIcon} uid={detailsData?.minerUid} right={<Button deep
-                className="py-2 w-32 text-xs transform scale-75 origin-right"
+                className="py-2 w-32 md:w-40 text-xs transform scale-75 origin-right"
                 onClick={() => {
                   //根据返回值判断是否关注，但是现在没有返回值，所以随便写了data?.miner
                   !isMinerIsUser && (!detailsData?.follow_miner ? followMinter(detailsData?.minerUid) : unFollowMinter(detailsData?.minerUid));
@@ -117,7 +120,7 @@ export const PoapDetail = () => {
                         isCurrentUser = true
                       }
                       return (
-                        <IconTextRightCard key={index} className="m-4 p-2" icon={item?.avatar} uid={item?.uid} right={<Button deep
+                        <IconTextRightCard key={index} className="m-4 p-2" icon={item?.avatar} uid={item?.uid} right={<Button deep={item?.follow === 1 || isCurrentUser}
                           className="py-2 w-24 text-xs transform scale-75 origin-right"
                           onClick={() => {
                             //根据返回值判断是否关注，但是现在没有返回值，所以随便写了item.uid

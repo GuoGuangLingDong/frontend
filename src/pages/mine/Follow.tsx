@@ -82,7 +82,7 @@ const FollowItem = ({ item, handle, isFollow }: { item: IFollowItem, handle: () 
         <NFTAmountLink item={item} />
       </div>
       {(isFollow || !item?.follow) && <Button
-        className="w-20 py-2 text-xs transform scale-75 origin-right"
+        className="w-20 md:w-32 py-2 text-xs transform scale-75 origin-right"
         style={{ background: "#99A7B5" }}
         onClick={() => {
           handle()

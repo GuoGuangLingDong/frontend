@@ -28,7 +28,7 @@ export const Login = () => {
             }} />
             <div className="flex justify-between items-center text-sm">
                 <RememberPassword />
-                <div onClick={() => {
+                <div className="cursor-pointer" onClick={() => {
                     navigate("/reset-password")
                 }}>忘记密码</div>
             </div>

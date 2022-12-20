@@ -28,7 +28,7 @@ export const Banner = () => {
       <Carousel autoplay ref={ref as any} dots={false} pauseOnHover={false}>
         {data?.map((item, i) => {
           return (
-            <img key={i} className={`w-full h-48 select-none rounded-3xl`} onClick={() => {
+            <img key={i} className={`w-full h-48 md:h-96 select-none rounded-3xl`} onClick={() => {
               window.open(item.link, "_target");
             }} src={item.src} alt="" />
           )

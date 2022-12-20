@@ -12,7 +12,7 @@ export type IDIVProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLIn
 
 export const Star = ({ amount, ...props }: { amount: number } & IDIVProps) => {
   return (
-    <div {...props} className={`flex item-center justify-center cursor-pointer flex-1 ${props.className || ""}`}>
+    <div {...props} className={`flex item-center justify-center ${props.className || ""}`}>
       <img src={star} className="w-3" alt="share" />
       &nbsp;
       <div>{amount || 0}</div>
@@ -22,7 +22,7 @@ export const Star = ({ amount, ...props }: { amount: number } & IDIVProps) => {
 
 export const Holder = ({ amount, ...props }: { amount: number } & IDIVProps) => {
   return (
-    <div {...props} className={`flex item-center justify-center cursor-pointer flex-1 ${props.className || ""}`}>
+    <div {...props} className={`flex item-center justify-center ${props.className || ""}`}>
       <img src={holder} className="w-4" alt="share" />
       &nbsp;
       <div>{amount || 0}</div>
@@ -38,7 +38,7 @@ export const ListItem = ({ item, ...props }: { item: any } & IDIVProps) => {
   }}>
     <LoadImage
       src={item?.cover_img}
-      className="rounded-t-3xl cursor-pointer h-44 w-full"
+      className="rounded-t-3xl cursor-pointer h-44 w-full md:h-80 md:w-80 md:m-auto"
       style={{ padding: 2 }}
     />
     <div className="absolute px-3 pt-2 w-full top-0 left-0">
@@ -65,14 +65,14 @@ export const ListItem = ({ item, ...props }: { item: any } & IDIVProps) => {
       <div className="text-xs transform scale-90 origin-left">
         {item.poap_name}
       </div>
-      {item?.collectable && <Button className="w-16 py-1 text-xs transform scale-75 origin-right">
+      {item?.collectable && <Button className="w-16 md:w-24 py-1 text-xs transform scale-75 origin-right">
         限时领取
       </Button>}
     </div>
     <div className="text-xs flex items-center border-t h-10" style={{ color: secondColor }}>
-      <Holder amount={item.holder_num} />
+      <div className="flex-1"><Holder amount={item.holder_num} /></div>
       <div style={{ width: 1, height: "100%", backgroundColor: bgColor }}></div>
-      <Star amount={item.favour_number} />
+      <div className="flex-1"><Star amount={item.favour_number} /></div>
     </div>
   </CardBackground>
   )

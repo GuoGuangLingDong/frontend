@@ -3,17 +3,16 @@ import { Button } from "../../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import { BodyBox } from "../../components/BodyBox";
 import { useState } from "react";
-import { Header } from "../../components/Header";
+import { GoBack, Header } from "../../components/Header";
 import { CardBackground } from "../../components/Card";
 import { useSwitch } from "../../components/Loading";
 import api from "../../api";
 import { useMessage } from "../../components/Message";
 import { useRequest } from "../../hooks/useRequest";
 import { Upload } from "../../components/Upload";
-import edit from "../../assets/image/edit.svg"
 import { SocialItem, TEditParams, TSocialItemParams } from "./components/SocialItem";
 import { useAuth } from "../../components/UserAuth";
-
+import { isMobile } from "../../helpers/utilities";
 
 // 铸造POAP
 export const Edit = () => {
@@ -24,9 +23,8 @@ export const Edit = () => {
     const navigator = useNavigate();
     const inputRef = useRef<HTMLInputElement>(null)
     const [, setUserInfoFun] = useRequest(api.setUserInfo);
-    const [isEdit, openEdit, closeEdit] = useSwitch();
-
     const [links, setLinks] = useState<TSocialItemParams[]>([])
+    const mobile = isMobile();
 
     const [values, setValues] = useState<TEditParams>({
         username: "",
@@ -90,6 +88,7 @@ export const Edit = () => {
         <>
             <Header title={"定制个人主页"} />
             <BodyBox css={{ marginBottom: 50, paddingTop: 100 }}>
+                {!mobile && <GoBack />}
                 <div className="flex justify-center">
                     <Upload width={180} height={180} closeLoading={closeLoading} openLoading={openLoading} src={userInfo?.avatar} onChange={(url) => {
                         setParams({ avatar: url })
@@ -98,11 +97,11 @@ export const Edit = () => {
                 <div className="flex justify-center items-center mt-4 mb-6">
                     <input type="text" ref={inputRef} value={values.username} onChange={(val) => {
                         setParams({ username: val.target.value })
-                    }} maxLength={30} className="outline-none p-2 text-center" placeholder="请输入用户名"/>
+                    }} maxLength={30} className="outline-none p-2 text-center" placeholder="请输入用户名" />
                 </div>
 
-                <CardBackground className="flex justify-center items-center px-2 relative mt-0" style={{ minHeight: 180, minWidth: 180 }}>
-                    <textarea name="" value={values.introduction} className="outline-none" id="" cols={36} rows={6}
+                <CardBackground className="flex justify-center items-center px-2 md:px-4 relative mt-0" style={{ minHeight: 180, minWidth: 180 }}>
+                    <textarea name="" value={values.introduction} className="outline-none w-full" id="" rows={6}
                         placeholder="请输入个人简介"
                         onChange={(val) => {
                             const value = val?.target?.value;
@@ -116,7 +115,7 @@ export const Edit = () => {
 
                 <div className="font-bold mt-10 flex justify-between items-center">
                     展示社交信息
-                    <Button className="w-16 py-1" deep onClick={add}>
+                    <Button className="w-16 md:w-20 py-1" deep onClick={add}>
                         添加
                     </Button>
                 </div>

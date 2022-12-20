@@ -5,7 +5,7 @@ export const RememberPassword = () => {
     const [remember, setRemember] = useState<boolean>(localStorage.getItem("remember") === "true");
 
     return (
-        <div className="flex items-center text-sm" onClick={() => {
+        <div className="flex items-center text-sm cursor-pointer" onClick={() => {
             setRemember(!remember);
             localStorage.setItem("remember", `${!remember}`)
         }}>

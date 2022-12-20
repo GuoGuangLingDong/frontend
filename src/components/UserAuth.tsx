@@ -24,7 +24,7 @@ export interface IUserInfo {
 export const AuthContext = createContext(
   {} as {
     userInfo?: IUserInfo;
-    setUserInfo: React.Dispatch<IUserInfo>;
+    setUserInfo: React.Dispatch<IUserInfo | undefined>;
     login: (arg: TAuthParams) => void,
     register: (arg: TAuthParams) => void,
     resetPassword: (arg: TAuthParams) => void,
@@ -38,7 +38,7 @@ export const AuthContext = createContext(
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [userInfo, setUserInfo] = useState<IUserInfo>();
+  const [userInfo, setUserInfo] = useState<IUserInfo | undefined>();
   const [loading, openLoading, closeLoading] = useSwitch();
   const navigate = useNavigate();
   const { message } = useMessage();
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const index = href?.indexOf("redirect=");
       if (index > 0) {
         const hash = decodeURIComponent(href?.slice(index + 9));
-        navigate(hash);
+        navigate(`${hash}?redirect`);
       } else {
         navigate("/home");
       }

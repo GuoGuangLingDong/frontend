@@ -61,7 +61,7 @@ export const TextLabel = ({ text, right, children, ...props }: {
             <div style={{
                 minWidth: 90
             }}>{text}</div>
-            <div className="flex items-center justify-between" style={{ width: "calc(100% - 100px)" }}>
+            <div className="flex items-center justify-between" style={{ width: `calc(100% - 100px)` }}>
                 {children}
                 {right}
             </div>

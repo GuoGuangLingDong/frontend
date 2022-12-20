@@ -9,6 +9,7 @@ import huizhang from "../../assets/image/huizhang.png";
 import api from "../../api/index";
 import { useRequest } from "../../hooks/useRequest";
 import { LoadPage } from "../../components/LoadPage";
+import { isMobile } from "../../helpers/utilities";
 
 interface IDIDScoreItem {
   "opt": string,
@@ -19,6 +20,7 @@ interface IDIDScoreItem {
 export const DIDScore = () => {
   const [value, getScoreFun] = useRequest(api.getScore);
   const [data, setData] = useState<IDIDScoreItem[]>([]);
+  const mobile = isMobile();
   const getScore = useCallback(async (pageNo: number) => {
     const data = await getScoreFun({
       from: pageNo,
@@ -28,12 +30,13 @@ export const DIDScore = () => {
   }, [getScoreFun]);
 
   return (<>
+    {!mobile && <Header></Header>}
     <BodyBox css={{
-      background: "linear-gradient(360deg, transparent 60%, #EEEFF4, #F6BF75, #D77185, #8766AC, #4150B1)",
+      background: mobile ? "linear-gradient(360deg, transparent 60%, #EEEFF4, #F6BF75, #D77185, #8766AC, #4150B1)" : "",
       paddingTop: 100,
       position: "relative"
     }}>
-      <Header title={<span className="text-white">DID积分</span>} css={{ background: "transparent", boxShadow: "none", position: "absolute", zIndex: 50, top: 10, left: 0 }}></Header>
+      {mobile && <Header title={<span className="text-white">DID积分</span>} css={{ background: "transparent", boxShadow: "none", position: "absolute", zIndex: 50, top: 10, left: 0 }}></Header>}
       <CardBackground className="m-0 p-4">
         <div className="text-center -mt-12 mb-10">
           <div className="m-auto w-24 h-24 rounded-full flex justify-center items-center mb-4" style={{ background: "#EEEFF4", border: "3px solid white" }}>

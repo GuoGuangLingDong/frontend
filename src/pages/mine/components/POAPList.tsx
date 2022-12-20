@@ -29,7 +29,7 @@ export const MinePOAPList = () => {
   return (<div className="flex mt-6 flex-wrap" ref={ref}>
     <LoadPage getList={getUserInfo} setData={setData} dataLength={userInfo?.length} id="poap_list" path="poap_list">
       {userInfo?.map((item: any, i: number) => {
-        return (<CardBackground className="p-0 m-0 relative w-full" key={i} onClick={() => {
+        return (<CardBackground className="p-0 m-0 relative w-full md:w-96" key={i} onClick={() => {
           navigate(`/detail/${item?.poap_id}?minerID=${item?.minerUid}&minerIcon=${encodeURIComponent(item?.minerIcon)}&minerName=${encodeURIComponent(item?.minerName)}`)
         }}>
           <LoadImage
@@ -60,7 +60,7 @@ export const MinePOAPList = () => {
           <div className="p-4">
             <div className="text-sm flex justify-between items-center">
               <div>{item.poap_name}</div>
-              <div>#{ellipseAddress(item.poap_id, 6)}</div>
+              <div>#{item.poap_id?.slice(0,6)}...{item.poap_id?.slice(-6)}</div>
             </div>
             <div className="text-sm flex items-center justify-between mt-2" style={{ color: secondColor }}>
               <div className="flex items-center">
