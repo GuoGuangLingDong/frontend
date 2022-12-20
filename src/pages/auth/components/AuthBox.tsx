@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BodyBox } from "../../../components/BodyBox";
 import { CardBackground } from "../../../components/Card";
 import { PersonBackground } from "./PersonBackground";
 import login from "../../../assets/image/login.png"

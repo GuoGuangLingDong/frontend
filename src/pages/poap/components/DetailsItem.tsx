@@ -12,7 +12,6 @@ import { useCallback, useRef } from "react";
 import { downloadImg } from "../../mine/Share";
 import { useMessage } from "../../../components/Message";
 import { SmallLoading, useSwitch } from "../../../components/Loading";
-import { ellipseAddress } from "./PoapBaseInfo";
 import { useRequest } from "../../../hooks/useRequest";
 import api from "../../../api";
 import { BodyBox } from "../../../components/BodyBox";
@@ -87,13 +86,15 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                     borderRadius: "30px"
                 }}>
                     {/* <div className="absolute -top-10 text-center text-white w-full font-bold">长按保存至相册</div> */}
-                    <div ref={ref}>
-                        <CardBackground className="p-0 m-0 mt-0">
-                            <LoadImage
-                                src={details?.cover_img}
-                                className="rounded-3xl cursor-pointer w-full"
-                                style={{ padding: 2, width: mobile ? "80vw" : "26vw", height: mobile ? "80vw" : '26vw' }}
-                            />
+                    <div ref={ref} >
+                        <CardBackground className="p-0 m-0 mt-0 border-4" style={{ borderColor: "rgba(224,204,168)", padding: 5  }} >
+                            <div className="rounded-3xl border-4 border-black p-1" style={{ borderColor: "rgba(224,204,168)" }} >
+                                <LoadImage
+                                    src={details?.cover_img}
+                                    className="rounded-3xl cursor-pointer w-full bg-white"
+                                    style={{ padding: 2, width: mobile ? "80vw" : "26vw" }}
+                                />
+                            </div>
                             {/* <div className="absolute px-3 pt-2 w-full top-0 left-0">
                                 <div className="rounded-full w-full flex items-center text-white" style={{
                                     background: "rgba(0,0,0,0.5)",
@@ -110,10 +111,11 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                                     </div>
                                 </div>
                             </div> */}
-                            <div className="h-32 flex justify-between items-center p-4 font-bold">
+                            <div className="h-32 flex justify-between items-center p-4">
                                 <div>
-                                    <div>{details?.poap_name}</div>
-                                    <div>ID: {details?.poap_id?.length <= 16 ? details?.poap_id : `${details?.poap_id.slice(0, 6)}...${details?.poap_id.slice(-6)}`}</div>
+                                    <div className="font-bold">{details?.poap_name}</div>
+                                    <div className="text-xs">POAP ID: {details?.poap_id?.length <= 16 ? details?.poap_id : `${details?.poap_id.slice(0, 6)}...${details?.poap_id.slice(-6)}`}</div>
+                                    <div className="text-xs">链上ID: 0x{details?.chain?.contract_addr?.length <= 16 ? details?.chain?.contract_addr : `${details?.chain?.contract_addr.slice(0, 6)}...${details?.chain?.contract_addr.slice(-6)}`}</div>
                                 </div>
                                 <QRCode
                                     id="qrCode"

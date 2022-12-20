@@ -32,13 +32,13 @@ export const List = ({ data }: { data: IPoap[] }) => {
 
   return (<BodyBox>
     <div className="flex mt-6 flex-wrap" ref={ref}>
-      {data.concat(data)?.map((item, i) => {
+      {data?.map((item, i) => {
         return (<ListItem
           key={i}
           item={item}
           className="relative p-0 m-0"
           style={{
-            width: mobile ? "49%" : "30%",
+            width: mobile ? "49%" : "19.4rem",
             marginLeft: mobile && i % 2 === 0 ? "0px" : "1%",
             marginRight: mobile && i % 2 === 1 ? "0px" : "1%",
           }} />)

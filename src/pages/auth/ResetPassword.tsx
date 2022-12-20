@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { BodyBox } from "../../components/BodyBox"
 import { Button } from "../../components/Button"
 import { CardBackground } from "../../components/Card"
 import { Header } from "../../components/Header"
