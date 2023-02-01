@@ -115,7 +115,7 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                                 <div>
                                     <div className="font-bold">{details?.poap_name}</div>
                                     <div className="text-xs">POAP ID: {details?.poap_id?.length <= 16 ? details?.poap_id : `${details?.poap_id.slice(0, 6)}...${details?.poap_id.slice(-6)}`}</div>
-                                    <div className="text-xs">链上ID: 0x{details?.chain?.contract_addr?.length <= 16 ? details?.chain?.contract_addr : `${details?.chain?.contract_addr.slice(0, 6)}...${details?.chain?.contract_addr.slice(-6)}`}</div>
+                                    <div className="text-xs">链上ID: {details?.chain?.contract_addr?.length <= 16 ? details?.chain?.contract_addr : `${details?.chain?.contract_addr.slice(0, 6)}...${details?.chain?.contract_addr.slice(-6)}`}</div>
                                 </div>
                                 <QRCode
                                     id="qrCode"

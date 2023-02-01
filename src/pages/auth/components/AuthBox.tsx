@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { CardBackground } from "../../../components/Card";
 import { PersonBackground } from "./PersonBackground";
 import login from "../../../assets/image/login.png"
-import logo from "../../../assets/image/logo.png"
+import logo from "../../../assets/image/logo.svg"
 import { isMobile } from "../../../helpers/utilities";
 
 export const AuthBox = ({ children }: { children: ReactNode }) => {

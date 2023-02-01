@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { CSSProperties, memo, ReactNode, useMemo, useState } from "react";
-import logo from "../assets/image/logo.png";
+import logo from "../assets/image/logo.svg";
 import menu from "../assets/image/menu.svg";
 import back from "../assets/image/back.svg";
 import closeImg from "../assets/image/close.svg";
@@ -215,7 +215,7 @@ export const Header = memo(({ title, right, css }: { title?: string | ReactNode,
     <>
       {isOpenDiglog && <Diglog isOpen={isOpenDiglog} close={closeDiglog} />}
       <div className="flex md:hidden px-4 lg:px-16 items-center justify-between text-lg fixed w-full h-16 md:h-16 bg-gray-50 md:bg-opacity-90 text-black text-opacity-70 shadow-sm z-50" style={{ background: pathname === "/home" ? bgColor : "white", ...(css || {}) }}>
-        {(["/home"]?.includes(pathname) || pathname.includes("profile")) ? <div className={hearderBoxCss} onClick={() => {
+        {(["/home"]?.includes(pathname) || pathname.includes("profile") || pathname.includes("detail") ) ? <div className={hearderBoxCss} onClick={() => {
           isOpenMenu ? closeMenu() : openMenu();
         }}>
           <img className={hearderIconCss} src={menu} alt="menu" />

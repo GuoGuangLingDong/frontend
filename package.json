@@ -17,6 +17,7 @@
     "@types/react-router-dom": "^5.3.3",
     "antd": "^4.22.4",
     "axios": "^1.2.0",
+    "cross-env": "^7.0.3",
     "html2canvas": "^1.4.1",
     "http-proxy-middleware": "^2.0.6",
     "qrcode.react": "^3.1.0",
@@ -26,10 +27,11 @@
     "react-router-dom": "^6.4.3",
     "react-scripts": "^5.0.1",
     "tailwindcss": "^3.2.4",
-    "typescript": "^4.9.3"
+    "typescript": "^4.9.3",
+    "yarn": "^1.22.19"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "cross-env PORT=80 craco start",
     "build": "craco build",
     "test": "craco test",
     "deploy": "cd website && yarn push",
