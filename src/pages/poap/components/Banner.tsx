@@ -7,7 +7,7 @@ import pic3 from "../../../assets/image/pic3.jpg"
 export const Banner = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [data] = useState<{ src: string, link: string }[]>([{
-    link: "http://60.205.229.57:3000/#/detail/a4394025ff7e4b02bd5695688d62695c",
+    link: "http://play.bugubadge.com/#/detail/a4394025ff7e4b02bd5695688d62695c",
     src: pic1
   },
   {
