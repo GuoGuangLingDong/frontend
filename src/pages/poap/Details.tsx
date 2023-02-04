@@ -34,7 +34,7 @@ export const PoapDetail = () => {
   // const { searchString } = useQueryString();
 
   const { unFollow: unFollowHolder, follow: followHolder } = useFollow(async () => {
-    const data = await getHolders({ poap_id: (param as any)?.id, from: 0 });
+    const data = await getHolders({ poapId: (param as any)?.id, from: 0 });
     setData(data?.list);
   }, [param, setData]);
 
@@ -42,7 +42,7 @@ export const PoapDetail = () => {
     const data = await getHolders({
       from: pageNo,
       count: 10,
-      poap_id: param?.id
+      poapId: param?.id
     });
     return data
   }, [param?.id, getHolders]);
@@ -55,12 +55,12 @@ export const PoapDetail = () => {
 
   useEffect(() => {
     if (!param?.id) return
-    getDetails({ poap_id: param?.id });
+    getDetails({ poapId: param?.id });
     //eslint-disable-next-line
   }, [param?.id])
 
   const { unFollow: unFollowMinter, follow: followMinter } = useFollow(() => {
-    getDetails({ poap_id: (param as any)?.id });
+    getDetails({ poapId: (param as any)?.id });
   }, [param]);
 
   const isMinerIsUser = useMemo(() => {

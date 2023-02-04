@@ -25,20 +25,20 @@ export interface IHolderItem {
 }
 
 export interface IPoapDetailsItem {
-    "poap_id": string,
+    "poapId": string,
     "miner": string,//发行人did
-    "poap_name": string,
-    "poap_number": number,
+    "poapName": string,
+    "poapNumber": number,
     "receive_cond": string,
-    "cover_img": string,
-    "poap_intro": string,
+    "coverImg": string,
+    "poapIntro": string,
     "favour_number": number,
     "holder_num": number,//持有人数量
     "miner_name": string,//发行人用户名
     "avatar": string,//发行人头像url
     "collectable": number //# 是否可领取，未持有，未被领完
     "favoured": boolean,//是否已点赞
-    "poap_sum": number,
+    "poapSum": number,
     "chain": {
         plat_name: string,
         publish_time: string,
@@ -58,7 +58,7 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
         const dom = ref.current;
         if (!dom) return
         openLoading()
-        downloadImg(dom, `poap-${details?.poap_id}`, () => {
+        downloadImg(dom, `poap-${details?.poapId}`, () => {
             message("保存成功！", "success");
             closeLoading()
         }).catch(() => {
@@ -90,7 +90,7 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                         <CardBackground className="p-0 m-0 mt-0 border-4" style={{ borderColor: "rgba(224,204,168)", padding: 5  }} >
                             <div className="rounded-3xl border-4 border-black p-1" style={{ borderColor: "rgba(224,204,168)" }} >
                                 <LoadImage
-                                    src={details?.cover_img}
+                                    src={details?.coverImg}
                                     className="rounded-3xl cursor-pointer w-full bg-white"
                                     style={{ padding: 2, width: mobile ? "80vw" : "26vw" }}
                                 />
@@ -113,8 +113,8 @@ export const SharePOAP = ({ isOpen, close, details }: { isOpen: boolean, close: 
                             </div> */}
                             <div className="h-32 flex justify-between items-center p-4">
                                 <div>
-                                    <div className="font-bold">{details?.poap_name}</div>
-                                    <div className="text-xs">POAP ID: {details?.poap_id?.length <= 16 ? details?.poap_id : `${details?.poap_id.slice(0, 6)}...${details?.poap_id.slice(-6)}`}</div>
+                                    <div className="font-bold">{details?.poapName}</div>
+                                    <div className="text-xs">POAP ID: {details?.poapId?.length <= 16 ? details?.poapId : `${details?.poapId.slice(0, 6)}...${details?.poapId.slice(-6)}`}</div>
                                     <div className="text-xs">链上ID: {details?.chain?.contract_addr?.length <= 16 ? details?.chain?.contract_addr : `${details?.chain?.contract_addr.slice(0, 6)}...${details?.chain?.contract_addr.slice(-6)}`}</div>
                                 </div>
                                 <QRCode
@@ -170,29 +170,29 @@ export const DetailItem = ({ item, getDetails, openShare }: { item: IPoapDetails
 
     const favour = useCallback(async () => {
         await favourFun({
-            poap_id: item.poap_id
+            poapId: item.poapId
         });
         await getDetails({
-            poap_id: item.poap_id
+            poapId: item.poapId
         })
     }, [item, getDetails, favourFun])
 
     return (<CardBackground className="p-0 m-0 md:flex items-center">
         <LoadImage
-            src={item?.cover_img}
+            src={item?.coverImg}
             className="rounded-3xl cursor-pointer h-96 w-full"
             style={{ padding: 2, width: mobile ? "100%" : "24rem" }}
             onClick={() => {
                 if (pathname?.includes("detail")) return
-                navigate(`/detail/${item?.poap_id}`)
+                navigate(`/detail/${item?.poapId}`)
             }} />
         <div className="p-4 md:flex-1 md:h-96 md:flex md:flex-col md:justify-between">
             <div>
                 <div className="text-sm md:text-2xl md:font-bold md:py-4">
-                    {item?.poap_name}
+                    {item?.poapName}
                 </div>
                 <div className="hidden md:block text-xs pb-4">
-                    {item?.poap_intro}
+                    {item?.poapIntro}
                 </div>
                 <div className="text-xs flex items-center mt-2" style={{ color: secondColor }}>
                     <Holder amount={item?.holder_num} style={{ justifyContent: "start" }} />
@@ -205,13 +205,13 @@ export const DetailItem = ({ item, getDetails, openShare }: { item: IPoapDetails
                     </>}
                     <div style={{ flex: 4, textAlign: "right" }} >
                         限量发行
-                        <span style={{ color: textColor }}>{item?.poap_sum || 0}</span>
+                        <span style={{ color: textColor }}>{item?.poapSum || 0}</span>
                         张
                     </div>
                 </div>
             </div>
             <div className="flex justify-between items-center align-bottom">
-                {item?.collectable && <><ClaimButton poap_id={item?.poap_id} getDetails={getDetails} />
+                {item?.collectable && <><ClaimButton poapId={item?.poapId} getDetails={getDetails} />
                     <div className="w-6"></div></>}
                 <button className="mt-6 p-0 select-none w-full sm:px-6 font-bold text-sm rounded-full text-white border-0" style={{
                     padding: 2,

@@ -15,7 +15,6 @@ import { NoData } from "./Details";
 
 export interface IPoap {
   "poapId": string,
-  "poap_id": string,
   "minerUid": string,
   "minerIcon": string,
   "poapName": string,

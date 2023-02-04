@@ -15,14 +15,14 @@ export const Holders = () => {
   const [holdersData, setData] = useState<any[]>([]);
 
   const { unFollow: unFollowHolder, follow: followHolder } = useFollow(() => {
-    getHolders({ poap_id: (param as any)?.id });
+    getHolders({ poapId: (param as any)?.id });
   }, [param]);
 
   const getList = useCallback(async (pageNo: number) => {
     const data = await getHolders({
       from: pageNo,
       count: 10,
-      poap_id: param?.id
+      poapId: param?.id
     });
     return data
   }, [param?.id, getHolders]);

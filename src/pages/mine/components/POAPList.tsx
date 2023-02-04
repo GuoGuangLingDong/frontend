@@ -30,10 +30,10 @@ export const MinePOAPList = () => {
     <LoadPage getList={getUserInfo} setData={setData} dataLength={userInfo?.length} id="poap_list" path="poap_list">
       {userInfo?.map((item: any, i: number) => {
         return (<CardBackground className="p-0 m-0 relative w-full md:w-96" key={i} onClick={() => {
-          navigate(`/detail/${item?.poap_id}?minerID=${item?.minerUid}&minerIcon=${encodeURIComponent(item?.minerIcon)}&minerName=${encodeURIComponent(item?.minerName)}`)
+          navigate(`/detail/${item?.poapId}?minerID=${item?.minerUid}&minerIcon=${encodeURIComponent(item?.minerIcon)}&minerName=${encodeURIComponent(item?.minerName)}`)
         }}>
           <LoadImage
-            src={item?.cover_img}
+            src={item?.coverImg}
             className="rounded-t-3xl cursor-pointer h-96 w-full"
             style={{ padding: 2 }}
           />
@@ -59,8 +59,8 @@ export const MinePOAPList = () => {
           </div>
           <div className="p-4">
             <div className="text-sm flex justify-between items-center">
-              <div>{item.poap_name}</div>
-              <div>#{item.poap_id?.slice(0,6)}...{item.poap_id?.slice(-6)}</div>
+              <div>{item.poapName}</div>
+              <div>#{item.poapId?.slice(0,6)}...{item.poapId?.slice(-6)}</div>
             </div>
             <div className="text-sm flex items-center justify-between mt-2" style={{ color: secondColor }}>
               <div className="flex items-center">

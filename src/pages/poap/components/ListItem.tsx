@@ -34,10 +34,10 @@ export const ListItem = ({ item, ...props }: { item: any } & IDIVProps) => {
   const navigate = useNavigate();
 
   return (<CardBackground {...props} onClick={() => {
-    navigate(`/detail/${item?.poap_id}`)
+    navigate(`/detail/${item?.poapId}`)
   }}>
     <LoadImage
-      src={item?.cover_img}
+      src={item?.coverImg}
       className="rounded-t-3xl cursor-pointer h-44 w-full md:h-80 md:w-80 md:m-auto"
       style={{ padding: 2 }}
     />
@@ -63,7 +63,7 @@ export const ListItem = ({ item, ...props }: { item: any } & IDIVProps) => {
     </div>
     <div className="flex items-center justify-between px-2 my-2 text-xs" style={{ minHeight: 30 }}>
       <div className="text-xs transform scale-90 origin-left">
-        {item.poap_name}
+        {item.poapName}
       </div>
       {item?.collectable && <Button className="w-16 md:w-24 py-1 text-xs transform scale-75 origin-right">
         限时领取
