@@ -8,7 +8,7 @@ import { Tabs } from "../../components/Tab";
 import api from "../../api/index";
 import { useFollow } from "../mine/Follow";
 import { ellipseAddress, PoapBaseInfo } from "./components/PoapBaseInfo";
-import { DetailItem, SharePOAP } from "./components/DetailsItem";
+import { DetailItem } from "./components/DetailsItem";
 import share from "../../assets/image/share.svg"
 import { useSwitch } from "../../components/Loading";
 import { secondColor } from "../../theme";
@@ -16,6 +16,7 @@ import { useAuth } from "../../components/UserAuth";
 import { useRequest } from "../../hooks/useRequest";
 import { LoadPage } from "../../components/LoadPage";
 import { isMobile } from "../../helpers/utilities";
+import { NewSharePOAP } from "./components/SharePOAP";
 
 export const NoData = () => {
   return <div className="h-40 flex justify-center items-center" style={{ color: secondColor }}>
@@ -73,7 +74,7 @@ export const PoapDetail = () => {
       <Header title={"POAP详情"} right={userInfo && mobile && <img src={share} className="w-4 h-4" onClick={() => {
         isShare ? closeShare() : openShare();
       }} alt="" />} />
-      <SharePOAP isOpen={isShare} close={closeShare} details={detailsData} />
+      <NewSharePOAP isOpen={isShare} close={closeShare} details={detailsData} />
       <BodyBox css={{ marginBottom: 50, paddingTop: 80 }}>
         {!mobile && <GoBack /> }
         <DetailItem item={detailsData} getDetails={getDetails} openShare={openShare}/>

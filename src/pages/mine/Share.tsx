@@ -9,29 +9,58 @@ import follow from "../../assets/image/follow.svg";
 import { useAuth } from "../../components/UserAuth";
 import QRCode from "qrcode.react";
 import CopyToClipboard from "react-copy-to-clipboard";
-import html2canvas from 'html2canvas'
+// import html2canvas from 'html2canvas'
+import domtoimage from '../../helpers/dom-to-image'
 import { useRef } from "react";
 import { useSwitch } from "../../components/Loading";
 import { MineBaseInfo } from "./components/ProfileInfo";
 import { ellipseAddress } from "../poap/components/PoapBaseInfo";
 import { isMobile } from "../../helpers/utilities";
+import html2canvas from "html2canvas";
 
 export const downloadImg = async (dom: any, name: string, afterHandle?: () => void) => {
-    await html2canvas(dom, {
-        useCORS: true
-    }).then(canvas => {
-        const url = canvas.toDataURL("image/png");
+    if (window?.location?.href?.includes("share")) {
+        await html2canvas(dom, {
+            useCORS: true
+        }).then(canvas => {
+            const url = canvas.toDataURL("image/png");
+            console.log(canvas)
 
-        let a = document.createElement("a");
-        a.style.display = "none";
-        a.setAttribute("href", url);
+            let a = document.createElement("a");
+            a.style.display = "none";
+            a.setAttribute("href", url);
 
-        a.setAttribute("download", `${name}.png`);
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        afterHandle?.();
-    });
+            a.setAttribute("download", `${name}.png`);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            afterHandle?.();
+        });
+        return
+    }
+
+    domtoimage.toPng(dom, { quality: 2, proxy: false, scale: 3 })
+        .then(function () {
+            // 执行两次因为在ios上如果只是一次则会导致图片无法截取，操蛋的解决方案
+            domtoimage.toPng(dom, { quality: 2, proxy: false, scale: 3, height: dom?.offsetHeight, width: dom?.offsetWidth })
+                .then(function (dataUrl: string) {
+                    let a = document.createElement("a");
+                    a.style.display = "none";
+                    a.setAttribute("href", dataUrl);
+
+                    a.setAttribute("download", `${name}.png`);
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    afterHandle?.();
+                })
+                .catch(function (error: any) {
+                    console.error('oops, something went wrong!', error);
+                });
+        })
+        .catch(function (error: any) {
+            console.error('oops, something went wrong!', error);
+        });
 }
 
 export const Share = () => {

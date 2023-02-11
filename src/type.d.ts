@@ -14,3 +14,4 @@ declare module '*.mp4' {
   }
 
   declare module 'react-blockies'
+  declare module 'dom-to-image';

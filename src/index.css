@@ -84,3 +84,36 @@ input[type='number'] {
   border-left: solid 20px transparent;
   border-bottom: solid 20px white;
 }
+
+.rectangle {
+  background-image: url(./assets/image/rankbg.jpeg);
+  background-size: cover;
+  background-position: center;
+}
+
+.share-bg {
+  background: #FFBEBE;
+  border: 1px solid #FFFFFF;
+  box-shadow: 40px 30px 80px rgba(54, 48, 116, 0.3);
+  border-radius: 30px;
+}
+
+.download-bg {
+  background: #F8D3D4;
+  box-shadow: 40px 30px 80px rgba(54, 48, 116, 0.3);
+  border-radius: 30px;
+}
+
+.img-bg {
+  box-shadow: inset 10px 10px 10px rgba(0, 0, 0, 0.05), inset -10px -10px 20px #FFFFFF;
+  filter: drop-shadow(-6px -6px 6px #FFFFFF) drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.05));
+  background: #F8F8F8;
+}
+
+.text-bg {
+  background: #F8F8F8;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.25);
+  filter: drop-shadow(-2px -2px 2px #FFFFFF);
+  border-radius: 10px;
+  text-align: center;
+}
