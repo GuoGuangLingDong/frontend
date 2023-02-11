@@ -11,7 +11,7 @@ const RankNum = ({index}:{index: number}) => {
     return (
         <div className="absolute right-3 top-3">
             <svg width="35" height="34" viewBox="0 0 35 34" className="transform scale-75" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7.8139 17C7.8139 11.4772 12.291 7.00002 17.8139 7.00002M33.6472 17C33.6472 25.7445 26.5584 32.8334 17.8139 32.8334C9.06939 32.8334 1.98056 25.7445 1.98056 17C1.98056 8.25551 9.06939 1.16669 17.8139 1.16669C26.5584 1.16669 33.6472 8.25551 33.6472 17Z" stroke="#161310" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M7.8139 17C7.8139 11.4772 12.291 7.00002 17.8139 7.00002M33.6472 17C33.6472 25.7445 26.5584 32.8334 17.8139 32.8334C9.06939 32.8334 1.98056 25.7445 1.98056 17C1.98056 8.25551 9.06939 1.16669 17.8139 1.16669C26.5584 1.16669 33.6472 8.25551 33.6472 17Z" stroke="#161310" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <div className="text-sm" style={{
                 marginTop: -24,
