@@ -68,7 +68,7 @@ export const NewSharePOAP = ({ isOpen, close, details }: { isOpen: boolean, clos
                                 style={{ padding: 30, width: mobile ? "34vw" : 200, height: mobile ? "34vw" : 200 }}
                             />
                             <div className="ml-2" style={{ width: mobile ? "40vw" : 200 }}>
-                                <div className="m-auto text-center mb-2 text-sm" style={{ color: "#606060" }}>{details?.poapName + 'fdafd大发放'}</div>
+                                <div className="m-auto text-center mb-2 text-sm" style={{ color: "#606060" }}>{details?.poapName}</div>
                                 <QRCode
                                     id="qrCode"
                                     value={window.location.href} //value参数为生成二维码的链接
