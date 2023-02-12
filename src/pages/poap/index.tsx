@@ -284,7 +284,7 @@ export const Home = () => {
         </div> : <Search searchFun={searchFun} closeSearch={closeSearch} setSearchValue={setSearchValue} searchValue={searchValue} />} />}
       <main className="mx-auto mb-8 sm:mb-16 pt-16 bg-white">
         <Banner />
-        {dataM?.length && <><RankList data={dataM?.slice(0, 5)} />
+        {!!dataM?.length && <><RankList data={dataM?.slice(0, 5)} />
           <h4 className="w-36 mt-16 mb-6 text-center font-bold m-auto text-black" style={{ background: "#FFBEBE" }}>Badges</h4></>}
         {mobile ? <LoadPage setData={setData} getList={getList} id="home-list" path={"list"} dataLength={data?.length}>
           {loading ? <DetailsPulse /> : (!listData?.list?.length && !data?.length ? <NoData /> : <List data={data} />)}
