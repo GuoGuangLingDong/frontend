@@ -222,15 +222,18 @@ export const Home = () => {
   const [data2, setData2] = useState<IPoap[]>([]);
   const [listData, getPoapList] = useRequest(api.getPoapList);
   const mobile = isMobile();
+
+  // 移动端请求
   const getList = useCallback(async (pageNo: number) => {
     const data = await getPoapList({
       from: pageNo,
-      count: 4,
+      count: 6,
       condition: value.current
     });
     return data
   }, [getPoapList, value]);
 
+  // web端请求
   const getList2 = useCallback(async (pageNo: number) => {
     const data = await getPoapList({
       from: pageNo,
@@ -263,7 +266,7 @@ export const Home = () => {
     }
     const data = await getPoapList({
       from: pageNo,
-      count: 4,
+      count: 6,
       condition: value.current
     });
     pageNo === 0 && closeLoading()

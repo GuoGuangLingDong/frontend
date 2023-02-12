@@ -64,6 +64,7 @@
     "craco-less": "^2.0.0",
     "craco-plugin-react-hot-reload": "^0.1.0",
     "dom-to-image": "^2.6.0",
+    "nativeshare": "^2.1.5",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "postcss": "^8.4.19",
     "postcss-cli": "^10.0.0",
