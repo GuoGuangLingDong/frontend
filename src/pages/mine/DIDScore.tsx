@@ -24,7 +24,7 @@ export const DIDScore = () => {
   const getScore = useCallback(async (pageNo: number) => {
     const data = await getScoreFun({
       from: pageNo,
-      count: 10
+      count: 10,
     });
     return data
   }, [getScoreFun]);

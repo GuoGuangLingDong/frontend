@@ -102,7 +102,7 @@ export const NewSharePOAP = ({ isOpen, close, details }: { isOpen: boolean, clos
                                 <div>复制链接</div>
                             </CopyToClipboard>
                         </div>
-                        <div className="bg-transparent cursor-pointer w-full rounded-full flex justify-center items-center">
+                        <div className="bg-transparent cursor-pointer w-full rounded-full flex justify-center items-center opacity-50">
                             <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform scale-75">
                                 <path d="M29.3333 19.3333V26C29.3333 27.8409 27.841 29.3333 26 29.3333H19.3333M4.33333 29.3333H7.66667C9.50762 29.3333 11 27.8409 11 26V22.6667C11 20.8257 9.50762 19.3333 7.66667 19.3333H4.33333C2.49238 19.3333 1 20.8257 1 22.6667V26C1 27.8409 2.49238 29.3333 4.33333 29.3333ZM4.33333 11H7.66667C9.50762 11 11 9.50761 11 7.66667V4.33333C11 2.49238 9.50762 1 7.66667 1H4.33333C2.49238 1 1 2.49238 1 4.33333V7.66667C1 9.50761 2.49238 11 4.33333 11ZM22.6667 11H26C27.841 11 29.3333 9.50761 29.3333 7.66667V4.33333C29.3333 2.49238 27.841 1 26 1H22.6667C20.8257 1 19.3333 2.49238 19.3333 4.33333V7.66667C19.3333 9.50761 20.8257 11 22.6667 11ZM21.8333 24.3333C20.4526 24.3333 19.3333 23.214 19.3333 21.8333C19.3333 20.4526 20.4526 19.3333 21.8333 19.3333C23.214 19.3333 24.3333 20.4526 24.3333 21.8333C24.3333 23.214 23.214 24.3333 21.8333 24.3333Z" stroke="white" strokeWidth="2" strokeLinecap="round" />
                             </svg>&nbsp;手机分享

@@ -4,6 +4,7 @@ import share1 from "../../../assets/image/share1.svg";
 import like from "../../../assets/image/like.svg";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 import { useGoDetails } from "./NewListItem";
+import { isMobile } from "../../../helpers/utilities";
 
 export type IDIVProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLInputElement>
 
@@ -43,8 +44,12 @@ export const Share1 = ({ amount, ...props }: { amount: number } & IDIVProps) => 
 
 export const RankItem = ({ item, index }: { item: any, index: number } & IDIVProps) => {
     const goDetails = useGoDetails();
+    const mobile = isMobile();
 
-    return (<div className="rectangle relative w-1/2 md:w-1/5 h-60 md:h-64 p-4 pt-10 md:p-10" onClick={() => {
+    return (<div className="rectangle relative h-64 p-4 pt-10 md:p-10" style={{
+        width: mobile ? 200 : "20%",
+        minWidth: 200
+    }} onClick={() => {
         goDetails(item?.poapId)
     }}>
         <RankNum index={index}/>

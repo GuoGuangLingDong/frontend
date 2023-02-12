@@ -37,6 +37,84 @@ export const ArrowImg = ({ color, cursor, handle, css }: { color?: string, curso
   )
 }
 
+export const RankList = ({ data }: { data: IPoap[] }) => {
+  const mobile = isMobile();
+  const ref = useRef<HTMLDivElement>(null);
+  let timer: any;
+
+  useEffect(() => {
+    const dom = ref?.current;
+    if (!dom) return
+    dom.scrollLeft = 0;
+  }, [ref]);
+
+  const [currentTab, setTab] = useState(0);
+
+  const move = (ref: RefObject<HTMLDivElement>, data: any[], timer: any, right?: boolean) => {
+    const dom = ref?.current;
+    if (!dom) return
+    const width = 200;
+    let offset = 0;
+    if (right) {
+      offset = (dom.scrollWidth - dom.scrollLeft - dom.offsetWidth) % width;
+    } else {
+      offset = dom.scrollLeft % width;
+    }
+    offset = Math.abs(offset) < 5 ? width : offset;
+
+    let left = dom.scrollLeft + offset * (right ? 1 : -1);
+    if (dom.offsetWidth + left >= dom.scrollWidth) {
+      left = dom.scrollWidth - dom.offsetWidth;
+    }
+    if (left <= 0) left = 0;
+    let scrollLeft = dom.scrollLeft;
+    clearInterval(timer);
+
+    timer = setInterval(() => {
+      scrollLeft = scrollLeft + 20 * (right ? 1 : -1)
+      dom.scrollLeft = scrollLeft;
+      if ((right && scrollLeft >= left) || (!right && scrollLeft <= left)) {
+        dom.scrollLeft = left;
+        clearInterval(timer);
+      }
+    }, 16);
+  };
+
+  return (<BodyBox>
+    <h4 className="w-36 mt-16 mb-6 text-center font-bold m-auto text-black" style={{ background: "#D6EDF7" }}>Weekly Rankings</h4>
+    <div className="flex items-center w-full relative">
+      {data?.length > 1 && mobile && <ArrowImg
+        css={`absolute ${mobile ? "scale-50 -left-12 -ml-1" : "scale-75 -left-12"} origin-right rotate-180 ${currentTab === 0 ? "cursor-not-allowed" : "cursor-pointer"}`}
+        color={currentTab !== 0 ? "#AC9F9F" : secondColor}
+        handle={() => {
+          if (currentTab !== 0) {
+            move(ref, data, timer)
+            setTab(currentTab - 1)
+          }
+        }}
+      />}
+      <div className="w-11/12 m-auto overflow-scroll h-64 md:w-full" ref={ref}>
+        <div className="flex justify-center" style={{ width: mobile ? 200 * data?.length : "100%" }}>
+          {data?.map((item, i) => {
+            return (<RankItem key={i} item={item} index={i + 1} />)
+          })}
+        </div>
+      </div>
+      {data?.length > 1 && mobile && <ArrowImg
+        css={`absolute ${mobile ? "scale-50 -right-8" : "scale-75 -right-12"} origin-left rotate-9 ${currentTab === data.length - 1 ? "cursor-not-allowed" : "cursor-pointer"}`}
+        color={currentTab !== data?.length - 1 ? "#AC9F9F" : secondColor}
+        handle={() => {
+          if (currentTab !== data?.length - 1) {
+            move(ref, data, timer, true);
+            setTab(currentTab + 1)
+          }
+        }}
+      />}
+    </div>
+  </BodyBox>
+  );
+};
+
 export const List = ({ data }: { data: IPoap[] }) => {
   const mobile = isMobile();
   const ref = useRef<HTMLDivElement>(null);
@@ -53,7 +131,6 @@ export const List = ({ data }: { data: IPoap[] }) => {
   const move = (ref: RefObject<HTMLDivElement>, data: any[], timer: any, right?: boolean) => {
     const dom = ref?.current;
     if (!dom) return
-    console.log(dom.scrollWidth)
     const width = 260;
     let offset = 0;
     if (right) {
@@ -204,14 +281,7 @@ export const Home = () => {
         </div> : <Search searchFun={searchFun} closeSearch={closeSearch} setSearchValue={setSearchValue} searchValue={searchValue} />} />}
       <main className="mx-auto mb-8 sm:mb-16 pt-16 bg-white">
         <Banner />
-        {dataM?.length && <><BodyBox>
-          <h4 className="w-36 mt-16 mb-6 text-center font-bold m-auto text-black" style={{ background: "#D6EDF7" }}>Weekly Rankings</h4>
-          <div className="flex justify-center flex-wrap">
-            {dataM?.slice(0, 5)?.map((item, i) => {
-              return (<RankItem key={i} item={item} index={i + 1} />)
-            })}
-          </div>
-        </BodyBox>
+        {dataM?.length && <><RankList data={dataM?.slice(0, 5)} />
           <h4 className="w-36 mt-16 mb-6 text-center font-bold m-auto text-black" style={{ background: "#FFBEBE" }}>Badges</h4></>}
         {mobile ? <LoadPage setData={setData} getList={getList} id="home-list" path={"list"} dataLength={data?.length}>
           {loading ? <DetailsPulse /> : (!listData?.list?.length && !data?.length ? <NoData /> : <List data={data} />)}
