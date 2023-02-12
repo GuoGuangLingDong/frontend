@@ -83,8 +83,8 @@ export const RankList = ({ data }: { data: IPoap[] }) => {
   return (<BodyBox>
     <h4 className="w-36 mt-16 mb-6 text-center font-bold m-auto text-black" style={{ background: "#D6EDF7" }}>Weekly Rankings</h4>
     <div className="flex items-center w-full relative">
-      {data?.length > 1 && mobile && <ArrowImg
-        css={`absolute ${mobile ? "scale-50 -left-12 -ml-1" : "scale-75 -left-12"} origin-right rotate-180 ${currentTab === 0 ? "cursor-not-allowed" : "cursor-pointer"}`}
+      {(data?.length > 1 && mobile || data?.length > 5) && <ArrowImg
+        css={`absolute ${mobile ? "scale-50 -left-12 -ml-1" : "scale-75 -left-20"} origin-right rotate-180 ${currentTab === 0 ? "cursor-not-allowed" : "cursor-pointer"}`}
         color={currentTab !== 0 ? "#AC9F9F" : secondColor}
         handle={() => {
           if (currentTab !== 0) {
@@ -94,13 +94,13 @@ export const RankList = ({ data }: { data: IPoap[] }) => {
         }}
       />}
       <div className="w-11/12 m-auto overflow-scroll h-64 md:w-full" ref={ref}>
-        <div className="flex justify-center" style={{ width: mobile ? 200 * data?.length : "100%" }}>
+        <div className="flex justify-center" style={{ width: (mobile && data?.length >= 2 || data?.length >= 5) ? 200 * data?.length : "100%" }}>
           {data?.map((item, i) => {
             return (<RankItem key={i} item={item} index={i + 1} />)
           })}
         </div>
       </div>
-      {data?.length > 1 && mobile && <ArrowImg
+      {(data?.length > 1 && mobile || data?.length > 5) && <ArrowImg
         css={`absolute ${mobile ? "scale-50 -right-8" : "scale-75 -right-12"} origin-left rotate-9 ${currentTab === data.length - 1 ? "cursor-not-allowed" : "cursor-pointer"}`}
         color={currentTab !== data?.length - 1 ? "#AC9F9F" : secondColor}
         handle={() => {
@@ -223,15 +223,19 @@ export const Home = () => {
   const [listData, getPoapList] = useRequest(api.getPoapList);
   const mobile = isMobile();
 
+  //控制等级排名处的数量
+  const rankCount = 5;
+  const pageSize = rankCount % 2 === 0 ? rankCount : rankCount + 1;
+
   // 移动端请求
   const getList = useCallback(async (pageNo: number) => {
     const data = await getPoapList({
       from: pageNo,
-      count: 6,
+      count: pageSize,
       condition: value.current
     });
     return data
-  }, [getPoapList, value]);
+  }, [getPoapList, value, pageSize]);
 
   // web端请求
   const getList2 = useCallback(async (pageNo: number) => {
@@ -266,12 +270,12 @@ export const Home = () => {
     }
     const data = await getPoapList({
       from: pageNo,
-      count: 6,
+      count: pageSize,
       condition: value.current
     });
     pageNo === 0 && closeLoading()
     setData(data?.list)
-  }, [getPoapList, value, setData, closeLoading, openLoading, mobile]);
+  }, [getPoapList, value, setData, closeLoading, openLoading, mobile, pageSize]);
 
   const dataM = (mobile ? data : data2);
 
@@ -284,7 +288,7 @@ export const Home = () => {
         </div> : <Search searchFun={searchFun} closeSearch={closeSearch} setSearchValue={setSearchValue} searchValue={searchValue} />} />}
       <main className="mx-auto mb-8 sm:mb-16 pt-16 bg-white">
         <Banner />
-        {!!dataM?.length && <><RankList data={dataM?.slice(0, 5)} />
+        {!!dataM?.length && <><RankList data={dataM?.slice(0, rankCount)} />
           <h4 className="w-36 mt-16 mb-6 text-center font-bold m-auto text-black" style={{ background: "#FFBEBE" }}>Badges</h4></>}
         {mobile ? <LoadPage setData={setData} getList={getList} id="home-list" path={"list"} dataLength={data?.length}>
           {loading ? <DetailsPulse /> : (!listData?.list?.length && !data?.length ? <NoData /> : <List data={data} />)}
