@@ -80,6 +80,25 @@ export const RankList = ({ data }: { data: IPoap[] }) => {
     }, 16);
   };
 
+  useEffect(() => {
+    const dom = ref.current;
+    if (!dom) return
+    let timer: NodeJS.Timeout | null = null;
+    const width = 260;
+    dom.addEventListener("scroll", (e) => {
+      if (timer) return
+      timer = setTimeout(() => {
+        const index = Math.floor((dom.scrollLeft + width / 2) / width);
+        setTab(index);
+        if (dom.scrollLeft + dom.offsetWidth >= dom.scrollWidth) {
+          setTab(data.length - 1);
+        }
+        clearTimeout(timer as any);
+        timer = null
+      }, 30)
+    })
+  }, [setTab])
+
   return (<BodyBox>
     <h4 className="w-36 mt-16 mb-6 text-center font-bold m-auto text-black" style={{ background: "#D6EDF7" }}>Weekly Rankings</h4>
     <div className="flex items-center w-full relative">
@@ -89,7 +108,6 @@ export const RankList = ({ data }: { data: IPoap[] }) => {
         handle={() => {
           if (currentTab !== 0) {
             move(ref, data, timer)
-            setTab(currentTab - 1)
           }
         }}
       />}
@@ -101,12 +119,11 @@ export const RankList = ({ data }: { data: IPoap[] }) => {
         </div>
       </div>
       {(data?.length > 1 && mobile || data?.length > 5) && <ArrowImg
-        css={`absolute ${mobile ? "scale-50 -right-8" : "scale-75 -right-12"} origin-left rotate-9 ${currentTab === data.length - 1 ? "cursor-not-allowed" : "cursor-pointer"}`}
-        color={currentTab !== data?.length - 1 ? "#AC9F9F" : secondColor}
+        css={`absolute ${mobile ? "scale-50 -right-8" : "scale-75 -right-12"} origin-left rotate-9 ${currentTab === data.length - 1 || currentTab === - 1 ? "cursor-not-allowed" : "cursor-pointer"}`}
+        color={currentTab !== data?.length - 1 && currentTab !== -1 ? "#AC9F9F" : secondColor}
         handle={() => {
           if (currentTab !== data?.length - 1) {
             move(ref, data, timer, true);
-            setTab(currentTab + 1)
           }
         }}
       />}
@@ -123,7 +140,7 @@ export const List = ({ data }: { data: IPoap[] }) => {
   useEffect(() => {
     const dom = ref?.current;
     if (!dom) return
-    // dom.scrollLeft = dom.scrollWidth;
+    dom.scrollLeft = 0;
   }, [ref]);
 
   const [currentTab, setTab] = useState(0);
@@ -158,6 +175,25 @@ export const List = ({ data }: { data: IPoap[] }) => {
     }, 16);
   };
 
+  useEffect(() => {
+    const dom = ref.current;
+    if (!dom) return
+    let timer: NodeJS.Timeout | null = null;
+    const width = 260;
+    dom.addEventListener("scroll", (e) => {
+      if (timer) return
+      timer = setTimeout(() => {
+        const index = Math.floor((dom.scrollLeft + width / 2) / width);
+        setTab(index);
+        if (dom.scrollLeft + dom.offsetWidth >= dom.scrollWidth) {
+          setTab(data.length - 1);
+        }
+        clearTimeout(timer as any);
+        timer = null
+      }, 30)
+    })
+  }, [setTab])
+
   return (<BodyBox>
     <div className="flex items-center w-full relative">
       {data?.length > 4 && <ArrowImg
@@ -166,7 +202,6 @@ export const List = ({ data }: { data: IPoap[] }) => {
         handle={() => {
           if (currentTab !== 0) {
             move(ref, data, timer)
-            setTab(currentTab - 1)
           }
         }}
       />}
@@ -174,12 +209,11 @@ export const List = ({ data }: { data: IPoap[] }) => {
         <NewList data={data} />
       </div> : <NewList data={data} />}
       {data?.length > 4 && <ArrowImg
-        css={`absolute scale-75 rotate-9 -right-12 ${currentTab === data.length - 4 ? "cursor-not-allowed" : "hover:scale-100 cursor-pointer"}`}
-        color={currentTab !== data?.length - 4 ? "#AC9F9F" : secondColor}
+        css={`absolute scale-75 rotate-9 -right-12 ${currentTab === data.length - 4 || currentTab === -1 ? "cursor-not-allowed" : "hover:scale-100 cursor-pointer"}`}
+        color={currentTab !== data?.length - 4 && currentTab !== -1 ? "#AC9F9F" : secondColor}
         handle={() => {
           if (currentTab !== data?.length - 4) {
             move(ref, data, timer, true);
-            setTab(currentTab + 1)
           }
         }}
       />}
@@ -224,7 +258,7 @@ export const Home = () => {
   const mobile = isMobile();
 
   //控制等级排名处的数量
-  const rankCount = 5;
+  const rankCount = 10;
   const pageSize = rankCount % 2 === 0 ? rankCount : rankCount + 1;
 
   // 移动端请求
@@ -288,11 +322,13 @@ export const Home = () => {
         </div> : <Search searchFun={searchFun} closeSearch={closeSearch} setSearchValue={setSearchValue} searchValue={searchValue} />} />}
       <main className="mx-auto mb-8 sm:mb-16 pt-16 bg-white">
         <Banner />
-        {!!dataM?.length && <><RankList data={dataM?.slice(0, rankCount)} />
+        {!!dataM?.length && <><RankList data={dataM?.concat(dataM, dataM, dataM)?.slice(0, rankCount)} />
           <h4 className="w-36 mt-16 mb-6 text-center font-bold m-auto text-black" style={{ background: "#FFBEBE" }}>Badges</h4></>}
-        {mobile ? <LoadPage setData={setData} getList={getList} id="home-list" path={"list"} dataLength={data?.length}>
-          {loading ? <DetailsPulse /> : (!listData?.list?.length && !data?.length ? <NoData /> : <List data={data} />)}
-        </LoadPage> : <List data={data2} />}
+        {mobile
+          ? <LoadPage setData={setData} getList={getList} id="home-list" path={"list"} dataLength={data?.length}>
+            {loading ? <DetailsPulse /> : (!listData?.list?.length && !data?.length ? <NoData /> : <List data={data} />)}
+          </LoadPage>
+          : <List data={data2?.concat(data2, data2, data2)} />}
       </main>
     </>
   );
