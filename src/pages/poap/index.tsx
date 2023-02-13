@@ -322,13 +322,13 @@ export const Home = () => {
         </div> : <Search searchFun={searchFun} closeSearch={closeSearch} setSearchValue={setSearchValue} searchValue={searchValue} />} />}
       <main className="mx-auto mb-8 sm:mb-16 pt-16 bg-white">
         <Banner />
-        {!!dataM?.length && <><RankList data={dataM?.concat(dataM, dataM, dataM)?.slice(0, rankCount)} />
+        {!!dataM?.length && <><RankList data={dataM?.slice(0, rankCount)} />
           <h4 className="w-36 mt-16 mb-6 text-center font-bold m-auto text-black" style={{ background: "#FFBEBE" }}>Badges</h4></>}
         {mobile
           ? <LoadPage setData={setData} getList={getList} id="home-list" path={"list"} dataLength={data?.length}>
             {loading ? <DetailsPulse /> : (!listData?.list?.length && !data?.length ? <NoData /> : <List data={data} />)}
           </LoadPage>
-          : <List data={data2?.concat(data2, data2, data2)} />}
+          : <List data={data2} />}
       </main>
     </>
   );
