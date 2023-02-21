@@ -2,7 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { LoadImage } from "../../../components/Image";
 import { useCallback } from "react";
 import { isMobile } from "../../../helpers/utilities";
-import { IDIVProps } from "./RankItem";
+import { IDIVProps } from "./ListItem";
+import { IPoap } from "..";
+import { BodyBox } from "../../../components/BodyBox";
+import { ScrollBox } from "../../../components/ScrollBox";
 
 export const useGoDetails = () => {
   const navigate = useNavigate();
@@ -38,18 +41,20 @@ export const NewListItem = ({ item, ...props }: { item: any } & IDIVProps) => {
   )
 };
 
-export const NewList = ({ data }: { data: any[] }) => {
-  const mobile = isMobile();
-  return (
-    <div className={`flex mt-6 pb-0 md:pb-12 flex-wrap md:flex-nowrap ${!mobile ? "justify-center" : "justify-between"}`} style={{ width: mobile ? "100%" : data?.length * 260 - 40 }}>
-      {data?.map((item, i) => {
-        return (<NewListItem
-          key={i}
-          item={item}
-          style={{
-            marginLeft: !mobile && i !== 0 ? 40 : 0,
-          }} />)
-      })}
-    </div>
-  )
-}
+export const PoapList = ({ data }: { data: IPoap[] }) => {
+  return (<BodyBox css={{ paddingBottom: 20 }}>
+    <ScrollBox data={data} isShowBar rowCount={4}>
+      <div className={`flex m-auto mt-6 pb-0 md:pb-8 flex-wrap md:flex-nowrap justify-center`} style={{ width: data?.length * 260 - 40 }}>
+        {data?.map((item, i) => {
+          return (<NewListItem
+            key={i}
+            item={item}
+            style={{
+              marginLeft: i !== 0 ? 40 : 0,
+            }} />)
+        })}
+      </div>
+    </ScrollBox>
+  </BodyBox>
+  );
+};

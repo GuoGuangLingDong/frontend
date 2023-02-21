@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { secondColor, textColor } from "../../../theme";
 import { CardBackground } from "../../../components/Card";
 import { LoadImage } from "../../../components/Image";
-import { Holder, Star } from "../components/ListItem";
+import { Holder, Star } from "./ListItem";
 import starDeep from "../../../assets/image/starDeep.svg";
 import stared from "../../../assets/image/select-on.svg";
 import { ClaimButton } from "../components/ClaimButton";
@@ -188,10 +188,10 @@ export const DetailItem = ({ item, getDetails, openShare }: { item: IPoapDetails
             }} />
         <div className="p-4 md:flex-1 md:h-96 md:flex md:flex-col md:justify-between">
             <div>
-                <div className="text-sm md:text-2xl md:font-bold md:py-4">
+                <div className="text-md md:text-2xl md:font-bold md:py-4">
                     {item?.poapName}
                 </div>
-                <div className="hidden md:block text-xs pb-4">
+                <div className="text-xs pb-4">
                     {item?.poapIntro}
                 </div>
                 <div className="text-xs flex items-center mt-2" style={{ color: secondColor }}>

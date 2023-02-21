@@ -1,7 +1,6 @@
 import { Header, hearderBoxCss, hearderIconCss } from "../../components/Header";
 import search from "../../assets/image/search.svg";
-import { RefObject, useCallback, useEffect, useRef, useState } from "react";
-import { BodyBox } from "../../components/BodyBox";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { isMobile, useQueryString } from "../../helpers/utilities";
 import api from "../../api/index";
 import { Banner } from "./components/Banner";
@@ -10,9 +9,9 @@ import { LoadPage } from "../../components/LoadPage";
 import { useRequest } from "../../hooks/useRequest";
 import { DetailsPulse } from "./components/DetailsItem";
 import { NoData } from "./Details";
-import { RankItem } from "./components/RankItem";
-import { NewList } from "./components/NewListItem";
-import { secondColor } from "../../theme";
+import { RankList } from "./components/Rank";
+import { NewListItem, PoapList } from "./components/NewList";
+import { Search } from "./components/Search";
 
 export interface IPoap {
   "poapId": string,
@@ -24,226 +23,6 @@ export interface IPoap {
   "coverImg": string,
   "poapIntro": string,
   "like_num": number
-}
-
-export const ArrowImg = ({ color, cursor, handle, css }: { color?: string, cursor?: string, handle?: () => void, css?: string }) => {
-  return (
-    <svg width="43" height="42" viewBox="0 0 43 42" fill="none" xmlns="http://www.w3.org/2000/svg" className={`transition-all duration-500 transform ${css}`} onClick={() => {
-      handle && handle()
-    }}>
-      <path d="M5.34759 2.96976L39.4134 18.9929C41.1659 19.8172 41.1659 22.3101 39.4134 23.1345L5.34759 39.1576C3.57311 39.9923 1.63942 38.3543 2.1708 36.4667L6.25262 21.9669C6.4189 21.3763 6.4189 20.7511 6.25262 20.1604L2.1708 5.66064C1.63942 3.77304 3.57312 2.13512 5.34759 2.96976Z" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-
-  )
-}
-
-export const RankList = ({ data }: { data: IPoap[] }) => {
-  const mobile = isMobile();
-  const ref = useRef<HTMLDivElement>(null);
-  let timer: any;
-
-  useEffect(() => {
-    const dom = ref?.current;
-    if (!dom) return
-    dom.scrollLeft = 0;
-  }, [ref]);
-
-  const [currentTab, setTab] = useState(0);
-
-  const move = (ref: RefObject<HTMLDivElement>, data: any[], timer: any, right?: boolean) => {
-    const dom = ref?.current;
-    if (!dom) return
-    const width = 200;
-    let offset = 0;
-    if (right) {
-      offset = (dom.scrollWidth - dom.scrollLeft - dom.offsetWidth) % width;
-    } else {
-      offset = dom.scrollLeft % width;
-    }
-    offset = Math.abs(offset) < 5 ? width : offset;
-
-    let left = dom.scrollLeft + offset * (right ? 1 : -1);
-    if (dom.offsetWidth + left >= dom.scrollWidth) {
-      left = dom.scrollWidth - dom.offsetWidth;
-    }
-    if (left <= 0) left = 0;
-    let scrollLeft = dom.scrollLeft;
-    clearInterval(timer);
-
-    timer = setInterval(() => {
-      scrollLeft = scrollLeft + 20 * (right ? 1 : -1)
-      dom.scrollLeft = scrollLeft;
-      if ((right && scrollLeft >= left) || (!right && scrollLeft <= left)) {
-        dom.scrollLeft = left;
-        clearInterval(timer);
-      }
-    }, 16);
-  };
-
-  useEffect(() => {
-    const dom = ref.current;
-    if (!dom) return
-    let timer: NodeJS.Timeout | null = null;
-    const width = 260;
-    dom.addEventListener("scroll", (e) => {
-      if (timer) return
-      timer = setTimeout(() => {
-        const index = Math.floor((dom.scrollLeft + width / 2) / width);
-        setTab(index);
-        if (dom.scrollLeft + dom.offsetWidth >= dom.scrollWidth) {
-          setTab(data.length - 1);
-        }
-        clearTimeout(timer as any);
-        timer = null
-      }, 30)
-    })
-  }, [setTab])
-
-  return (<BodyBox>
-    <h4 className="w-36 mt-16 mb-6 text-center font-bold m-auto text-black" style={{ background: "#D6EDF7" }}>Weekly Rankings</h4>
-    <div className="flex items-center w-full relative">
-      {(data?.length > 1 && mobile || data?.length > 5) && <ArrowImg
-        css={`absolute ${mobile ? "scale-50 -left-12 -ml-1" : "scale-75 -left-20"} origin-right rotate-180 ${currentTab === 0 ? "cursor-not-allowed" : "cursor-pointer"}`}
-        color={currentTab !== 0 ? "#AC9F9F" : secondColor}
-        handle={() => {
-          if (currentTab !== 0) {
-            move(ref, data, timer)
-          }
-        }}
-      />}
-      <div className="w-11/12 m-auto overflow-scroll h-64 md:w-full" ref={ref}>
-        <div className="flex justify-center" style={{ width: (mobile && data?.length >= 2 || data?.length >= 5) ? 200 * data?.length : "100%" }}>
-          {data?.map((item, i) => {
-            return (<RankItem key={i} item={item} index={i + 1} />)
-          })}
-        </div>
-      </div>
-      {(data?.length > 1 && mobile || data?.length > 5) && <ArrowImg
-        css={`absolute ${mobile ? "scale-50 -right-8" : "scale-75 -right-12"} origin-left rotate-9 ${currentTab === data.length - 1 || currentTab === - 1 ? "cursor-not-allowed" : "cursor-pointer"}`}
-        color={currentTab !== data?.length - 1 && currentTab !== -1 ? "#AC9F9F" : secondColor}
-        handle={() => {
-          if (currentTab !== data?.length - 1) {
-            move(ref, data, timer, true);
-          }
-        }}
-      />}
-    </div>
-  </BodyBox>
-  );
-};
-
-export const List = ({ data }: { data: IPoap[] }) => {
-  const mobile = isMobile();
-  const ref = useRef<HTMLDivElement>(null);
-  let timer: any;
-
-  useEffect(() => {
-    const dom = ref?.current;
-    if (!dom) return
-    dom.scrollLeft = 0;
-  }, [ref]);
-
-  const [currentTab, setTab] = useState(0);
-
-  const move = (ref: RefObject<HTMLDivElement>, data: any[], timer: any, right?: boolean) => {
-    const dom = ref?.current;
-    if (!dom) return
-    const width = 260;
-    let offset = 0;
-    if (right) {
-      offset = (dom.scrollWidth - dom.scrollLeft - dom.offsetWidth) % width;
-    } else {
-      offset = dom.scrollLeft % width;
-    }
-    offset = Math.abs(offset) < 5 ? width : offset;
-
-    let left = dom.scrollLeft + offset * (right ? 1 : -1);
-    if (dom.offsetWidth + left >= dom.scrollWidth) {
-      left = dom.scrollWidth - dom.offsetWidth;
-    }
-    if (left <= 0) left = 0;
-    let scrollLeft = dom.scrollLeft;
-    clearInterval(timer);
-
-    timer = setInterval(() => {
-      scrollLeft = scrollLeft + 20 * (right ? 1 : -1)
-      dom.scrollLeft = scrollLeft;
-      if ((right && scrollLeft >= left) || (!right && scrollLeft <= left)) {
-        dom.scrollLeft = left;
-        clearInterval(timer);
-      }
-    }, 16);
-  };
-
-  useEffect(() => {
-    const dom = ref.current;
-    if (!dom) return
-    let timer: NodeJS.Timeout | null = null;
-    const width = 260;
-    dom.addEventListener("scroll", (e) => {
-      if (timer) return
-      timer = setTimeout(() => {
-        const index = Math.floor((dom.scrollLeft + width / 2) / width);
-        setTab(index);
-        if (dom.scrollLeft + dom.offsetWidth >= dom.scrollWidth) {
-          setTab(data.length - 1);
-        }
-        clearTimeout(timer as any);
-        timer = null
-      }, 30)
-    })
-  }, [setTab])
-
-  return (<BodyBox>
-    <div className="flex items-center w-full relative">
-      {data?.length > 4 && <ArrowImg
-        css={`absolute scale-75 rotate-180 -left-12 ${currentTab === 0 ? "cursor-not-allowed" : "hover:scale-100 cursor-pointer"}`}
-        color={currentTab !== 0 ? "#AC9F9F" : secondColor}
-        handle={() => {
-          if (currentTab !== 0) {
-            move(ref, data, timer)
-          }
-        }}
-      />}
-      {!mobile ? <div className="overflow-scroll m-auto" ref={ref}>
-        <NewList data={data} />
-      </div> : <NewList data={data} />}
-      {data?.length > 4 && <ArrowImg
-        css={`absolute scale-75 rotate-9 -right-12 ${currentTab === data.length - 4 || currentTab === -1 ? "cursor-not-allowed" : "hover:scale-100 cursor-pointer"}`}
-        color={currentTab !== data?.length - 4 && currentTab !== -1 ? "#AC9F9F" : secondColor}
-        handle={() => {
-          if (currentTab !== data?.length - 4) {
-            move(ref, data, timer, true);
-          }
-        }}
-      />}
-    </div>
-  </BodyBox>
-  );
-};
-
-const Search = ({ searchValue, setSearchValue, searchFun, closeSearch }: {
-  searchValue: any,
-  setSearchValue: React.Dispatch<any>,
-  searchFun: (pageNo: number) => Promise<void>,
-  closeSearch: () => void
-}) => {
-  return (
-    <div className="flex items-center fixed md:relative md:w-80 w-full h-16 md:h-10 rounded-3xl px-4 z-50 md:shadow-xl md:border">
-      <input type="text" placeholder="请输入搜索内容" value={searchValue}
-        className="bg-white outline-none rounded-l-3xl w-full pl-4 pr-2 py-2 h-10 md:h-8"
-        onChange={(val) => {
-          setSearchValue(val.target.value);
-        }}
-      />
-      <div className={`cursor-pointer w-8 bg-white flex items-center h-10 md:h-8 rounded-r-3xl`} onClick={() => {
-        searchFun(0);
-        closeSearch();
-      }}>
-        <img className={hearderIconCss} src={search} alt="logo" />
-      </div>
-    </div>
-  )
 }
 
 export const Home = () => {
@@ -261,7 +40,7 @@ export const Home = () => {
   const rankCount = 10;
   const pageSize = rankCount % 2 === 0 ? rankCount : rankCount + 1;
 
-  // 移动端请求
+  // 移动端一页一页的请求数据
   const getList = useCallback(async (pageNo: number) => {
     const data = await getPoapList({
       from: pageNo,
@@ -271,7 +50,7 @@ export const Home = () => {
     return data
   }, [getPoapList, value, pageSize]);
 
-  // web端请求
+  // web端一次性请求100条回来
   const getList2 = useCallback(async (pageNo: number) => {
     const data = await getPoapList({
       from: pageNo,
@@ -326,9 +105,18 @@ export const Home = () => {
           <h4 className="w-36 mt-16 mb-6 text-center font-bold m-auto text-black" style={{ background: "#FFBEBE" }}>Badges</h4></>}
         {mobile
           ? <LoadPage setData={setData} getList={getList} id="home-list" path={"list"} dataLength={data?.length}>
-            {loading ? <DetailsPulse /> : (!listData?.list?.length && !data?.length ? <NoData /> : <List data={data} />)}
+            {loading ? <DetailsPulse /> : (!listData?.list?.length && !data?.length ? <NoData /> : <div
+              className={`flex mt-6 pb-0 px-6 md:pb-12 flex-wrap md:flex-nowrap justify-between`}
+              style={{ width: "100%" }}>
+              {data?.map((item, i) => {
+                return (<NewListItem
+                  key={i}
+                  item={item}
+                />)
+              })}
+            </div>)}
           </LoadPage>
-          : <List data={data2} />}
+          : <PoapList data={data2} />}
       </main>
     </>
   );
