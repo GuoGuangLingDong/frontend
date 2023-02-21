@@ -96,11 +96,12 @@ export const ScrollBox = ({ data, children, isShowBar, rowCount }: { data: any[]
         </div>
         {(mobile || data?.length > rowCount) && isShowBar && <div className="flex justify-center">
             {data?.map((_, i) => {
+                if (i % rowCount !== 0) return null
                 return (
                     <div
                         key={i}
                         className="w-2 h-2 rounded-full mx-1 cursor-pointer"
-                        style={{ background: currentTab === i ? textColor : secondColor }}
+                        style={{ background: Math.floor(currentTab / rowCount) === Math.floor(i / rowCount) ? textColor : secondColor }}
                         onClick={() => {
                             move(i, Math.abs(currentTab - i), currentTab < i);
                         }}></div>

@@ -55,7 +55,7 @@ export const RankItem = ({ item, index }: { item: any, index: number } & IDIVPro
   }}>
     <RankNum index={index} />
     <LoadImage
-      src={item?.coverImg}
+      src={item?.coverImg || item?.cover_img}
       className="rounded-3xl cursor-pointer w-28 h-28 md:h-28 md:w-28 m-auto"
     />
     <div className="text-xs transform scale-75 my-1 flex justify-center items-center h-8 md:h-10 md:my-2 text-center font-bold ellipsis-2">

@@ -34,6 +34,7 @@ export const NewSharePOAP = ({ isOpen, close, details }: { isOpen: boolean, clos
         const nativeShare1 = new NativeShare();
         nativeShare1?.setShareData(shareData)
         setNativeShare(nativeShare1);
+    // eslint-disable-next-line 
     }, [nativeShare, NativeShare])
 
     const save = () => {

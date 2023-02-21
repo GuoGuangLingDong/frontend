@@ -30,11 +30,11 @@ export const NewListItem = ({ item, ...props }: { item: any } & IDIVProps) => {
   }}>
     <div className="rounded-lg absolute left-2 right-2 -bottom-2 h-full pt-4" style={{ backgroundColor: "rgba(243, 209, 209, 0.49)" }}>
       <LoadImage
-        src={item?.coverImg}
+        src={item?.coverImg || item?.cover_img}
         className="rounded-lg cursor-pointer w-32 h-32 md:h-40 md:w-40 m-auto"
       />
       <div className="text-xs mt-8 md:mt-12 flex justify-center items-center text-center font-bold">
-        {item.poapName}
+        {item.poap_name || item?.poapName}
       </div>
     </div>
   </div>
